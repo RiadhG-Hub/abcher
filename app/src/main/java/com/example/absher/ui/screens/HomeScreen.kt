@@ -2,16 +2,41 @@ package com.example.absher.ui.screens
 
 
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,9 +45,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.absher.ui.viewmodel.HomeViewModel
 import com.example.absher.R
 import com.example.absher.ui.theme.MyAppTheme
+import com.example.absher.ui.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = viewModel()) {
@@ -61,29 +86,50 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = view
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarWithTime() {
-    TopAppBar(
-        title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(id = R.string.top_bar_title),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontSize = 18.sp
-                )
-                Text(
-                    text = stringResource(id = R.string.time),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontSize = 14.sp
-                )
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .height(80.dp)
+        .background(
+            color = Color(0xFFCDB372),
+            shape = RoundedCornerShape(
+                bottomEnd = 16.dp, // Bottom-right corner
+                bottomStart = 16.dp // Bottom-left corner
+            )
+        )){
+        TopAppBar(
+            title = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End, // Align content to the right
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+
+
+                    // Add spacing between icon and text
+
+                    Text(
+                        text = stringResource(id = R.string.top_bar_title),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 18.sp
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    SvgIcon(R.drawable.right)
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary
+            )
         )
+    }
+
+}
+
+@Composable
+private fun SvgIcon(drawable : Int) {
+    Image(
+        painter = painterResource(id = drawable),
+        contentDescription = "My SVG Icon"
     )
 }
 
@@ -103,23 +149,19 @@ fun CardGrid() {
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.End
             ) {
-                Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = "Document",
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
+                SvgIcon(R.drawable.note)
                 Text(
                     text = stringResource(id = R.string.files),
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.End,
                     fontSize = 16.sp,
                     modifier = Modifier.padding(top = 8.dp),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = stringResource(id = R.string.files_desc),
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.End,
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
@@ -135,23 +177,20 @@ fun CardGrid() {
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.End
+
             ) {
-                Icon(
-                    imageVector = Icons.Default.CheckCircle,
-                    contentDescription = "Approved",
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
+                SvgIcon(R.drawable.task)
                 Text(
                     text = stringResource(id = R.string.tasks),
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.End,
                     fontSize = 16.sp,
                     modifier = Modifier.padding(top = 8.dp),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = stringResource(id = R.string.tasks_desc),
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.End,
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
@@ -172,23 +211,19 @@ fun CardGrid() {
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.End
             ) {
-                Icon(
-                    imageVector = Icons.Default.Notifications,
-                    contentDescription = "Notifications",
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
+                SvgIcon(R.drawable.online_prediction)
                 Text(
                     text = stringResource(id = R.string.notifications),
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.End,
                     fontSize = 16.sp,
                     modifier = Modifier.padding(top = 8.dp),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = stringResource(id = R.string.notifications_desc),
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.End,
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
@@ -204,23 +239,19 @@ fun CardGrid() {
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.End
             ) {
-                Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = "Team",
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
+                SvgIcon(R.drawable.groups)
                 Text(
                     text = stringResource(id = R.string.team),
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.End ,
                     fontSize = 16.sp,
                     modifier = Modifier.padding(top = 8.dp),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = stringResource(id = R.string.team_desc),
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.End,
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
@@ -300,9 +331,11 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
 
 @Preview(showBackground = true)
 @Preview(showBackground = true,
+
     uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO or android.content.res.Configuration.UI_MODE_TYPE_NORMAL, name = "homeScreenPreview")
 @Composable
 fun HomeScreenPreview() {
+
     MyAppTheme {
         HomeScreen(
             navController = rememberNavController(), // Mock NavHostController

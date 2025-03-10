@@ -1,15 +1,14 @@
 <resources>
     <string name="app_name">Absher</string>
-    <string name="top_bar_title">سلاى وبركاته</string>
-    <string name="time">9:41</string>
-    <string name="files">ملفاتي</string>
-    <string name="files_desc">أرفع وأدير ملفاتي بسهولة</string>
+    <string name="top_bar_title">المجالس واللجان</string>
+    <string name="files">التوصيات</string>
+    <string name="files_desc">للإطلاع على التوصيات مع إمكانية التعديل و إضافة الملاحظات و المرفقات اللازمة</string>
     <string name="tasks">المهام</string>
-    <string name="tasks_desc">راجع مهامي وأكملها بكفاءة</string>
-    <string name="notifications">الإشعارات</string>
-    <string name="notifications_desc">تابع إشعاراتي بسهولة</string>
-    <string name="team">الفريق</string>
-    <string name="team_desc">تواصل مع زملائي بسهولة</string>
+    <string name="tasks_desc">للإطلاع على المهام مع إمكانية الموافقة، الرفض أو التوقيع بعد الإطلاع على مرفقات الاجتماع</string>
+    <string name="notifications">الإجتماعات المباشرة</string>
+    <string name="notifications_desc">للإطلاع على الاجتماعات المباشرة، مع إمكانية الإطلاع على المرفقات اللازمة و جدول الأعمال</string>
+    <string name="team">الإجتماعات</string>
+    <string name="team_desc">للإطلاع على الاجتماعات، مع إمكانية الإطلاع على المرفقات اللازمة و جدول الأعمال</string>
     <string name="nav_home">الرئيسية</string>
     <string name="nav_chat">الدردشة</string>
     <string name="nav_more">المزيد</string>

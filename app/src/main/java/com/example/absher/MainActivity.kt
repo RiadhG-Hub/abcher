@@ -9,10 +9,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.absher.ui.navigation.AppNavigation
 import com.example.absher.ui.theme.MyAppTheme
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val config = resources.configuration
+        config.setLayoutDirection(Locale("ar")) // Arabic locale forces RTL
+        resources.updateConfiguration(config, resources.displayMetrics)
         setContent {
             MyAppTheme {
                 Surface(
