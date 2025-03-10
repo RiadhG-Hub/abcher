@@ -12,10 +12,51 @@ class MeetingViewModel : ViewModel() {
     private val _meetings = MutableLiveData<List<Meeting>>()
     val meetings: LiveData<List<Meeting>> = _meetings
 
+
+    private val _meetingsState = MutableLiveData<FetchMeetingState>(FetchMeetingStateInit())
+    val meetingsState: LiveData<FetchMeetingState> = _meetingsState
+
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
     private val authToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50IjoiRjNnWTA0SkduQjNDYlErUGZNZXhaM29MeHV3dlVvaE9JM2doZlB0bGllQT0iLCJkZXBhcnRtZW50IjoibmdUdmhBeXdiOFQxL3R3TWxRWkhBTzcrdzU2TVcwMzV3M1ZMU2cycnV1OD0iLCJuYW1lIjoick82WnM1dEJacGF0RjcycUhSTWNpMWx0b04zZFR3andKOEZGRWxSWWJTMVpScEtZQjIvUExsdktqaUVDZzhUZiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMSIsImxhbmciOiJhciIsImV4cCI6MTc0MTY0OTEzMiwiaXNzIjoiSW50YWxpbyIsImF1ZCI6IkludGFsaW8ifQ.Ca_tPRc8SAQBY3yKCeqfWfW1a3EY-0J-khkUU2XZy8E"
+
+
+
+    fun fetchMeetingsWithState() {
+        _meetingsState.value = FetchMeetingStateLoading()
+        viewModelScope.launch {
+            try {
+                val request = MeetingSearchRequest(
+                    statusId = null,
+                    committeeId = null,
+                    toDate = null,
+                    fromDate = null,
+                    onlyMyMeetings = true,
+                    title = null,
+                    location = null
+                )
+
+                val response = RetrofitClient.meetingApiService.searchMeetings(
+                    page = 1,
+                    pageSize = 10,
+                    authToken = authToken,
+                    request = request
+                )
+
+                if (response.success) {
+                    _meetingsState.value = FetchMeetingStateSuccess(response.data.data);
+                } else {
+                    _meetingsState.value = FetchMeetingStateError(response.message ?: "Unknown error occurred")
+
+                }
+            } catch (e: Exception) {
+                _meetingsState.value = FetchMeetingStateError(e.message ?: "Network error occurred")
+
+            }
+        }
+    }
+
 
     fun fetchMeetings() {
         viewModelScope.launch {
@@ -48,3 +89,14 @@ class MeetingViewModel : ViewModel() {
         }
     }
 }
+
+
+
+  open class  FetchMeetingState {
+
+}
+
+class  FetchMeetingStateSuccess(val meetings: List<Meeting>) : FetchMeetingState()
+class  FetchMeetingStateError(val error: String) : FetchMeetingState()
+class  FetchMeetingStateLoading : FetchMeetingState()
+class  FetchMeetingStateInit : FetchMeetingState()

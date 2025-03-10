@@ -2,6 +2,8 @@ package com.example.absher.ui.screens
 
 
 
+import android.app.Activity
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,12 +38,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -82,6 +86,8 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = view
         containerColor = MaterialTheme.colorScheme.background
     )
 }
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -135,6 +141,7 @@ private fun SvgIcon(drawable : Int) {
 
 @Composable
 fun CardGrid() {
+    val context = LocalContext.current ;
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -235,7 +242,13 @@ fun CardGrid() {
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
-            )
+            ), onClick = {
+
+                (context as? Activity)?.let {
+                    val intent = Intent(it, MeetingActivity::class.java)
+                    it.startActivity(intent)
+                }
+            }
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
