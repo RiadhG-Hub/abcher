@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Absher</string>
+    <string name="top_bar_title">سلاى وبركاته</string>
+    <string name="time">9:41</string>
+    <string name="files">ملفاتي</string>
+    <string name="files_desc">أرفع وأدير ملفاتي بسهولة</string>
+    <string name="tasks">المهام</string>
+    <string name="tasks_desc">راجع مهامي وأكملها بكفاءة</string>
+    <string name="notifications">الإشعارات</string>
+    <string name="notifications_desc">تابع إشعاراتي بسهولة</string>
+    <string name="team">الفريق</string>
+    <string name="team_desc">تواصل مع زملائي بسهولة</string>
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_chat">الدردشة</string>
+    <string name="nav_more">المزيد</string>
+    <string name="nav_settings">الإعدادات</string>
+    <string name="nav_profile">الحساب</string>
+</resources>
