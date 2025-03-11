@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.example.absher.services.data.models.RefreshTokenResponse
 import javax.inject.Inject
 import javax.inject.Singleton
+import androidx.core.content.edit
 
 @Singleton
 class TokenManager @Inject constructor(
@@ -15,9 +16,9 @@ class TokenManager @Inject constructor(
     }
 
     fun saveAccessToken(token: String) {
-        sharedPreferences.edit()
-            .putString(KEY_ACCESS_TOKEN, token)
-            .apply()
+        sharedPreferences.edit() {
+            putString(KEY_ACCESS_TOKEN, token)
+        }
     }
 
     fun getAccessToken(): String? {
@@ -25,13 +26,12 @@ class TokenManager @Inject constructor(
     }
 
     fun clearToken() {
-        sharedPreferences.edit()
-            .remove(KEY_ACCESS_TOKEN)
-            .apply()
+        sharedPreferences.edit() {
+            remove(KEY_ACCESS_TOKEN)
+        }
     }
 
     fun refreshTokenSync(): RefreshTokenResponse? {
-        // TODO: Implement actual refresh token API call
-        return null
+        return  null
     }
 }

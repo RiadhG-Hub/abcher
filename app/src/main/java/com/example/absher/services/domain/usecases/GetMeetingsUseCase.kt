@@ -3,8 +3,10 @@ import com.example.absher.services.data.models.Meeting
 import com.example.absher.services.domain.repository.MeetingRepository
 import javax.inject.Inject
 
-class GetMeetingsUseCase @Inject constructor(private val repository: MeetingRepository) {
-    suspend operator fun invoke(): List<Meeting>? {
-        return repository.getMeetings()
+class GetMeetingsUseCase @Inject constructor(
+    private val meetingRepository: MeetingRepository
+) {
+    suspend fun execute(): List<Meeting>? {
+        return meetingRepository.getMeetings()
     }
 }

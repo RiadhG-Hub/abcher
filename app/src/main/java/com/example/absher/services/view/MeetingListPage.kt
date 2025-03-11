@@ -12,12 +12,21 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.absher.services.adapter.AuthInterceptor
+import com.example.absher.services.adapter.MeetingApiAdapter
+import com.example.absher.services.adapter.TokenManager
+import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.data.models.Meeting
+import com.example.absher.services.domain.repository.MeetingRepository
+import com.example.absher.services.domain.usecases.GetMeetingsUseCase
 import com.example.absher.services.view.ui.theme.AbsherTheme
 import com.example.absher.services.viewmodel.*
+
+// Path: view/MeetingListPage.kt
+
 
 class MeetingListPage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,8 +36,23 @@ class MeetingListPage : ComponentActivity() {
             AbsherTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MeetingListScreen(
-                        modifier = Modifier.padding(innerPadding),
-
+                        modifier = Modifier.padding(innerPadding), viewModel  = MeetingViewModel(
+                            GetMeetingsUseCase(
+                                MeetingRepository(
+                                    RemoteMeetingDataSource(
+                                        MeetingApiAdapter(
+                                            AuthInterceptor(
+                                                TokenManager(
+                                                    LocalContext.current.getSharedPreferences("app_prefs",
+                                                        MODE_PRIVATE
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                            ),
                     )
                 }
             }
@@ -38,7 +62,7 @@ class MeetingListPage : ComponentActivity() {
 
 @Composable
 fun MeetingListScreen(
-    viewModel: MeetingViewModel   = hiltViewModel(),
+    viewModel: MeetingViewModel ,
     modifier: Modifier = Modifier
 ) {
     val isDarkMode by viewModel.isDarkMode.collectAsStateWithLifecycle(initialValue = false)
@@ -55,13 +79,15 @@ fun MeetingListScreen(
 fun MeetingListViewHandler(viewModel: MeetingViewModel) {
     val meetingsState by viewModel.fetchMeetingState.observeAsState(FetchMeetingStateInit())
 
-    LaunchedEffect(Unit) { viewModel.fetchMeetings() }
+    LaunchedEffect(Unit) {
+        viewModel.fetchMeetings() // This triggers the fetch
+    }
 
     when (meetingsState) {
         is FetchMeetingStateLoading -> LoadingView()
         is FetchMeetingStateSuccess -> SuccessView((meetingsState as FetchMeetingStateSuccess).meetings)
         is FetchMeetingStateError -> ErrorView((meetingsState as FetchMeetingStateError).error)
-        else -> EmptyStateView()
+        is FetchMeetingStateInit -> EmptyStateView()
     }
 }
 
@@ -99,7 +125,7 @@ private fun ErrorView(message: String) {
     ) {
         Text(text = message, color = Color.Red)
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = { /* Implement retry logic */ }) {
+        Button(onClick = { /* Retry logic here if needed */ }) {
             Text("Retry")
         }
     }
