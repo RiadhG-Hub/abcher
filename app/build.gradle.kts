@@ -86,8 +86,8 @@ dependencies {
     implementation(libs.androidx.datastore.preferences.v100)
 
 implementation(libs.androidx.hilt.navigation.compose)
-    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
-    implementation ("com.google.dagger:hilt-android:2.50")
+    implementation (libs.androidx.hilt.navigation.compose.v100)
+    implementation (libs.hilt.android.v250)
 
 
 

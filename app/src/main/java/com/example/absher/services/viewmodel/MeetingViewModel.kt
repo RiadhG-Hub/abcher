@@ -13,42 +13,45 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import com.example.absher.services.data.models.Meeting
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
+
+
+// Define states
+sealed class FetchMeetingState
+class FetchMeetingStateInit : FetchMeetingState()
+class FetchMeetingStateLoading : FetchMeetingState()
+data class FetchMeetingStateSuccess(val meetings: List<Meeting>?) : FetchMeetingState()
+data class FetchMeetingStateError(val error: String) : FetchMeetingState()
 
 @HiltViewModel
 class MeetingViewModel @Inject constructor(
-    private val getMeetingsUseCase: GetMeetingsUseCase,
-    private val dataStore: DataStore<Preferences>
+    // Inject your repository or use case here
+    // private val meetingRepository: MeetingRepository
 ) : ViewModel() {
 
-    private val _fetchMeetingState = MutableLiveData<FetchMeetingState>()
-    val fetchMeetingState: LiveData<FetchMeetingState> get() = _fetchMeetingState
+    private val _fetchMeetingState = MutableLiveData<FetchMeetingState>(FetchMeetingStateInit())
+    val fetchMeetingState: LiveData<FetchMeetingState> = _fetchMeetingState
 
-    private val DARK_MODE_KEY = booleanPreferencesKey("dark_mode")
-    val isDarkMode: Flow<Boolean> = dataStore.data.map { it[DARK_MODE_KEY] ?: false }
+    private val _isDarkMode = MutableStateFlow(false)
+    val isDarkMode: StateFlow<Boolean> = _isDarkMode
 
     fun fetchMeetings() {
         viewModelScope.launch {
-           _fetchMeetingState.value= FetchMeetingStateLoading();
+            _fetchMeetingState.value = FetchMeetingStateLoading()
             try {
-                val meetingList : List<Meeting>? = getMeetingsUseCase()
-                _fetchMeetingState.value = FetchMeetingStateSuccess(meetingList)
-            }catch (e : Exception){
-                _fetchMeetingState.value = FetchMeetingStateError(e.message ?: "Unknown error occurred")
+                // Replace with actual data fetching logic
+                // val meetings = meetingRepository.getMeetings()
+                val meetings = listOf<Meeting>() // Placeholder
+                _fetchMeetingState.value = FetchMeetingStateSuccess(meetings)
+            } catch (e: Exception) {
+                _fetchMeetingState.value = FetchMeetingStateError(e.message ?: "Unknown error")
             }
         }
     }
 
-    fun toggleDarkMode(enabled: Boolean) {
-        viewModelScope.launch {
-            dataStore.edit { preferences ->
-                preferences[DARK_MODE_KEY] = enabled
-            }
-        }
+    fun toggleDarkMode() {
+        _isDarkMode.value = !_isDarkMode.value
     }
 }
-sealed class FetchMeetingState
-data class FetchMeetingStateSuccess(val meetings: List<Meeting>?) : FetchMeetingState()
-data class FetchMeetingStateError(val error: String) : FetchMeetingState()
-class FetchMeetingStateLoading : FetchMeetingState()
-class FetchMeetingStateInit : FetchMeetingState()
