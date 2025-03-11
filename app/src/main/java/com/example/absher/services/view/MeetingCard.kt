@@ -1,4 +1,4 @@
-package com.example.absher.ui.views
+package com.example.absher.services.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,26 +23,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.absher.model.Meeting
+import com.example.absher.services.data.models.Meeting
 
 // Custom Arabic font (if available, e.g., "Noto Sans Arabic")
 // Replace with your font resource if you have one
 
 
 @Composable
-fun MeetingCard(meeting : Meeting) {
+fun MeetingCard(meeting: Meeting) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -76,7 +72,7 @@ fun MeetingCard(meeting : Meeting) {
                     )
                 ) {
                     Text(
-                        text = "في انتظار الاجتماع",
+                        text = meeting.statusName ?: "" ,
                         style = TextStyle(
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Medium,
@@ -87,7 +83,7 @@ fun MeetingCard(meeting : Meeting) {
 
                 // Meeting ID
                 Text(
-                    text = meeting.id.toString(),
+                    text = meeting.id.toString() ,
                     style = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
@@ -114,7 +110,7 @@ fun MeetingCard(meeting : Meeting) {
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "١٤ أكتوبر ٢٠٢٤",
+                        text = meeting.date ?: "",
                         style = TextStyle(
                             fontSize = 12.sp,
                             color = Color(0xFF757575),
@@ -124,7 +120,7 @@ fun MeetingCard(meeting : Meeting) {
                 }
 
                 Text(
-                    text = "MTG-2024-84 - العمره-ج",
+                    text = meeting.location ?: "",
                     style = TextStyle(
                         fontSize = 12.sp,
                         color = Color(0xFF757575),
@@ -137,7 +133,7 @@ fun MeetingCard(meeting : Meeting) {
 
             // Title
             Text(
-                text = "اجتماع مناقشة الاستعدادات الأولية لمؤتمر الساحل والواحات",
+                text = meeting.notes ?: "",
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
@@ -167,7 +163,7 @@ fun MeetingCard(meeting : Meeting) {
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "بداية الاجتماع ٠٣:٠٠ م",
+                        text = meeting.startTime ?: "",
                         style = TextStyle(
                             fontSize = 12.sp,
                             color = Color(0xFF212121),
@@ -187,7 +183,7 @@ fun MeetingCard(meeting : Meeting) {
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "نهاية الاجتماع ٠٣:٠٠ م",
+                        text = meeting.endTime ?: "",
                         style = TextStyle(
                             fontSize = 12.sp,
                             color = Color(0xFF212121),

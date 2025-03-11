@@ -4,13 +4,13 @@ import com.example.absher.services.data.models.Meeting
 import javax.inject.Inject
 
 interface MeetingRepository {
-    suspend fun getMeetings(): List<Meeting>
+    suspend fun getMeetings(): List<Meeting>?
 }
 
 class MeetingRepositoryImpl @Inject constructor(
     private val dataSource: RemoteMeetingDataSource
 ) : MeetingRepository {
-    override suspend fun getMeetings(): List<Meeting> {
+    override suspend fun getMeetings(): List<Meeting>? {
         return dataSource.getMeetings()
     }
 }

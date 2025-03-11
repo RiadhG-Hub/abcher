@@ -21,16 +21,21 @@ class MeetingViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : ViewModel() {
 
-    private val _meetings = MutableLiveData<List<Meeting>>()
-    val meetings: LiveData<List<Meeting>> get() = _meetings
+    private val _fetchMeetingState = MutableLiveData<FetchMeetingState>()
+    val fetchMeetingState: LiveData<FetchMeetingState> get() = _fetchMeetingState
 
     private val DARK_MODE_KEY = booleanPreferencesKey("dark_mode")
     val isDarkMode: Flow<Boolean> = dataStore.data.map { it[DARK_MODE_KEY] ?: false }
 
     fun fetchMeetings() {
         viewModelScope.launch {
-            val meetingList = getMeetingsUseCase()
-            _meetings.postValue(meetingList)
+           _fetchMeetingState.value= FetchMeetingStateLoading();
+            try {
+                val meetingList : List<Meeting>? = getMeetingsUseCase()
+                _fetchMeetingState.value = FetchMeetingStateSuccess(meetingList)
+            }catch (e : Exception){
+                _fetchMeetingState.value = FetchMeetingStateError(e.message ?: "Unknown error occurred")
+            }
         }
     }
 
@@ -42,3 +47,8 @@ class MeetingViewModel @Inject constructor(
         }
     }
 }
+sealed class FetchMeetingState
+data class FetchMeetingStateSuccess(val meetings: List<Meeting>?) : FetchMeetingState()
+data class FetchMeetingStateError(val error: String) : FetchMeetingState()
+class FetchMeetingStateLoading : FetchMeetingState()
+class FetchMeetingStateInit : FetchMeetingState()

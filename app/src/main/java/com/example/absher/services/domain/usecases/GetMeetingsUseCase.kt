@@ -4,7 +4,7 @@ import com.example.absher.services.domain.repository.MeetingRepository
 import javax.inject.Inject
 
 class GetMeetingsUseCase @Inject constructor(private val repository: MeetingRepository) {
-    suspend operator fun invoke(): List<Meeting> {
+    suspend operator fun invoke(): List<Meeting>? {
         return repository.getMeetings()
     }
 }

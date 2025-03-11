@@ -1,4 +1,4 @@
-package com.example.absher.ui.screens
+package com.example.absher.services.view
 
 
 import android.os.Bundle
@@ -16,20 +16,18 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import com.example.absher.model.Meeting
+
+import com.example.absher.services.data.models.Meeting
+import com.example.absher.services.viewmodel.FetchMeetingStateError
+import com.example.absher.services.viewmodel.FetchMeetingStateLoading
+import com.example.absher.services.viewmodel.FetchMeetingStateSuccess
+import com.example.absher.services.viewmodel.MeetingViewModel
 import com.example.absher.ui.screens.ui.theme.AbsherTheme
-import com.example.absher.ui.viewmodel.FetchMeetingStateError
-import com.example.absher.ui.viewmodel.FetchMeetingStateLoading
-import com.example.absher.ui.viewmodel.FetchMeetingStateSuccess
-import com.example.absher.ui.viewmodel.MeetingViewModel
-import com.example.absher.ui.views.MeetingCard
 
 // Activity
 class MeetingActivity : ComponentActivity() {
@@ -44,7 +42,7 @@ class MeetingActivity : ComponentActivity() {
 
     private fun initializeViewModel() {
         viewModel = ViewModelProvider(this)[MeetingViewModel::class.java]
-        viewModel.fetchMeetingsWithState()
+        viewModel.fetchMeetings()
     }
 
     private fun setupContent() {
@@ -67,7 +65,7 @@ fun MeetingListScreen(
     viewModel: MeetingViewModel,
     modifier: Modifier = Modifier
 ) {
-    val meetingsState = viewModel.meetingsState.observeAsState()
+    val meetingsState = viewModel.fetchMeetingState
     val stateValue = meetingsState.value
 
     when (stateValue) {
@@ -88,15 +86,15 @@ private fun LoadingView(modifier: Modifier) {
 }
 
 @Composable
-private fun SuccessView(meetings: List<Meeting>, modifier: Modifier = Modifier) {
+private fun SuccessView(meetings: List<Meeting>?, modifier: Modifier = Modifier) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(meetings.size) {
-            MeetingCard(meeting = meetings[it])
+        items(meetings?.size ?: 0) {
+            MeetingCard(meeting = meetings?.get(it) ?: Meeting(null,null,null,null,null,null,null,null,null,null,null,null) )
         }
 
 
@@ -105,7 +103,7 @@ private fun SuccessView(meetings: List<Meeting>, modifier: Modifier = Modifier) 
 }
 
 @Composable
-private fun ErrorView(message: String, modifier: Modifier = Modifier) {
+internal fun ErrorView(message: String, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -143,10 +141,3 @@ fun Greeting(
 }
 
 // Preview
-@Preview(showBackground = true)
-@Composable
-fun MeetingListScreenPreview() {
-    AbsherTheme {
-        MeetingListScreen(viewModel = MeetingViewModel())
-    }
-}

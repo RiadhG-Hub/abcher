@@ -1,7 +1,9 @@
 package com.example.absher
 
 import android.content.Context
+import android.nfc.Tag
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +14,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
+import androidx.navigation.Navigation
+import com.example.absher.services.adapter.MeetingApiAdapter
 import com.example.absher.services.view.MeetingListScreen
 import com.example.absher.ui.navigation.AppNavigation
 import com.example.absher.ui.theme.MyAppTheme
@@ -21,6 +25,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.internal.concurrent.Task
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -36,7 +45,9 @@ class MainActivity : ComponentActivity() {
             setLocale(locale)
             setLayoutDirection(locale)
         }
-        val context = createConfigurationContext(config)
+        //val context = createConfigurationContext(config)
+
+
 
         setContent {
             MyAppTheme {
@@ -44,8 +55,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MeetingListScreen()
-                }
+                    AppNavigation()                }
             }
         }
     }
