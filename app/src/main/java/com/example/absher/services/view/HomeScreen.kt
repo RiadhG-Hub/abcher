@@ -1,9 +1,10 @@
-package com.example.absher.ui.screens
+package com.example.absher.services.view
 
 
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,9 +50,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.absher.R
-import com.example.absher.services.view.MeetingActivity
 import com.example.absher.ui.theme.MyAppTheme
-import com.example.absher.ui.viewmodel.HomeViewModel
+import com.example.absher.services.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = viewModel()) {
@@ -141,7 +141,7 @@ private fun SvgIcon(drawable : Int) {
 
 @Composable
 fun CardGrid() {
-    val context = LocalContext.current ;
+    val context = LocalContext.current
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -245,7 +245,7 @@ fun CardGrid() {
             ), onClick = {
 
                 (context as? Activity)?.let {
-                    val intent = Intent(it, MeetingActivity::class.java)
+                    val intent = Intent(it, MeetingListPage::class.java)
                     it.startActivity(intent)
                 }
             }
@@ -345,7 +345,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
 @Preview(showBackground = true)
 @Preview(showBackground = true,
 
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO or android.content.res.Configuration.UI_MODE_TYPE_NORMAL, name = "homeScreenPreview")
+    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL, name = "homeScreenPreview")
 @Composable
 fun HomeScreenPreview() {
 

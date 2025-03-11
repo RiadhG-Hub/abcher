@@ -1,4 +1,4 @@
-package com.example.absher.ui.viewmodel
+package com.example.absher.services.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
