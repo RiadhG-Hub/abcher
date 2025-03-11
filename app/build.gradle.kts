@@ -44,7 +44,7 @@ android {
 
 dependencies {
     // Core Libraries
-    implementation(libs.androidx.core.ktx)
+
     implementation(libs.androidx.activity.compose)
 
     // Compose Libraries

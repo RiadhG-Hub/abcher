@@ -35,13 +35,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.absher.model.Meeting
 
 // Custom Arabic font (if available, e.g., "Noto Sans Arabic")
 // Replace with your font resource if you have one
 
 
 @Composable
-fun MeetingCard() {
+fun MeetingCard(meeting : Meeting) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -86,7 +87,7 @@ fun MeetingCard() {
 
                 // Meeting ID
                 Text(
-                    text = "#232333",
+                    text = meeting.id.toString(),
                     style = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
@@ -213,11 +214,11 @@ fun MeetingCard() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MeetingCardPreview() {
-    // Set the direction to RTL for Arabic text
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        MeetingCard()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun MeetingCardPreview() {
+//    // Set the direction to RTL for Arabic text
+//    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+//        MeetingCard()
+//    }
+//}
