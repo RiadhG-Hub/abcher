@@ -11,6 +11,62 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+class MeetingViewModel(
+    private val getMeetingsUseCase: GetMeetingsUseCase
+) : ViewModel() {
+    private val _fetchMeetingState = MutableLiveData<FetchMeetingState>()
+    val fetchMeetingState: LiveData<FetchMeetingState> = _fetchMeetingState
+
+    val isDarkMode = MutableStateFlow(false)
+
+    private var currentPage = 1
+    private val pageSize = 10
+    private var isLoading = false
+    private var hasMoreData = true
+    private val allMeetings = mutableListOf<Meeting>()
+
+    init {
+        fetchMeetings()
+    }
+
+    fun fetchMeetings() {
+        if (isLoading || !hasMoreData) return
+
+        isLoading = true
+        _fetchMeetingState.value = FetchMeetingStateLoading()
+
+        viewModelScope.launch {
+            try {
+                val response = getMeetingsUseCase.execute(
+                    from = currentPage,
+                    to = pageSize
+                )
+                val newMeetings = response ?: emptyList()
+
+                allMeetings.addAll(newMeetings)
+                hasMoreData = newMeetings.size == pageSize
+                currentPage++
+
+                _fetchMeetingState.postValue(
+                    FetchMeetingStateSuccess(allMeetings.toList())
+                )
+            } catch (e: Exception) {
+                _fetchMeetingState.postValue(
+                    FetchMeetingStateError(e.message ?: "Unknown error")
+                )
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun resetAndFetch() {
+        currentPage = 1
+        allMeetings.clear()
+        hasMoreData = true
+        fetchMeetings()
+    }
+}
 
 // Define states
 sealed class FetchMeetingState
@@ -18,38 +74,3 @@ class FetchMeetingStateInit : FetchMeetingState()
 class FetchMeetingStateLoading : FetchMeetingState()
 data class FetchMeetingStateSuccess(val meetings: List<Meeting>?) : FetchMeetingState()
 data class FetchMeetingStateError(val error: String) : FetchMeetingState()
-
-
-
-
-
-@HiltViewModel
-class MeetingViewModel @Inject constructor(
-    private val getMeetingsUseCase: GetMeetingsUseCase
-) : ViewModel() {
-
-    // StateFlow for dark mode (as in your original code)
-    private val _isDarkMode = MutableStateFlow(false)
-    val isDarkMode: StateFlow<Boolean> = _isDarkMode
-
-    // LiveData for meeting fetch state
-    private val _fetchMeetingState = MutableLiveData<FetchMeetingState>(FetchMeetingStateInit())
-    val fetchMeetingState: LiveData<FetchMeetingState> = _fetchMeetingState
-
-    fun fetchMeetings() {
-        viewModelScope.launch {
-            _fetchMeetingState.value = FetchMeetingStateLoading()
-            try {
-                val meetings = getMeetingsUseCase.execute(from = 1, to = 10)
-                _fetchMeetingState.value = FetchMeetingStateSuccess(meetings)
-            } catch (e: Exception) {
-                _fetchMeetingState.value = FetchMeetingStateError(e.message ?: "Unknown error")
-            }
-        }
-    }
-
-    // Optional: Toggle dark mode if needed
-    fun toggleDarkMode() {
-        _isDarkMode.value = !_isDarkMode.value
-    }
-}

@@ -2,7 +2,9 @@ package com.example.absher.services.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,27 +17,53 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.absher.R
 import com.example.absher.services.data.models.Meeting
+import com.example.absher.services.view.ui.theme.AbsherTheme
 
 // Custom Arabic font (if available, e.g., "Noto Sans Arabic")
 // Replace with your font resource if you have one
 
+
+
+@Composable
+fun ClickableUnderlinedText(onClick: () -> Unit) {
+    Text(
+        text = "المزيد من التفاصيل",
+        style = TextStyle(
+            fontSize = 12.sp,
+            color = Color(0xFF39836B),
+            textDecoration = TextDecoration.Underline // Adds underline
+        ),
+        textAlign = TextAlign.End,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() } // Makes the text clickable
+            .padding(4.dp) // Adds slight padding for better tap experience
+    )
+}
 
 @Composable
 fun MeetingCard(meeting: Meeting) {
@@ -59,6 +87,19 @@ fun MeetingCard(meeting: Meeting) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Status button
+
+
+                // Meeting ID
+                Text(
+                    text = " ${meeting.id}#" ,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF212121), // Dark gray
+                        // fontFamily = arabicFontFamily
+                    )
+                )
+
                 TextButton(
                     onClick = { /* Handle click */ },
                     modifier = Modifier
@@ -80,17 +121,6 @@ fun MeetingCard(meeting: Meeting) {
                         )
                     )
                 }
-
-                // Meeting ID
-                Text(
-                    text = meeting.id.toString() ,
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF212121), // Dark gray
-                        // fontFamily = arabicFontFamily
-                    )
-                )
             }
 
             // Date and Reference Number
@@ -98,16 +128,30 @@ fun MeetingCard(meeting: Meeting) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
+
             ) {
+
+
+                Box(modifier = Modifier
+
+                    .padding(8.dp)
+                    .background(color = Color(0x00E0F7FA), shape = RoundedCornerShape(8.dp))
+                    .border(1.dp, Color(0xFFCBCBCB), RoundedCornerShape(8.dp))
+                    .padding(12.dp)){
+                    Text(
+                        text = "الرقم التعريفي ${meeting.referenceNumber}",
+                        style = TextStyle(
+                            fontSize = 12.sp,
+                            color = Color(0xFF757575),
+                            // fontFamily = arabicFontFamily
+                        )
+                    )
+                }
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange, // Calendar icon
-                        contentDescription = "Date Icon",
-                        tint = Color(0xFF757575), // Medium gray
-                        modifier = Modifier.size(14.dp)
-                    )
+                    SvgIcon(R.drawable.calendar_today)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = meeting.date ?: "",
@@ -118,52 +162,46 @@ fun MeetingCard(meeting: Meeting) {
                         )
                     )
                 }
-
-                Text(
-                    text = meeting.location ?: "",
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        color = Color(0xFF757575),
-                        // fontFamily = arabicFontFamily
-                    )
-                )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             // Title
-            Text(
-                text = meeting.notes ?: "",
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF212121),
-                    // fontFamily = arabicFontFamily
-                ),
-                textAlign = TextAlign.End,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .background(color = Color(0xFFF2F2F2))
+
+                    .padding(12.dp)
+            ) {
+                Text(
+                    text = meeting.notes ?: "",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF353334),
+                    ),
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
             // Start and End Time
-            Row(
+            Column (
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                horizontalAlignment = Alignment.CenterHorizontally,
+
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.CheckCircle,
-                        contentDescription = "Start Time Icon",
-                        tint = Color(0xFF4CAF50), // Green
-                        modifier = Modifier.size(16.dp)
-                    )
+                    SvgIcon(R.drawable.timer)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = meeting.startTime ?: "",
+                        text = " بداية الإجتماع   ${meeting.startTime}",
                         style = TextStyle(
                             fontSize = 12.sp,
                             color = Color(0xFF212121),
@@ -171,19 +209,14 @@ fun MeetingCard(meeting: Meeting) {
                         )
                     )
                 }
-
+                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp).background(Color(0XFFF2F2F2)), thickness = 1.dp)
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "End Time Icon",
-                        tint = Color(0xFFF44336), // Red
-                        modifier = Modifier.size(16.dp)
-                    )
+                    SvgIcon(R.drawable.timer_off)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = meeting.endTime ?: "",
+                        text = " نهاية الإجتماع   ${meeting.endTime}",
                         style = TextStyle(
                             fontSize = 12.sp,
                             color = Color(0xFF212121),
@@ -196,25 +229,35 @@ fun MeetingCard(meeting: Meeting) {
             Spacer(modifier = Modifier.height(12.dp))
 
             // Location
-            Text(
-                text = "المعرض التجاري",
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    color = Color(0xFF757575),
-                    // fontFamily = arabicFontFamily
-                ),
-                textAlign = TextAlign.End,
-                modifier = Modifier.fillMaxWidth()
-            )
+            ClickableUnderlinedText{
+
+            }
         }
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun MeetingCardPreview() {
-//    // Set the direction to RTL for Arabic text
-//    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-//        MeetingCard()
-//    }
-//}
+@Preview(showBackground = true)
+@Composable
+fun MeetingCardPreview() {
+    AbsherTheme {
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            val sampleMeeting = Meeting(
+                id = 7,
+                statusId = 5,
+                referenceNumber = "MTG-2024-0",
+                title = "إجتماع مناقشة نظام إدارة الجلسات الخاصة بالمجالس واللجان",
+                date = "2024-07-01T00:00:00",
+                startTime = "13:00",
+                endTime = "17:00",
+                location = "Intalio Meeting Room",
+                isCommittee = false,
+                notes = "جناح الديوان العام للمحاسبة بمؤتمر \"ليب 2024\" يشهد إقبالاً واسعاً للاطلاع على تجربة المراجعة الإلكترونية\n" +
+                        "جناح الديوان العام للمحاسبة بمؤتمر \"ليب 2024\" يشهد إقبالاً واسعاً للاطلاع على تجربة المراجعة الإلكترونية\n" +
+                        "جناح الديوان العام للمحاسبة بمؤتمر \"ليب 2024\" يشهد إقبالاً واسعاً للاطلاع على تجربة المراجعة الإلكترونية",
+                committeeName = "لجان النظر في المخالفات والتظلمات",
+                statusName = "تم الانتهاء"
+            )
+            MeetingCard(meeting = sampleMeeting)
+        }
+    }
+}

@@ -132,7 +132,7 @@ fun TopAppBarWithTime() {
 }
 
 @Composable
-private fun SvgIcon(drawable : Int) {
+fun SvgIcon(drawable : Int) {
     Image(
         painter = painterResource(id = drawable),
         contentDescription = "My SVG Icon"
