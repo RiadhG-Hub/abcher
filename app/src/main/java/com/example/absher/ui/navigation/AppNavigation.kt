@@ -7,15 +7,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.absher.services.view.MeetingListScreen
 
-import com.example.absher.ui.screens.HomeScreen
+
+
+
 
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
-        composable("home") { HomeScreen(navController) }
+        composable("home") { MeetingListScreen() }
         composable("chat") { ChatScreen() }
         composable("more") { MoreScreen() }
         composable("settings") { SettingsScreen() }

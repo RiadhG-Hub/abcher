@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -76,14 +78,20 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(libs.kotlinx.coroutines.android.v139)
+    implementation(libs.hilt.android.v2511)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.datastore.preferences.v100)
+
+implementation(libs.androidx.hilt.navigation.compose)
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation ("com.google.dagger:hilt-android:2.50")
 
 
 
+    kotlin("kapt")
 
-
-
-
-
-
-
+}
+kapt {
+    correctErrorTypes = true
 }
