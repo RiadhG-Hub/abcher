@@ -40,7 +40,7 @@ class MeetingViewModel @Inject constructor(
         viewModelScope.launch {
             _fetchMeetingState.value = FetchMeetingStateLoading()
             try {
-                val meetings = getMeetingsUseCase.execute()
+                val meetings = getMeetingsUseCase.execute(from = 1, to = 10)
                 _fetchMeetingState.value = FetchMeetingStateSuccess(meetings)
             } catch (e: Exception) {
                 _fetchMeetingState.value = FetchMeetingStateError(e.message ?: "Unknown error")
