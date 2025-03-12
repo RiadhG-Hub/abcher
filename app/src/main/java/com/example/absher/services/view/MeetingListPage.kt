@@ -1,5 +1,6 @@
 package com.example.absher.services.view
 
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,9 +17,13 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -99,7 +104,7 @@ fun MeetingListScreenTopAppBar() {
 
 
                     // Add spacing between icon and text
-                    SvgIcon(R.drawable.right)
+                    SvgIcon(R.drawable.right, modifier = Modifier.rotate(180f).padding())
                     Text(
                         text = stringResource(id = R.string.team),
                         color = MaterialTheme.colorScheme.onPrimary,
@@ -110,7 +115,7 @@ fun MeetingListScreenTopAppBar() {
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
+                containerColor = Color(0xFFCDB372),
                 titleContentColor = MaterialTheme.colorScheme.onPrimary
             )
         )
@@ -119,7 +124,7 @@ fun MeetingListScreenTopAppBar() {
 }
 
 @Composable
-private fun LoadingView() {
+private fun LoadingView(modifier: Modifier = Modifier) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator()
     }
@@ -276,4 +281,18 @@ private fun ErrorView(message: String, onRetry: () -> Unit) {
             Text("Retry")
         }
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun MeetingListScreenLoadingPreview() {
+    AbsherTheme {
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        Scaffold(
+            topBar = { MeetingListScreenTopAppBar() }
+        ) { paddingValues ->
+            LoadingView(modifier = Modifier.padding(paddingValues))
+        }
+    }}
 }

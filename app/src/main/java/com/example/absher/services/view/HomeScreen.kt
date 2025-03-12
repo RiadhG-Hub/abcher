@@ -35,15 +35,19 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -106,10 +110,10 @@ fun TopAppBarWithTime() {
             title = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End, // Align content to the right
+                    horizontalArrangement = Arrangement.Start, // Align content to the right
                     modifier = Modifier.fillMaxWidth()
                 ) {
-
+                    SvgIcon(R.drawable.right, modifier = Modifier.rotate(180f).padding())
 
                     // Add spacing between icon and text
 
@@ -119,7 +123,7 @@ fun TopAppBarWithTime() {
                         fontSize = 18.sp
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    SvgIcon(R.drawable.right)
+
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
@@ -132,11 +136,13 @@ fun TopAppBarWithTime() {
 }
 
 @Composable
-fun SvgIcon(drawable : Int) {
-    Image(
-        painter = painterResource(id = drawable),
-        contentDescription = "My SVG Icon"
-    )
+fun SvgIcon(drawable : Int, modifier: Modifier = Modifier) {
+    Box(modifier = modifier){
+        Image(
+            painter = painterResource(id = drawable),
+            contentDescription = "My SVG Icon"
+        )
+    }
 }
 
 @Composable
@@ -156,58 +162,26 @@ fun CardGrid() {
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.End
-            ) {
-                SvgIcon(R.drawable.note)
-                Text(
-                    text = stringResource(id = R.string.files),
-                    textAlign = TextAlign.End,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(top = 8.dp),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = stringResource(id = R.string.files_desc),
-                    textAlign = TextAlign.End,
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
-            }
-        }
-        Card(
-            modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(8.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            )
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.End
+                horizontalAlignment = Alignment.Start
 
             ) {
                 SvgIcon(R.drawable.task)
                 Text(
                     text = stringResource(id = R.string.tasks),
-                    textAlign = TextAlign.End,
+                    textAlign = TextAlign.Start,
                     fontSize = 16.sp,
                     modifier = Modifier.padding(top = 8.dp),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = stringResource(id = R.string.tasks_desc),
-                    textAlign = TextAlign.End,
+                    textAlign = TextAlign.Start,
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }
         }
-    }
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+
         Card(
             modifier = Modifier.weight(1f),
             shape = RoundedCornerShape(8.dp),
@@ -218,24 +192,31 @@ fun CardGrid() {
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.End
+                horizontalAlignment = Alignment.Start
             ) {
-                SvgIcon(R.drawable.online_prediction)
+                SvgIcon(R.drawable.note)
                 Text(
-                    text = stringResource(id = R.string.notifications),
-                    textAlign = TextAlign.End,
+                    text = stringResource(id = R.string.files),
+                    textAlign = TextAlign.Start,
                     fontSize = 16.sp,
                     modifier = Modifier.padding(top = 8.dp),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = stringResource(id = R.string.notifications_desc),
-                    textAlign = TextAlign.End,
+                    text = stringResource(id = R.string.files_desc),
+                    textAlign = TextAlign.Start,
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }
         }
+
+    }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+
         Card(
             modifier = Modifier.weight(1f),
             shape = RoundedCornerShape(8.dp),
@@ -252,19 +233,47 @@ fun CardGrid() {
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.End
+                horizontalAlignment = Alignment.Start
             ) {
                 SvgIcon(R.drawable.groups)
                 Text(
                     text = stringResource(id = R.string.team),
-                    textAlign = TextAlign.End ,
+                    textAlign = TextAlign.Start ,
                     fontSize = 16.sp,
                     modifier = Modifier.padding(top = 8.dp),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = stringResource(id = R.string.team_desc),
-                    textAlign = TextAlign.End,
+                    textAlign = TextAlign.Start,
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+            }
+        }
+        Card(
+            modifier = Modifier.weight(1f),
+            shape = RoundedCornerShape(8.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            )
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
+                SvgIcon(R.drawable.online_prediction)
+                Text(
+                    text = stringResource(id = R.string.notifications),
+                    textAlign = TextAlign.Start,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(top = 8.dp),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = stringResource(id = R.string.notifications_desc),
+                    textAlign = TextAlign.Start,
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
@@ -350,9 +359,10 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
 fun HomeScreenPreview() {
 
     MyAppTheme {
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         HomeScreen(
             navController = rememberNavController(), // Mock NavHostController
             viewModel = HomeViewModel() // Instantiate a new ViewModel for preview
         )
-    }
+    }}
 }
