@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
@@ -31,8 +32,9 @@ import com.example.absher.R
 
 
 @Composable
-fun MeetingsAttendsCardView( modifier: Modifier = Modifier) {
-    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically){
+fun MeetingsAttendsCardView( modifier: Modifier = Modifier
+, title : String, subtitle : String) {
+    Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
         Box(
             modifier = Modifier
                 .size(40.dp) // Adjust size as needed
@@ -42,7 +44,7 @@ fun MeetingsAttendsCardView( modifier: Modifier = Modifier) {
         SvgIcon(drawable = R.drawable.man , modifier =  Modifier.size(40.dp).fillMaxSize() )
 }
         Column {
-            Text(text = "عبدالله بن محمد", style = TextStyle(
+            Text(text = title, style = TextStyle(
 
                     fontSize = 12.sp,
                     lineHeight = 20.sp,
@@ -53,7 +55,7 @@ fun MeetingsAttendsCardView( modifier: Modifier = Modifier) {
                     textAlign = TextAlign.Right,
 
             ))
-            Text(text = "oaadiab@hq.moi.gov.sa", style = TextStyle(
+            Text(text = subtitle, style = TextStyle(
                     fontSize = 12.sp,
                 lineHeight = 20.sp,
 
@@ -72,6 +74,6 @@ fun MeetingsAttendsCardView( modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     AbsherTheme {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            MeetingsAttendsCardView()}
+            MeetingsAttendsCardView(title = "Title example ", subtitle = "Subtitle example")}
     }
 }

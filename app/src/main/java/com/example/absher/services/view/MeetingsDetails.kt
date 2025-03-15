@@ -26,8 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,31 +34,52 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.absher.R
+import com.example.absher.services.adapter.MeetingApiAdapter
+import com.example.absher.services.data.datasource.RemoteMeetingDataSource
+import com.example.absher.services.domain.repository.MeetingRepository
+import com.example.absher.services.domain.usecases.GetMeetingsUseCase
 import com.example.absher.services.view.ui.theme.AbsherTheme
+import com.example.absher.services.viewmodel.FetchMeetingAttendsViewModel
 import com.example.absher.services.viewmodel.MeetingDetailsNavigationSections
 import com.example.absher.services.viewmodel.MeetingDetailsNavigationViewModel
 
 class MeetingsDetails : ComponentActivity() {
+    val fetchMeetingAttendsViewModel  = FetchMeetingAttendsViewModel(
+    GetMeetingsUseCase(
+    MeetingRepository(
+    RemoteMeetingDataSource(
+    MeetingApiAdapter(
+
+    )
+    )
+    )
+    )
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val meetingId = intent.getIntExtra("MEETING_ID", 0)
+       /// val meetingId = intent.getIntExtra("MEETING_ID", 0)
+
         setContent {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                DetailsWrapper()
+                DetailsWrapper(fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel)
 
             }
     }
 }
 @Composable
-fun DetailsWrapper(modifier: Modifier = Modifier , viewModel : MeetingDetailsNavigationViewModel = viewModel()){
+fun DetailsWrapper(
+    modifier: Modifier = Modifier,
+    viewModel: MeetingDetailsNavigationViewModel = viewModel(),
+    fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel()
+){
     val selectedIndex = viewModel.selectedNavItem.value
     Scaffold (
         topBar = {
             MeetingDetailsTopAppBar()
         },
         content = { padding ->
-        Column(
+        Column(horizontalAlignment =  Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
@@ -68,7 +87,7 @@ fun DetailsWrapper(modifier: Modifier = Modifier , viewModel : MeetingDetailsNav
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             NavigationTopAppBar(selectedIndex = selectedIndex)
-            Wrapper()
+            Wrapper(fetchMeetingAttendsViewModel= fetchMeetingAttendsViewModel)
 
         }
 
@@ -77,7 +96,7 @@ fun DetailsWrapper(modifier: Modifier = Modifier , viewModel : MeetingDetailsNav
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-  fun MeetingDetailsTopAppBar(modifier: Modifier=Modifier , ) {
+  fun MeetingDetailsTopAppBar() {
     TopAppBar(
         title = { Text("My App") },
         navigationIcon = {
@@ -185,7 +204,7 @@ fun NavigationItem (modifier: Modifier=Modifier , title:String, icon:Int , index
 
 
 @Composable
-private  fun Wrapper(modifier: Modifier = Modifier , viewModel : MeetingDetailsNavigationViewModel = viewModel() )
+private  fun Wrapper(viewModel : MeetingDetailsNavigationViewModel = viewModel(), fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel())
 {
 when(viewModel.selectedNavItem.value){
     MeetingDetailsNavigationSections.Meetings -> {
@@ -196,7 +215,8 @@ when(viewModel.selectedNavItem.value){
         Text(text = viewModel.selectedNavItem.value.name)
     }
     MeetingDetailsNavigationSections.Attends -> {
-        Text(text = viewModel.selectedNavItem.value.name)
+        fetchMeetingAttendsViewModel.fetchMeetingAttendees(meetingID = 2103)
+        AttendsList(meetingId = 0, fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel)
 
     }
     MeetingDetailsNavigationSections.Attachments -> {
@@ -204,6 +224,8 @@ when(viewModel.selectedNavItem.value){
     }
 }
 }
+
+
 
 @Preview(showBackground = true)
 @Composable
