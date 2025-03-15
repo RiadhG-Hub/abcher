@@ -5,6 +5,7 @@ package com.example.absher.services.view
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -136,10 +138,15 @@ fun TopAppBarWithTime() {
 }
 
 @Composable
-fun SvgIcon(drawable : Int, modifier: Modifier = Modifier) {
+fun SvgIcon(drawable : Int, modifier: Modifier = Modifier , defaultColor : Color? = null ) {
     Box(modifier = modifier){
         Image(
             modifier= modifier,
+            colorFilter = if (defaultColor != null ) {
+                ColorFilter.tint(defaultColor)
+            } else {
+                null
+            },
             painter = painterResource(id = drawable),
             contentDescription = "My SVG Icon"
         )

@@ -19,9 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.absher.services.view.ui.theme.AbsherTheme
 import com.example.absher.R
 
@@ -35,11 +39,29 @@ fun MeetingsAttendsCardView( modifier: Modifier = Modifier) {
                 .clip(CircleShape) // Makes the image circular
                 .border(BorderStroke(1.dp, Color(0XFFE5D9B4)), CircleShape) // Adds border
         ) {
-        SvgIcon(drawable = R.drawable.man , modifier =  Modifier.size(40.dp).fillMaxSize(), )
+        SvgIcon(drawable = R.drawable.man , modifier =  Modifier.size(40.dp).fillMaxSize() )
 }
         Column {
-            Text(text = "عبدالله بن محمد")
-            Text(text = "oaadiab@hq.moi.gov.sa")
+            Text(text = "عبدالله بن محمد", style = TextStyle(
+
+                    fontSize = 12.sp,
+                    lineHeight = 20.sp,
+
+                    fontWeight = FontWeight(700),
+                    color = Color(0xFF808080),
+
+                    textAlign = TextAlign.Right,
+
+            ))
+            Text(text = "oaadiab@hq.moi.gov.sa", style = TextStyle(
+                    fontSize = 12.sp,
+                lineHeight = 20.sp,
+
+                fontWeight = FontWeight(400),
+                color = Color(0xFF353334),
+
+                textAlign = TextAlign.Right,
+            ))
         }
     }
 }
