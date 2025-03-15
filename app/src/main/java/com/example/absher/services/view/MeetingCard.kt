@@ -1,5 +1,7 @@
 package com.example.absher.services.view
 
+import android.util.Log
+import android.webkit.ConsoleMessage.MessageLevel.LOG
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,18 +13,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -31,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -51,7 +48,7 @@ import com.example.absher.services.view.ui.theme.AbsherTheme
 @Composable
 fun ClickableUnderlinedText(onClick: () -> Unit) {
     Text(
-        text = "المزيد من التفاصيل",
+        text = stringResource(R.string.moredetails),
         style = TextStyle(
             fontSize = 12.sp,
             color = Color(0xFF39836B),
@@ -60,13 +57,19 @@ fun ClickableUnderlinedText(onClick: () -> Unit) {
         textAlign = TextAlign.End,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() } // Makes the text clickable
+            .clickable {
+                Log.i(
+                    "ClickableUnderlinedText",
+                    "ClickableUnderlinedText: ClickableUnderlinedText"
+                )
+                onClick()
+            } // Makes the text clickable
             .padding(4.dp) // Adds slight padding for better tap experience
     )
 }
 
 @Composable
-fun MeetingCard(meeting: Meeting) {
+fun MeetingCard(meeting: Meeting,  onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -139,7 +142,7 @@ fun MeetingCard(meeting: Meeting) {
                     .border(1.dp, Color(0xFFCBCBCB), RoundedCornerShape(8.dp))
                     .padding(12.dp)){
                     Text(
-                        text = "الرقم التعريفي ${meeting.referenceNumber}",
+                        text = stringResource(R.string.infonumber, meeting.referenceNumber!!),
                         style = TextStyle(
                             fontSize = 12.sp,
                             color = Color(0xFF757575),
@@ -201,7 +204,7 @@ fun MeetingCard(meeting: Meeting) {
                     SvgIcon(R.drawable.timer)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = " بداية الإجتماع   ${meeting.startTime}",
+                        text = stringResource(R.string.startmeeting, meeting.startTime!!),
                         style = TextStyle(
                             fontSize = 12.sp,
                             color = Color(0xFF212121),
@@ -209,14 +212,16 @@ fun MeetingCard(meeting: Meeting) {
                         )
                     )
                 }
-                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp).background(Color(0XFFF2F2F2)), thickness = 1.dp)
+                HorizontalDivider(modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .background(Color(0XFFF2F2F2)), thickness = 1.dp)
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     SvgIcon(R.drawable.timer_off)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = " نهاية الإجتماع   ${meeting.endTime}",
+                        text = stringResource(R.string.meetingend, meeting.endTime!!),
                         style = TextStyle(
                             fontSize = 12.sp,
                             color = Color(0xFF212121),
@@ -230,7 +235,7 @@ fun MeetingCard(meeting: Meeting) {
 
             // Location
             ClickableUnderlinedText{
-
+onClick()
             }
         }
     }
@@ -257,7 +262,9 @@ fun MeetingCardPreview() {
                 committeeName = "لجان النظر في المخالفات والتظلمات",
                 statusName = "تم الانتهاء"
             )
-            MeetingCard(meeting = sampleMeeting)
+            MeetingCard(meeting = sampleMeeting, onClick = {
+                Log.e("MeetingCard ", "MeetingCardPreview: ${sampleMeeting.title}", )
+            })
         }
     }
 }

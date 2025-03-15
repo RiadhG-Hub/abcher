@@ -89,7 +89,11 @@ implementation(libs.androidx.hilt.navigation.compose)
     implementation (libs.androidx.hilt.navigation.compose.v100)
     implementation (libs.hilt.android.v250)
 
+    testImplementation (libs.mockito.kotlin)
 
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.mockito.kotlin.v410)
+    testImplementation (libs.kotlinx.coroutines.test)
 
     kotlin("kapt")
 

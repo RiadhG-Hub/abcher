@@ -1,5 +1,4 @@
 package com.example.absher.services.adapter// adapter/MeetingApiAdapter.kt
-import android.util.Log
 import com.example.absher.services.data.models.MeetingRequestBody
 import com.example.absher.services.data.models.MeetingResponse
 import retrofit2.HttpException
@@ -10,8 +9,11 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-class MeetingApiAdapter(authInterceptor: AuthInterceptor) {
-    // TODO add token refresh logic using authInterceptor
+class MeetingApiAdapter {
+    private var tokenCore = "azs"
+    private val tokenApiAdapter = TokenApiAdapter()
+
+    // TODO: Add token refresh logic using authInterceptor
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://mmsksa.d-intalio.com/MMS_Api/")
         .addConverterFactory(GsonConverterFactory.create())
@@ -19,29 +21,38 @@ class MeetingApiAdapter(authInterceptor: AuthInterceptor) {
 
     private val apiService = retrofit.create(MeetingApiService::class.java)
 
-    suspend fun fetchMeetings(from : Int = 0,    to : Int = 10): MeetingResponse? {
+    suspend fun fetchMeetings(from: Int = 1, to: Int = 10, token: String = "Bearer $tokenCore"): MeetingResponse? {
         val requestBody = MeetingRequestBody()
-        val tokenCore = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50IjoiekZjMUFVMUZ6QXBuSjZpVUxkaGxibUFoeXlNMUtkdmV3YW81RU14TmZSND0iLCJkZXBhcnRtZW50IjoiUHZ5VEtPOGJDWmdpWUU5NFQxM0JFaHQ0UjhQcThsMWp5bW5GY3ExMHVLMD0iLCJuYW1lIjoidHBBZXRNMHNjZHJ4eG9obE1BNTRidFFjY1Q0bGZWZzJ1TnNnNGZiMWxrQlFzNVkyK2pIV2Q3UTdsMC93YjFxSyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMSIsImxhbmciOiJhciIsImV4cCI6MTc0MTc0MTYyMiwiaXNzIjoiSW50YWxpbyIsImF1ZCI6IkludGFsaW8ifQ.ZJspSG8nkS1nEJFeAt0ywH0CwT-925FZJP7Nxdg7EB0"
-        val token = "Bearer $tokenCore"
 
         return try {
-            val result = apiService.getMeetings(token, from = from.toString()  , to = to.toString(), requestBody)
-            Log.e("fetchMeetings", "Success: $result")
+            val result = apiService.getMeetings(token, from.toString(), to.toString(), requestBody)
+            println("[INFO] Fetch meetings successful: $result")
+            println("[INFO] Message: ${result.message}")
             result
         } catch (e: HttpException) {
             if (e.code() == 401) {
-                Log.e("fetchMeetings", "Error 401: Unauthorized - Invalid or expired token")
+                println("[WARNING] 401 Unauthorized: Token expired, attempting refresh...")
+                val tokenResult = tokenApiAdapter.testToken()
+                tokenResult?.data?.token?.let {
+                    tokenCore = it
+                    println("[INFO] Token refreshed successfully.")
+                    return fetchMeetings(from, to, "Bearer $tokenCore")
+                } ?: run {
+                    println("[ERROR] Token refresh failed.")
+                    null
+                }
             } else {
-                Log.e("fetchMeetings", "HTTP error: ${e.code()} - ${e.message()}")
+                System.err.println("[ERROR] HTTP ${e.code()}: ${e.message()}")
+                null
             }
-            null
         } catch (e: Exception) {
-            Log.e("fetchMeetings", "Unexpected error: ${e.message}")
+            System.err.println("[ERROR] Unexpected error: ${e.message}")
             null
         }
-    }}
+    }
+}
 
- interface MeetingApiService {
+interface MeetingApiService {
     @POST("api/meetings/search/{from}/{to}")
     suspend fun getMeetings(
         @Header("Authorization") token: String,
@@ -50,4 +61,3 @@ class MeetingApiAdapter(authInterceptor: AuthInterceptor) {
         @Body requestBody: MeetingRequestBody
     ): MeetingResponse
 }
-

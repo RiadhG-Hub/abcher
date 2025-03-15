@@ -22,7 +22,7 @@ class AuthInterceptor @Inject constructor(
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        
+
         val token = tokenManager.getAccessToken()
         val authenticatedRequest = originalRequest.newBuilder()
             .addAuthHeader(token)
@@ -59,12 +59,16 @@ class AuthInterceptor @Inject constructor(
         }
     }
 
-    private fun refreshToken(): String? {
+     fun refreshToken(): String? {
         try {
             val refreshResponse = tokenManager.refreshTokenSync()
-            return refreshResponse?.accessToken
+            return refreshResponse?.data!!.token
         } catch (e: Exception) {
             return null
         }
+    }
+
+    fun getToken() : String? {
+        return  tokenManager.getAccessToken()
     }
 }

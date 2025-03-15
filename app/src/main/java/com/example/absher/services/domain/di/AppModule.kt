@@ -31,16 +31,12 @@ object AppModule {
         return TokenManager(sharedPreferences)
     }
 
-    @Provides
-    @Singleton
-    fun provideAuthInterceptor(tokenManager: TokenManager): AuthInterceptor {
-        return AuthInterceptor(tokenManager)
-    }
+
 
     @Provides
     @Singleton
     fun provideMeetingApiAdapter(authInterceptor: AuthInterceptor): MeetingApiAdapter {
-        return MeetingApiAdapter(authInterceptor)
+        return MeetingApiAdapter()
     }
 
     @Provides

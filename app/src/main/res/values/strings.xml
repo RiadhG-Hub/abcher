@@ -16,4 +16,9 @@
     <string name="nav_profile">الحساب</string>
     <string name="title_activity_meeting">MeetingActivity</string>
     <string name="title_activity_meeting_list_page">MeetingListPage</string>
+    <string name="meetings">الإجتماع</string>
+    <string name="meetingend">" نهاية الإجتماع   %1$s"</string>
+    <string name="moredetails">المزيد من التفاصيل</string>
+    <string name="infonumber">الرقم التعريفي %1$s</string>
+    <string name="startmeeting">" بداية الإجتماع   %1$s"</string>
 </resources>

@@ -21,7 +21,7 @@
             android:label="@string/title_activity_meeting_list_page"
             android:theme="@style/Theme.Absher" />
         <activity
-            android:name=".services.view.MeetingActivity"
+            android:name=".services.view.MeetingsDetails"
             android:exported="false"
             android:label="@string/title_activity_meeting"
             android:theme="@style/Theme.Absher" />

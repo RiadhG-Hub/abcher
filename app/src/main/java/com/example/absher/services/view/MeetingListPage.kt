@@ -1,7 +1,8 @@
 package com.example.absher.services.view
 
-import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -50,6 +51,7 @@ class MeetingListPage : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AbsherTheme {
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 Scaffold(
 
                     topBar = { MeetingListScreenTopAppBar() },
@@ -60,20 +62,14 @@ class MeetingListPage : ComponentActivity() {
                                 MeetingRepository(
                                     RemoteMeetingDataSource(
                                         MeetingApiAdapter(
-                                            AuthInterceptor(
-                                                TokenManager(
-                                                    LocalContext.current.getSharedPreferences("app_prefs",
-                                                        MODE_PRIVATE
-                                                    )
-                                                )
-                                            )
+
                                         )
                                     )
                                 )
                             )
                             ),
                     )
-                }
+                }}
             }
         }
     }
@@ -130,38 +126,9 @@ private fun LoadingView(modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
-private fun SuccessView(meetings: List<Meeting>?) {
-    if (meetings.isNullOrEmpty()) {
-        EmptyStateView()
-    } else {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(meetings.size) { index ->
-                MeetingCard(meetings[index])
-            }
-        }
-    }
-}
 
-@Composable
-private fun ErrorView(message: String) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = message, color = Color.Red)
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = { /* Retry logic here if needed */ }) {
-            Text("Retry")
-        }
-    }
-}
+
+
 
 @Composable
 private fun EmptyStateView() {
@@ -234,10 +201,12 @@ fun MeetingListViewHandler(viewModel: MeetingViewModel) {
 
 @Composable
 private fun SuccessView(
+
     meetings: List<Meeting>?,
     isLoadingMore: Boolean,
     lazyListState: LazyListState
 ) {
+    val context = LocalContext.current
     if (meetings.isNullOrEmpty()) {
         EmptyStateView()
     } else {
@@ -249,7 +218,13 @@ private fun SuccessView(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(meetings.size) { index ->
-                MeetingCard(meetings[index])
+                MeetingCard(meetings[index], onClick = {
+                    Log.e("TAG", "SuccessView: Clicked")
+                        val intent = Intent(context, MeetingsDetails::class.java)
+                        intent.putExtra("MEETING_ID", meetings[index].id)
+                        context.startActivity(intent)
+
+                })
             }
 
             if (isLoadingMore) {
