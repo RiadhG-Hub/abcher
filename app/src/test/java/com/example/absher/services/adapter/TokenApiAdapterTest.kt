@@ -21,7 +21,7 @@ class TokenApiAdapterTest {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val apiService = retrofit.create(MeetingApiService::class.java)
+        retrofit.create(MeetingApiService::class.java)
         tokenApiAdapter = TokenApiAdapter() // Use real interceptor if required
     }
 

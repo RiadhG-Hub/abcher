@@ -21,7 +21,7 @@ class MeetingApiAdapterTest {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val apiService = retrofit.create(MeetingApiService::class.java)
+        retrofit.create(MeetingApiService::class.java)
         meetingApiAdapter = MeetingApiAdapter() // Use real interceptor if required
     }
 
@@ -32,5 +32,15 @@ class MeetingApiAdapterTest {
 
 
         println("Fetched Meetings: $result")
+    }
+
+
+    @Test
+    fun `fetchMeetingAttendees should return real MeetingResponse`() = runBlocking {
+        val result = meetingApiAdapter.fetchMeetingAttendees(meetingId = 2103 )
+
+
+
+        println("Fetch meeting attends $result")
     }
 }

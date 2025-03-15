@@ -20,20 +20,20 @@ class TokenApiAdapter {
 
     suspend fun testToken(): RefreshTokenResponse? {
         return try {
-            val result = apiService.testToken();
-            println("Token test successful: $result");
-            println("Message: ${result.message}");
-            result;
+            val result = apiService.testToken()
+            println("Token test successful: $result")
+            println("Message: ${result.message}")
+            result
         } catch (e: HttpException) {
             if (e.code() == 401) {
-                System.err.println("[ERROR] 401 Unauthorized: Invalid or expired token");
+                System.err.println("[ERROR] 401 Unauthorized: Invalid or expired token")
             } else {
-                System.err.println("[ERROR] HTTP ${e.code()}: ${e.message()}");
+                System.err.println("[ERROR] HTTP ${e.code()}: ${e.message()}")
             }
-            null;
+            null
         } catch (e: Exception) {
-            System.err.println("[ERROR] Unexpected: ${e.message}");
-            null;
+            System.err.println("[ERROR] Unexpected: ${e.message}")
+            null
         }
     }
 }

@@ -1,10 +1,12 @@
 package com.example.absher.services.adapter// adapter/MeetingApiAdapter.kt
+import com.example.absher.services.data.models.AttendeeResponse
 import com.example.absher.services.data.models.MeetingRequestBody
 import com.example.absher.services.data.models.MeetingResponse
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -50,7 +52,42 @@ class MeetingApiAdapter {
             null
         }
     }
+
+
+suspend fun fetchMeetingAttendees(meetingId: Int, token: String = "Bearer $tokenCore"):AttendeeResponse ? {
+
+
+    return try {
+        val result = apiService.fetchMeetingAttendees(
+            meetingId = meetingId,
+            token = token
+        )
+        println("[INFO] Fetch meetings successful: $result")
+
+        result
+    } catch (e: HttpException) {
+        if (e.code() == 401) {
+            println("[WARNING] 401 Unauthorized: Token expired, attempting refresh...")
+            val tokenResult = tokenApiAdapter.testToken()
+            tokenResult?.data?.token?.let {
+                tokenCore = it
+                println("[INFO] Token refreshed successfully.")
+                return fetchMeetingAttendees(meetingId, "Bearer $tokenCore")
+            } ?: run {
+                println("[ERROR] Token refresh failed.")
+                null
+            }
+        } else {
+            System.err.println("[ERROR] HTTP ${e.code()}: ${e.message()}")
+            null
+        }
+    } catch (e: Exception) {
+        System.err.println("[ERROR] Unexpected error: ${e.message}")
+        null
+    }
 }
+}
+
 
 interface MeetingApiService {
     @POST("api/meetings/search/{from}/{to}")
@@ -60,4 +97,12 @@ interface MeetingApiService {
         @Path("to") to: String,
         @Body requestBody: MeetingRequestBody
     ): MeetingResponse
+
+
+
+    @GET("api/meetings/{meetingId}/attendees")
+    suspend fun fetchMeetingAttendees(
+        @Path("meetingId") meetingId: Int,
+        @Header("Authorization") token: String
+    ): AttendeeResponse?
 }

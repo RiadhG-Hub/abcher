@@ -16,7 +16,7 @@ class TokenManager @Inject constructor(
     }
 
     fun saveAccessToken(token: String) {
-        sharedPreferences.edit() {
+        sharedPreferences.edit {
             putString(KEY_ACCESS_TOKEN, token)
         }
     }
@@ -26,7 +26,7 @@ class TokenManager @Inject constructor(
     }
 
     fun clearToken() {
-        sharedPreferences.edit() {
+        sharedPreferences.edit {
             remove(KEY_ACCESS_TOKEN)
         }
     }

@@ -139,6 +139,7 @@ fun TopAppBarWithTime() {
 fun SvgIcon(drawable : Int, modifier: Modifier = Modifier) {
     Box(modifier = modifier){
         Image(
+            modifier= modifier,
             painter = painterResource(id = drawable),
             contentDescription = "My SVG Icon"
         )
