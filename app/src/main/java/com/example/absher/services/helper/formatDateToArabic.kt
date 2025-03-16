@@ -8,7 +8,7 @@ import java.util.Locale
 fun formatDateToArabic(inputDate: String): String {
     try {// Parse the input date
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
-        val date: Date = inputFormat.parse(inputDate) ?: return ""
+        val date: Date = inputFormat.parse(inputDate) ?: return "not available"
 
         // Format the date in Arabic
         val outputFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ar"))
@@ -17,7 +17,7 @@ fun formatDateToArabic(inputDate: String): String {
         // Convert numbers to Arabic numerals
         return convertToArabicNumbers(formattedDate)
     } catch (_: Exception) {
-        return  ""
+        return  "not available"
     }
 }
 
@@ -45,7 +45,7 @@ fun formatTimeToArabic(inputTime: String): String {
         // Convert digits to Arabic numerals
         return convertToArabicNumbers(formattedTime)
     } catch (e: Exception) {
-        return ""
+        return "not available"
     }
 }
 

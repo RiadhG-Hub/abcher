@@ -40,13 +40,16 @@ import com.example.absher.services.data.models.MeetingInfoData
 import com.example.absher.services.data.models.MeetingInfoResponse
 import com.example.absher.services.helper.formatDateToArabic
 import com.example.absher.services.helper.formatTimeToArabic
-import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.services.viewmodel.FetchMeetingInfoStateError
 import com.example.absher.services.viewmodel.FetchMeetingInfoStateInit
 import com.example.absher.services.viewmodel.FetchMeetingInfoStateLoading
 import com.example.absher.services.viewmodel.FetchMeetingInfoStateSuccess
 import com.example.absher.services.viewmodel.FetchMeetingInfoViewModel
 import com.example.absher.services.viewmodel.MeetingDetailsNavigationViewModel
+import com.example.absher.ui.theme.AbsherTheme
+import com.example.absher.ui.theme.CustomTextStyles
+import com.example.absher.ui.theme.Gray
+import com.example.absher.ui.theme.SubtitleColor
 
 
 @Composable
@@ -244,13 +247,19 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                         style = TextStyle(fontSize = 12.sp, color = Color(0xFF212121))
                     )
                 }
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(vertical = 4.dp)
+                        .background(Color(0XFFF2F2F2)),
+                    thickness = 1.dp
+                )
             }
 
             Row() {
                 Column {
                     Row {
                         SvgIcon(
-                            R.drawable.calendar_today, defaultColor = Color(0xFF212121),
+                            R.drawable.calendar_today, defaultColor = Gray,
                             modifier = modifier.padding(end = 4.dp)
                         )
                         Text(
@@ -269,6 +278,7 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
 
                         Text(
                             text = formatDateToArabic(meeting.data?.date!!),
+                            modifier = modifier.padding(start = 62.dp),
 
                             // Small/Bold
                             style = TextStyle(
@@ -282,9 +292,10 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                         )
 
                     }
+                    HorizontalDivider()
                     Row {
                         SvgIcon(
-                            R.drawable.meeting_room, defaultColor = Color(0xFF212121),
+                            R.drawable.meeting_room, defaultColor = Gray,
                             modifier = modifier.padding(end = 4.dp)
                         )
                         Text(
@@ -301,12 +312,26 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                             )
                         )
 
-                    }
+                        Text(
+                            text = meeting.data?.location.toString(),
+                            modifier = modifier.padding(start = 18.dp),
+                            // Small/Bold
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                lineHeight = 20.sp,
 
+                                fontWeight = FontWeight(700),
+                                color = Color(0xFF353334),
+                                textAlign = TextAlign.Right,
+                            )
+                        )
+
+                    }
+                    HorizontalDivider()
                     Row {
                         SvgIcon(
-                            R.drawable.other_houses,
-                            defaultColor = Color(0xFF212121),
+                            R.drawable.house_info,
+                            defaultColor = Gray,
                             modifier = modifier.padding(end = 4.dp)
                         )
                         Text(
@@ -323,11 +348,25 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                             )
                         )
 
-                    }
+                        Text(
+                            text = meeting.data?.committeeName.toString(),
+                            modifier = modifier.padding(start = 36.dp),
+                            // Small/Bold
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                lineHeight = 20.sp,
 
+                                fontWeight = FontWeight(700),
+                                color = Color(0xFF353334),
+                                textAlign = TextAlign.Right,
+                            )
+                        )
+
+                    }
+                    HorizontalDivider()
                     Row {
                         SvgIcon(
-                            R.drawable.person_outline, defaultColor = Color(0xFF212121),
+                            R.drawable.person_outline, defaultColor = Gray,
                             modifier = modifier.padding(end = 4.dp)
                         )
                         Text(
@@ -344,37 +383,43 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                             )
                         )
 
-                    }
+                        Text(
+                            text = meeting.data?.createdby.toString(),
+                            modifier = modifier.padding(start = 49.dp),
 
+                            // Small/Bold
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                lineHeight = 20.sp,
+
+                                fontWeight = FontWeight(700),
+                                color = Color(0xFF353334),
+                                textAlign = TextAlign.Right,
+                            )
+                        )
+
+                    }
+                    HorizontalDivider()
                 }
 
             }
-            Text(
-                text = "ملاحظات",
+            Row(modifier = modifier.padding(top = 8.dp,)){
 
-                // Small/Regular
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    lineHeight = 20.sp,
+                SvgIcon(drawable = R.drawable.timer, defaultColor = Color(0XFF808080),
+                    modifier = modifier.padding(end = 4.dp,))
+                Text(
+                    text = "ملاحظات",
 
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF353334),
-                    textAlign = TextAlign.Right,
+                    // Small/Regular
+                    style = CustomTextStyles.SmallRegular12
                 )
-            )
+            }
 
             Text(
                 text = meeting.data?.notes.toString(),
 
                 // Small/Bold
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    lineHeight = 20.sp,
-
-                    fontWeight = FontWeight(700),
-                    color = Color(0xFF353334),
-                    textAlign = TextAlign.Justify,
-                )
+                style = CustomTextStyles.SmallBold.copy(color = SubtitleColor)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
