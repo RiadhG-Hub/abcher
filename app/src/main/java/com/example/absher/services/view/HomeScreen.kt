@@ -5,7 +5,6 @@ package com.example.absher.services.view
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -56,8 +55,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.absher.R
-import com.example.absher.ui.theme.MyAppTheme
 import com.example.absher.services.viewmodel.HomeViewModel
+import com.example.absher.ui.theme.MyAppTheme
 
 @Composable
 fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = viewModel()) {
@@ -108,6 +107,7 @@ fun TopAppBarWithTime() {
                 bottomStart = 16.dp // Bottom-left corner
             )
         )){
+        SvgIcon(R.drawable.headers_background)
         TopAppBar(
             title = {
                 Row(

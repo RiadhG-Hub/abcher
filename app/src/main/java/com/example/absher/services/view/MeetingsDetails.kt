@@ -41,23 +41,36 @@ import com.example.absher.services.domain.usecases.GetMeetingsUseCase
 import com.example.absher.services.view.ui.theme.AbsherTheme
 import com.example.absher.services.viewmodel.FetchAgendaViewModel
 import com.example.absher.services.viewmodel.FetchMeetingAttendsViewModel
+import com.example.absher.services.viewmodel.FetchMeetingInfoViewModel
 import com.example.absher.services.viewmodel.MeetingDetailsNavigationSections
 import com.example.absher.services.viewmodel.MeetingDetailsNavigationViewModel
 
 class MeetingsDetails : ComponentActivity() {
-    val fetchMeetingAttendsViewModel  = FetchMeetingAttendsViewModel(
-    GetMeetingsUseCase(
-    MeetingRepository(
-    RemoteMeetingDataSource(
-    MeetingApiAdapter(
+    val fetchMeetingAttendsViewModel = FetchMeetingAttendsViewModel(
+        GetMeetingsUseCase(
+            MeetingRepository(
+                RemoteMeetingDataSource(
+                    MeetingApiAdapter(
 
-    )
-    )
-    )
-    )
+                    )
+                )
+            )
+        )
     )
 
-    val fetchAgendaViewModel  = FetchAgendaViewModel(
+    val fetchMeetingInfoViewModel = FetchMeetingInfoViewModel(
+        GetMeetingsUseCase(
+            MeetingRepository(
+                RemoteMeetingDataSource(
+                    MeetingApiAdapter(
+
+                    )
+                )
+            )
+        )
+    )
+
+    val fetchAgendaViewModel = FetchAgendaViewModel(
         GetMeetingsUseCase(
             MeetingRepository(
                 RemoteMeetingDataSource(
@@ -71,46 +84,56 @@ class MeetingsDetails : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       /// val meetingId = intent.getIntExtra("MEETING_ID", 0)
+        /// val meetingId = intent.getIntExtra("MEETING_ID", 0)
 
         setContent {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                DetailsWrapper(fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel, fetchAgendaViewModel = fetchAgendaViewModel)
+                DetailsWrapper(
+                    fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel,
+                    fetchAgendaViewModel = fetchAgendaViewModel
+                )
 
             }
+        }
+    }
+
+    @Composable
+    fun DetailsWrapper(
+        modifier: Modifier = Modifier,
+        viewModel: MeetingDetailsNavigationViewModel = viewModel(),
+        fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
+        fetchAgendaViewModel: FetchAgendaViewModel = viewModel(),
+    ) {
+        val selectedIndex = viewModel.selectedNavItem.value
+        Scaffold(
+            topBar = {
+                MeetingDetailsTopAppBar()
+            },
+            content = { padding ->
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .padding(padding)
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    NavigationTopAppBar(selectedIndex = selectedIndex)
+                    Wrapper(
+                        fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel,
+                        fetchAgendaViewModel = fetchAgendaViewModel,
+                        fetchMeetingInfoViewModel=fetchMeetingInfoViewModel
+                    )
+
+                }
+
+            })
     }
 }
-@Composable
-fun DetailsWrapper(
-    modifier: Modifier = Modifier,
-    viewModel: MeetingDetailsNavigationViewModel = viewModel(),
-    fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
-            fetchAgendaViewModel  : FetchAgendaViewModel = viewModel(),
-){
-    val selectedIndex = viewModel.selectedNavItem.value
-    Scaffold (
-        topBar = {
-            MeetingDetailsTopAppBar()
-        },
-        content = { padding ->
-        Column(horizontalAlignment =  Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            NavigationTopAppBar(selectedIndex = selectedIndex)
-            Wrapper(fetchMeetingAttendsViewModel= fetchMeetingAttendsViewModel , fetchAgendaViewModel = fetchAgendaViewModel)
-
-        }
-
-    })
-}}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-  fun MeetingDetailsTopAppBar() {
+fun MeetingDetailsTopAppBar() {
     TopAppBar(
         title = { Text("My App") },
         navigationIcon = {
@@ -127,13 +150,11 @@ fun DetailsWrapper(
 }
 
 
-
-
 @Composable
 private fun NavigationTopAppBar(
     modifier: Modifier = Modifier,
     selectedIndex: MeetingDetailsNavigationSections,
-    viewModel : MeetingDetailsNavigationViewModel = viewModel()
+    viewModel: MeetingDetailsNavigationViewModel = viewModel()
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -146,7 +167,7 @@ private fun NavigationTopAppBar(
             index = MeetingDetailsNavigationSections.Meetings,
             selectedIndex = selectedIndex,
 
-            onClick = { newSelection->
+            onClick = { newSelection ->
 
                 viewModel.selectNavItem(newSelection)
             }
@@ -155,10 +176,9 @@ private fun NavigationTopAppBar(
             title = "جدول الأعمال",
             icon = R.drawable.calendar_today,
             index = MeetingDetailsNavigationSections.Calendar,
-            selectedIndex = selectedIndex
-            ,
+            selectedIndex = selectedIndex,
 
-            onClick = { newSelection->
+            onClick = { newSelection ->
                 viewModel.selectNavItem(newSelection)
 
             }
@@ -169,7 +189,7 @@ private fun NavigationTopAppBar(
             index = MeetingDetailsNavigationSections.Attends,
             selectedIndex = selectedIndex,
 
-            onClick = { newSelection->
+            onClick = { newSelection ->
 
                 viewModel.selectNavItem(newSelection)
             }
@@ -180,7 +200,7 @@ private fun NavigationTopAppBar(
             index = MeetingDetailsNavigationSections.Attachments,
             selectedIndex = selectedIndex,
 
-            onClick = { newSelection->
+            onClick = { newSelection ->
                 viewModel.selectNavItem(newSelection)
 
             }
@@ -189,21 +209,30 @@ private fun NavigationTopAppBar(
 }
 
 
-@Composable 
-fun NavigationItem (modifier: Modifier=Modifier , title:String, icon:Int , index : MeetingDetailsNavigationSections , selectedIndex : MeetingDetailsNavigationSections , onClick: (MeetingDetailsNavigationSections) -> Unit     ){
+@Composable
+fun NavigationItem(
+    modifier: Modifier = Modifier,
+    title: String,
+    icon: Int,
+    index: MeetingDetailsNavigationSections,
+    selectedIndex: MeetingDetailsNavigationSections,
+    onClick: (MeetingDetailsNavigationSections) -> Unit
+) {
     val color = if (index == selectedIndex) Color(0xff39836B) else
         Color(0xff757575)
-    Column (verticalArrangement = Arrangement.Center,
+    Column(
+        verticalArrangement = Arrangement.Center,
 
-        horizontalAlignment = Alignment.CenterHorizontally , modifier = modifier
+        horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier
             .padding(8.dp)
             .clickable {
                 onClick(index)
             }) {
         SvgIcon(drawable = icon, defaultColor = color)
-        Text(text = title,
+        Text(
+            text = title,
             color = color,
-                    fontSize = 12.sp,
+            fontSize = 12.sp,
             lineHeight = 20.sp,
 
             fontWeight = FontWeight(400),
@@ -211,44 +240,50 @@ fun NavigationItem (modifier: Modifier=Modifier , title:String, icon:Int , index
 
             textAlign = TextAlign.Center,
 
-        )
+            )
 
     }
 }
 
 
 @Composable
-private  fun Wrapper(viewModel : MeetingDetailsNavigationViewModel = viewModel(), fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
-fetchAgendaViewModel  : FetchAgendaViewModel = viewModel(), )
-{
-when(viewModel.selectedNavItem.value){
-    MeetingDetailsNavigationSections.Meetings -> {
-        Text(text = viewModel.selectedNavItem.value.name)
-    }
+private fun Wrapper(
+    viewModel: MeetingDetailsNavigationViewModel = viewModel(),
+    fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
+    fetchAgendaViewModel: FetchAgendaViewModel = viewModel(),
+    fetchMeetingInfoViewModel: FetchMeetingInfoViewModel = viewModel()
+) {
+    when (viewModel.selectedNavItem.value) {
+        MeetingDetailsNavigationSections.Meetings -> {
+            fetchMeetingInfoViewModel.FetchMeetingInfos(meetingID = 2103)
+            MeetingInfo(meetingId = 0, fetchMeetingInfoViewModel = fetchMeetingInfoViewModel)
+        }
 
-    MeetingDetailsNavigationSections.Calendar -> {
-        fetchAgendaViewModel.fetchMeetingAgendas(meetingID = 2103)
-        AgendaList(meetingId = 0, fetchAgendaViewModel = fetchAgendaViewModel)
-    }
-    MeetingDetailsNavigationSections.Attends -> {
-        fetchMeetingAttendsViewModel.fetchMeetingAttendees(meetingID = 2103)
-        AttendsList(meetingId = 0, fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel)
+        MeetingDetailsNavigationSections.Calendar -> {
+            fetchAgendaViewModel.fetchMeetingAgendas(meetingID = 2103)
+            AgendaList(meetingId = 0, fetchAgendaViewModel = fetchAgendaViewModel)
+        }
 
-    }
-    MeetingDetailsNavigationSections.Attachments -> {
-        Text(text = viewModel.selectedNavItem.value.name)
+        MeetingDetailsNavigationSections.Attends -> {
+            fetchMeetingAttendsViewModel.fetchMeetingAttendees(meetingID = 2103)
+            AttendsList(meetingId = 0, fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel)
+
+        }
+
+        MeetingDetailsNavigationSections.Attachments -> {
+            Text(text = viewModel.selectedNavItem.value.name)
+        }
     }
 }
-}
-
 
 
 @Preview(showBackground = true)
 @Composable
-  fun PreviewNavigationItem(){
+fun PreviewNavigationItem() {
     AbsherTheme {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             NavigationTopAppBar(selectedIndex = MeetingDetailsNavigationSections.Attends)
 
         }
-}}
+    }
+}

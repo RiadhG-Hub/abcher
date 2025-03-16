@@ -2,6 +2,7 @@ package com.example.absher.services.adapter// adapter/MeetingApiAdapter.kt
 import com.example.absher.services.data.models.AttendeeResponse
 import com.example.absher.services.data.models.Meeting
 import com.example.absher.services.data.models.MeetingAgendaResponse
+import com.example.absher.services.data.models.MeetingInfoResponse
 import com.example.absher.services.data.models.MeetingRequestBody
 import com.example.absher.services.data.models.MeetingResponse
 import retrofit2.HttpException
@@ -14,7 +15,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 class MeetingApiAdapter {
-    private var tokenCore = "azs"
+    private var tokenCore = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50Ijoib1NFY04rb0JsZTRsZ3BQWm1ZZ1F0eW9iaHV6YXdyS2VPaWZMZW1qYkFxVT0iLCJkZXBhcnRtZW50IjoiM0hZUkRmTVhmTUFKZWluYkZCUVZrSWc5K1ZzTFluY0E3MmFGQ012NUlNaz0iLCJuYW1lIjoiclZIRkRjQnpwSFN0ckwreUhreTQzd01memxtRDdESGx3T2ZabllWeHdGRT0iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjMwMjMiLCJsYW5nIjoiYXIiLCJleHAiOjE3NDIxMjQ2MzYsImlzcyI6IkludGFsaW8iLCJhdWQiOiJJbnRhbGlvIn0.33C1wad3j8GCMLZDSTzoM6ZC9Xz88m2cpvYvXIOgVBE"
     private val tokenApiAdapter = TokenApiAdapter()
 
     // TODO: Add token refresh logic using authInterceptor
@@ -161,6 +162,34 @@ suspend fun fetchMeetingAttendees(meetingId: Int, token: String = "Bearer $token
             null
         }
     }
+
+
+    suspend fun fetchMeetingInfo(meetingId: Int, token: String = "Bearer $tokenCore"): MeetingInfoResponse? {
+        return try {
+            val result = apiService.getMeetingInfo(meetingId, token)
+            println("[INFO] Fetch meeting info successful: $result")
+            result
+        } catch (e: HttpException) {
+            if (e.code() == 401) {
+                println("[WARNING] 401 Unauthorized: Token expired, attempting refresh...")
+                val tokenResult = tokenApiAdapter.testToken()
+                tokenResult?.data?.token?.let {
+                    tokenCore = it
+                    println("[INFO] Token refreshed successfully.")
+                    return fetchMeetingInfo(meetingId, "Bearer $tokenCore")
+                } ?: run {
+                    println("[ERROR] Token refresh failed.")
+                    null
+                }
+            } else {
+                System.err.println("[ERROR] HTTP ${e.code()}: ${e.message()}")
+                null
+            }
+        } catch (e: Exception) {
+            System.err.println("[ERROR] Unexpected error: ${e.message}")
+            null
+        }
+    }
 }
 
 
@@ -186,6 +215,13 @@ interface MeetingApiService {
         @Path("meetingId") meetingId: Int,
         @Header("Authorization") token: String
     ): MeetingAgendaResponse?
+
+
+    @GET("api/meetings/{meetingId}/meeting-info")
+    suspend fun getMeetingInfo(
+        @Path("meetingId") meetingId: Int,
+        @Header("Authorization") token: String
+    ): MeetingInfoResponse?
 }
 
 

@@ -1,11 +1,6 @@
 package com.example.absher.services.adapter
 
-import android.content.Context.MODE_PRIVATE
-import androidx.compose.ui.platform.LocalContext
-import com.example.absher.services.data.models.MeetingRequestBody
-import com.example.absher.services.data.models.MeetingResponse
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
@@ -47,6 +42,16 @@ class MeetingApiAdapterTest {
     @Test
     fun `fetchMeetingAgenda should return real MeetingResponse`() = runBlocking {
         val result = meetingApiAdapter.fetchMeetingAgendas( meetingId = 2103)
+
+
+
+        println("Fetch meeting attends $result")
+    }
+
+
+    @Test
+    fun `fetchMeetingInfo should return real MeetingInfo`() = runBlocking {
+        val result = meetingApiAdapter.fetchMeetingInfo( meetingId = 2103)
 
 
 

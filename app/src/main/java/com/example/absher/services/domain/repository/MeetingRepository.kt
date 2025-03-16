@@ -1,9 +1,9 @@
 package com.example.absher.services.domain.repository// domain/repository/MeetingRepository.kt
 import com.example.absher.services.data.datasource.RemoteMeetingDataSource
-import com.example.absher.services.data.models.Attendee
 import com.example.absher.services.data.models.AttendeeResponse
 import com.example.absher.services.data.models.Meeting
 import com.example.absher.services.data.models.MeetingAgendaResponse
+import com.example.absher.services.data.models.MeetingInfoResponse
 import javax.inject.Inject
 
 class MeetingRepository @Inject constructor(
@@ -18,6 +18,10 @@ class MeetingRepository @Inject constructor(
     }
     suspend fun fetchMeetingAgendas(meetingId: Int ): MeetingAgendaResponse? {
         return remoteDataSource.fetchMeetingAgendas(meetingId = meetingId)
+    }
+
+    suspend fun fetchMeetingInfo(meetingId: Int): MeetingInfoResponse? {
+        return remoteDataSource.fetchMeetingInfo(meetingId = meetingId)
     }
 
 
