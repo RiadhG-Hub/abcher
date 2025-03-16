@@ -39,6 +39,7 @@ import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.domain.repository.MeetingRepository
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
 import com.example.absher.services.view.ui.theme.AbsherTheme
+import com.example.absher.services.viewmodel.FetchAgendaViewModel
 import com.example.absher.services.viewmodel.FetchMeetingAttendsViewModel
 import com.example.absher.services.viewmodel.MeetingDetailsNavigationSections
 import com.example.absher.services.viewmodel.MeetingDetailsNavigationViewModel
@@ -56,13 +57,25 @@ class MeetingsDetails : ComponentActivity() {
     )
     )
 
+    val fetchAgendaViewModel  = FetchAgendaViewModel(
+        GetMeetingsUseCase(
+            MeetingRepository(
+                RemoteMeetingDataSource(
+                    MeetingApiAdapter(
+
+                    )
+                )
+            )
+        )
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        /// val meetingId = intent.getIntExtra("MEETING_ID", 0)
 
         setContent {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                DetailsWrapper(fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel)
+                DetailsWrapper(fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel, fetchAgendaViewModel = fetchAgendaViewModel)
 
             }
     }
@@ -71,7 +84,8 @@ class MeetingsDetails : ComponentActivity() {
 fun DetailsWrapper(
     modifier: Modifier = Modifier,
     viewModel: MeetingDetailsNavigationViewModel = viewModel(),
-    fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel()
+    fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
+            fetchAgendaViewModel  : FetchAgendaViewModel = viewModel(),
 ){
     val selectedIndex = viewModel.selectedNavItem.value
     Scaffold (
@@ -87,7 +101,7 @@ fun DetailsWrapper(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             NavigationTopAppBar(selectedIndex = selectedIndex)
-            Wrapper(fetchMeetingAttendsViewModel= fetchMeetingAttendsViewModel)
+            Wrapper(fetchMeetingAttendsViewModel= fetchMeetingAttendsViewModel , fetchAgendaViewModel = fetchAgendaViewModel)
 
         }
 
@@ -204,7 +218,8 @@ fun NavigationItem (modifier: Modifier=Modifier , title:String, icon:Int , index
 
 
 @Composable
-private  fun Wrapper(viewModel : MeetingDetailsNavigationViewModel = viewModel(), fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel())
+private  fun Wrapper(viewModel : MeetingDetailsNavigationViewModel = viewModel(), fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
+fetchAgendaViewModel  : FetchAgendaViewModel = viewModel(), )
 {
 when(viewModel.selectedNavItem.value){
     MeetingDetailsNavigationSections.Meetings -> {
@@ -212,7 +227,8 @@ when(viewModel.selectedNavItem.value){
     }
 
     MeetingDetailsNavigationSections.Calendar -> {
-        Text(text = viewModel.selectedNavItem.value.name)
+        fetchAgendaViewModel.fetchMeetingAgendas(meetingID = 2103)
+        AgendaList(meetingId = 0, fetchAgendaViewModel = fetchAgendaViewModel)
     }
     MeetingDetailsNavigationSections.Attends -> {
         fetchMeetingAttendsViewModel.fetchMeetingAttendees(meetingID = 2103)

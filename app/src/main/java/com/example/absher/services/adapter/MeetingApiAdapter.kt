@@ -1,6 +1,7 @@
 package com.example.absher.services.adapter// adapter/MeetingApiAdapter.kt
 import com.example.absher.services.data.models.AttendeeResponse
 import com.example.absher.services.data.models.Meeting
+import com.example.absher.services.data.models.MeetingAgendaResponse
 import com.example.absher.services.data.models.MeetingRequestBody
 import com.example.absher.services.data.models.MeetingResponse
 import retrofit2.HttpException
@@ -134,6 +135,32 @@ suspend fun fetchMeetingAttendees(meetingId: Int, token: String = "Bearer $token
         null
     }
 }
+    suspend fun fetchMeetingAgendas(meetingId: Int, token: String = "Bearer $tokenCore"): MeetingAgendaResponse? {
+        return try {
+            val result = apiService.fetchMeetingAgendas(meetingId, token)
+            println("[INFO] Fetch meeting agendas successful: $result")
+            result
+        } catch (e: HttpException) {
+            if (e.code() == 401) {
+                println("[WARNING] 401 Unauthorized: Token expired, attempting refresh...")
+                val tokenResult = tokenApiAdapter.testToken()
+                tokenResult?.data?.token?.let {
+                    tokenCore = it
+                    println("[INFO] Token refreshed successfully.")
+                    return fetchMeetingAgendas(meetingId, "Bearer $tokenCore")
+                } ?: run {
+                    println("[ERROR] Token refresh failed.")
+                    null
+                }
+            } else {
+                System.err.println("[ERROR] HTTP ${e.code()}: ${e.message}")
+                null
+            }
+        } catch (e: Exception) {
+            System.err.println("[ERROR] Unexpected error: ${e.message}")
+            null
+        }
+    }
 }
 
 
@@ -153,4 +180,12 @@ interface MeetingApiService {
         @Path("meetingId") meetingId: Int,
         @Header("Authorization") token: String
     ): AttendeeResponse?
+
+    @GET("api/meetings/{meetingId}/agendas")
+    suspend fun fetchMeetingAgendas(
+        @Path("meetingId") meetingId: Int,
+        @Header("Authorization") token: String
+    ): MeetingAgendaResponse?
 }
+
+

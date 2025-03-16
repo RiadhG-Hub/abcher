@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
@@ -43,8 +44,8 @@ fun MeetingsAttendsCardView( modifier: Modifier = Modifier
         ) {
         SvgIcon(drawable = R.drawable.man , modifier =  Modifier.size(40.dp).fillMaxSize() )
 }
-        Column {
-            Text(text = title, style = TextStyle(
+        Column (modifier = Modifier.padding(start = 8.dp)){
+            Text(text = title,modifier = modifier.padding(bottom = 4.dp), style = TextStyle(
 
                     fontSize = 12.sp,
                     lineHeight = 20.sp,

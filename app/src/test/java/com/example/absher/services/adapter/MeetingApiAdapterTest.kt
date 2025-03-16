@@ -43,4 +43,13 @@ class MeetingApiAdapterTest {
 
         println("Fetch meeting attends $result")
     }
+
+    @Test
+    fun `fetchMeetingAgenda should return real MeetingResponse`() = runBlocking {
+        val result = meetingApiAdapter.fetchMeetingAgendas( meetingId = 2103)
+
+
+
+        println("Fetch meeting attends $result")
+    }
 }
