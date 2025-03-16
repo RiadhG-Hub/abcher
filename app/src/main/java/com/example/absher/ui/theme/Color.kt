@@ -12,3 +12,5 @@ val StatusYellow = Color(0xFFFFC107) // Pending status
 val StatusRed = Color(0xFFDC3545)   // Rejected status
 val StatusDefault = Color(0xFFD4A017) // Default status
 val White = Color(0xFFFFFFFF)       // Card background
+val TaskColor = Color(0xFFC3A355) // Task color
+val SubtitleColor = Color(0xFF353334)

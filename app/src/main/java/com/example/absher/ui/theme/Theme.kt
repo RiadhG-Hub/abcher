@@ -9,13 +9,17 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.example.absher.ui.screens.ui.theme.Pink80
 
 
 private val DarkColorScheme = darkColorScheme(
     primary = GreenPrimary,
     secondary = StatusDefault,
-    tertiary = Pink80
+    background = White,
+    surface = White,
+    onPrimary = White,
+    onSecondary = DarkGray,
+    onBackground = DarkGray,
+    onSurface = DarkGray
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -27,6 +31,7 @@ private val LightColorScheme = lightColorScheme(
     onSecondary = DarkGray,
     onBackground = DarkGray,
     onSurface = DarkGray
+
 )
 
 @Composable

@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,14 +21,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -40,6 +37,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -47,19 +45,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.absher.R
 import com.example.absher.services.viewmodel.HomeViewModel
 import com.example.absher.ui.theme.AbsherTheme
+import com.example.absher.ui.theme.CustomTextStyles
+import com.example.absher.ui.theme.GreenPrimary
+import com.example.absher.ui.theme.SubtitleColor
+import com.example.absher.ui.theme.TaskColor
+import com.example.absher.ui.theme.White
 
 @Composable
 fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = viewModel()) {
@@ -98,7 +98,7 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = view
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AbcherTopAppBar(title : String = "change me") {
+fun AbcherTopAppBar(title: String = "change me") {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -109,12 +109,12 @@ fun AbcherTopAppBar(title : String = "change me") {
                     bottomEnd = 16.dp, // Bottom-right corner
                     bottomStart = 16.dp // Bottom-left corner
                 )
-            )
-            ,     contentAlignment = Alignment.Center
+            ), contentAlignment = Alignment.Center
     ) {
         Image(
 
-            modifier = Modifier.size(width = 400.dp, height = 250.dp) // Set a larger size
+            modifier = Modifier
+                .size(width = 400.dp, height = 250.dp) // Set a larger size
                 .offset(x = 0.dp, y = 10.dp),
             painter = painterResource(id = R.drawable.top_app_bar_background),
             contentDescription = "My SVG Icon"
@@ -126,23 +126,17 @@ fun AbcherTopAppBar(title : String = "change me") {
                     horizontalArrangement = Arrangement.Start, // Align content to the right
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    SvgIcon(R.drawable.right, modifier = Modifier
-                        .rotate(180f)
-                        .padding())
+                    SvgIcon(
+                        R.drawable.right, modifier = Modifier
+                            .rotate(180f)
+                            .padding()
+                    )
 
                     // Add spacing between icon and text
 
                     Text(
                         text = title,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 24.sp,
-
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFFFFFFFF),
-
-                            textAlign = TextAlign.Right,
-                        )
+                        style = CustomTextStyles.BaseBold
                     )
                     Spacer(modifier = Modifier.width(8.dp))
 
@@ -161,7 +155,7 @@ fun AbcherTopAppBar(title : String = "change me") {
 fun SvgIcon(drawable: Int, modifier: Modifier = Modifier, defaultColor: Color? = null) {
     Box(modifier = modifier) {
         Image(
-            modifier = modifier,
+
             colorFilter = if (defaultColor != null) {
                 ColorFilter.tint(defaultColor)
             } else {
@@ -180,64 +174,36 @@ fun CardGrid() {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Card(
-            modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(8.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            )
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.Start
+        CardElement(
+            title = stringResource(id = R.string.tasks),
+            modifier = Modifier.weight(1f) ,
+            onClick = {
 
-            ) {
-                SvgIcon(R.drawable.task)
-                Text(
-                    text = stringResource(id = R.string.tasks),
-                    textAlign = TextAlign.Start,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(top = 8.dp),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = stringResource(id = R.string.tasks_desc),
-                    textAlign = TextAlign.Start,
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
-            }
-        }
+            },
+            subtitle = stringResource(id = R.string.tasks_desc),
+            icon = R.drawable.task,
+            titleColor = TaskColor,
+            backgroundIconColor =Color(0xFFFCFBF8),
+        )
 
-        Card(
-            modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(8.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            )
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.Start
-            ) {
-                SvgIcon(R.drawable.note)
-                Text(
-                    text = stringResource(id = R.string.files),
-                    textAlign = TextAlign.Start,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(top = 8.dp),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = stringResource(id = R.string.files_desc),
-                    textAlign = TextAlign.Start,
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
-            }
-        }
+
+
+        CardElement(
+            title = stringResource(id = R.string.files),
+            modifier = Modifier.weight(1f) ,
+            onClick = {
+
+            },
+            subtitle = stringResource(id = R.string.files_desc),
+            icon = R.drawable.note,
+            titleColor = SubtitleColor,
+            backgroundIconColor =Color(0xFFFCFBF8),
+        )
+
+
+
+
+
 
     }
     Row(
@@ -245,80 +211,105 @@ fun CardGrid() {
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        Card(
-            modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(8.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            ), onClick = {
 
+        CardElement(
+            title = stringResource(id = R.string.team),
+            modifier = Modifier.weight(1f) ,
+            onClick = {
                 (context as? Activity)?.let {
                     val intent = Intent(it, MeetingListPage::class.java)
                     it.startActivity(intent)
                 }
-            }
+            },
+            subtitle = stringResource(id = R.string.team_desc),
+            icon = R.drawable.groups,
+            titleColor = GreenPrimary,
+            backgroundIconColor =GreenPrimary.copy(alpha = 0.1f),
+        )
+
+        CardElement(
+            title = stringResource(id = R.string.notifications),
+            modifier = Modifier.weight(1f) ,
+            onClick = {
+                (context as? Activity)?.let {
+                    val intent = Intent(it, MeetingListPage::class.java)
+                    it.startActivity(intent)
+                }
+            },
+            subtitle = stringResource(id = R.string.notifications_desc),
+            icon = R.drawable.online_prediction,
+            titleColor = TaskColor,
+            backgroundIconColor =Color(0xFFFCFBF8),
+        )
+
+
+
+
+    }
+}
+
+
+@Composable
+fun CardElement(modifier: Modifier= Modifier,
+                onClick: () -> Unit,
+                title : String ,
+                subtitle : String,
+                icon : Int,
+                titleColor : Color,
+                backgroundIconColor : Color){
+    Card(
+        modifier = modifier.clickable{
+            onClick()
+        },
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.Start
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.Start
-            ) {
-                SvgIcon(R.drawable.groups)
-                Text(
-                    text = stringResource(id = R.string.team),
-                    textAlign = TextAlign.Start,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(top = 8.dp),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = stringResource(id = R.string.team_desc),
-                    textAlign = TextAlign.Start,
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
-            }
-        }
-        Card(
-            modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(8.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
+            SvgIcon(
+                icon, modifier = Modifier
+                    .border(
+                        width = 0.dp,
+                        color = Color.Transparent,
+                        shape = RoundedCornerShape(8.dp) // Corner radius
+                    )
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(color = backgroundIconColor)
+                    .padding(7.dp)
             )
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.Start
-            ) {
-                SvgIcon(R.drawable.online_prediction)
-                Text(
-                    text = stringResource(id = R.string.notifications),
-                    textAlign = TextAlign.Start,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(top = 8.dp),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = stringResource(id = R.string.notifications_desc),
-                    textAlign = TextAlign.Start,
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
-            }
+            Text(
+                text = title,
+                textAlign = TextAlign.Start,
+
+                modifier = Modifier.padding(top = 8.dp),
+                style = CustomTextStyles.SmallBold.copy(titleColor)
+            )
+            Text(
+                text = subtitle,
+                textAlign = TextAlign.Start,
+                style = CustomTextStyles.SmallRegular12.copy(color = SubtitleColor)
+
+            )
         }
     }
 }
 
+
+
 @Composable
 fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> Unit) {
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary
+        containerColor = White,
+        contentColor = White, tonalElevation = 0.dp
     ) {
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-            label = { Text(stringResource(id = R.string.nav_home)) },
+            icon = { SvgIcon(drawable = R.drawable.other_houses) },
+            label = { Text("الرئيسية", style = CustomTextStyles.SmallRegular12) },
             selected = selectedNavItem == "home",
             onClick = { onNavItemSelected("home") },
             colors = NavigationBarItemDefaults.colors(
@@ -326,11 +317,12 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
                 unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
+
             )
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Home, contentDescription = "Chat") },
-            label = { Text(stringResource(id = R.string.nav_chat)) },
+            icon = { SvgIcon(drawable = R.drawable.absher) },
+            label = { Text("مجتمع الوزارة", style = CustomTextStyles.SmallRegular12) },
             selected = selectedNavItem == "chat",
             onClick = { onNavItemSelected("chat") },
             colors = NavigationBarItemDefaults.colors(
@@ -341,8 +333,8 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
             )
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Home, contentDescription = "Grid") },
-            label = { Text(stringResource(id = R.string.nav_more)) },
+            icon = { SvgIcon(drawable = R.drawable.apps) },
+            label = { Text("الخدمات", style = CustomTextStyles.SmallRegular12) },
             selected = selectedNavItem == "more",
             onClick = { onNavItemSelected("more") },
             colors = NavigationBarItemDefaults.colors(
@@ -353,8 +345,8 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
             )
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Settings, contentDescription = "Settings") },
-            label = { Text(stringResource(id = R.string.nav_settings)) },
+            icon = {SvgIcon(drawable = R.drawable.textsms) },
+            label = { Text("المحادثات", style = CustomTextStyles.SmallRegular12) },
             selected = selectedNavItem == "settings",
             onClick = { onNavItemSelected("settings") },
             colors = NavigationBarItemDefaults.colors(
@@ -365,15 +357,16 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
             )
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.AccountCircle, contentDescription = "Profile") },
-            label = { Text(stringResource(id = R.string.nav_profile)) },
+            icon = { SvgIcon(drawable = R.drawable.wallet) },
+            label = { Text("وثائقى", style = CustomTextStyles.SmallRegular12) },
             selected = selectedNavItem == "profile",
             onClick = { onNavItemSelected("profile") },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
+                unselectedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
+                indicatorColor = Color.Transparent
             )
         )
     }
