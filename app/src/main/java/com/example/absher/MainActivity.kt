@@ -11,18 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import com.example.absher.services.view.AppNavigation
-
-import com.example.absher.ui.theme.MyAppTheme
-import com.example.absher.services.viewmodel.HomeViewModel
+import com.example.absher.ui.theme.AbsherTheme
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 
 @AndroidEntryPoint  // ✅ REQUIRED for Hilt to work in Activities
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyAppTheme {
+            AbsherTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),

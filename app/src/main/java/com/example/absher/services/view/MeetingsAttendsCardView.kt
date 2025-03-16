@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.absher.services.view.ui.theme.AbsherTheme
+import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.R
 
 

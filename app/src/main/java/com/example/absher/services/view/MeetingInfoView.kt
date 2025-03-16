@@ -12,13 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -40,7 +38,9 @@ import com.example.absher.R
 import com.example.absher.services.data.models.MeetingAttendee
 import com.example.absher.services.data.models.MeetingInfoData
 import com.example.absher.services.data.models.MeetingInfoResponse
-import com.example.absher.services.view.ui.theme.AbsherTheme
+import com.example.absher.services.helper.formatDateToArabic
+import com.example.absher.services.helper.formatTimeToArabic
+import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.services.viewmodel.FetchMeetingInfoStateError
 import com.example.absher.services.viewmodel.FetchMeetingInfoStateInit
 import com.example.absher.services.viewmodel.FetchMeetingInfoStateLoading
@@ -76,9 +76,8 @@ fun MeetingInfo(
 }
 
 
-
 @Composable
-private fun MeetingDetailsCard(meeting: MeetingInfoResponse , modifier: Modifier = Modifier) {
+private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier = Modifier) {
 
     val statusColor = when (meeting.data?.statusId) {
         1 -> Color(0xFF28A745) // Green for status 1
@@ -121,15 +120,25 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse , modifier: Modifier
                     )
                 )
 
-                TextButton(
-                    onClick = { /* Handle status click */ },
+                Box(
                     modifier = Modifier
-                        .border(1.dp, statusColor, RoundedCornerShape(4.dp)),
-                    colors = ButtonDefaults.textButtonColors(contentColor = statusColor)
+
+                        .padding(8.dp)
+                        .background(color = Color(0x00E0F7FA), shape = RoundedCornerShape(8.dp))
+                        .border(1.dp, statusColor, RoundedCornerShape(4.dp))
+                        .padding(horizontal = 8.dp, vertical = 0.dp)
                 ) {
                     Text(
                         text = statusText,
-                        style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                        style = TextStyle(
+                            fontSize = 10.sp,
+                            lineHeight = 16.sp,
+
+                            fontWeight = FontWeight(700),
+
+                            color = statusColor,
+                            // fontFamily = arabicFontFamily
+                        )
                     )
                 }
             }
@@ -144,17 +153,22 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse , modifier: Modifier
             ) {
                 Box(
                     modifier = Modifier
+
                         .padding(8.dp)
-                        .background(Color(0x00E0F7FA), RoundedCornerShape(8.dp))
-                        .border(1.dp, Color(0xFFCBCBCB), RoundedCornerShape(8.dp))
-                        .padding(12.dp)
+                        .background(color = Color(0x00E0F7FA), shape = RoundedCornerShape(8.dp))
+                        .border(1.dp, Color(0xFFCBCBCB), RoundedCornerShape(4.dp))
+                        .padding(horizontal = 8.dp, vertical = 0.dp)
                 ) {
                     Text(
-                        text = stringResource(
-                            R.string.infonumber,
-                            meeting.data?.referenceNumber ?: "N/A"
-                        ),
-                        style = TextStyle(fontSize = 12.sp, color = Color(0xFF757575))
+                        text = stringResource(R.string.infonumber, meeting.data?.referenceNumber!!),
+                        style = TextStyle(
+                            fontSize = 10.sp,
+                            lineHeight = 16.sp,
+
+                            fontWeight = FontWeight(700),
+                            color = Color(0xFF5A5A5A),
+
+                            )
                     )
                 }
 
@@ -162,7 +176,7 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse , modifier: Modifier
                     SvgIcon(R.drawable.calendar_today)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = meeting.data?.date ?: "N/A",
+                        text = formatDateToArabic(meeting.data?.date ?: ""),
                         style = TextStyle(fontSize = 12.sp, color = Color(0xFF757575))
                     )
                 }
@@ -181,9 +195,12 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse , modifier: Modifier
                 Text(
                     text = meeting.data?.title ?: "No title available",
                     style = TextStyle(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF353334)
+                        fontSize = 12.sp,
+                        lineHeight = 20.sp,
+                        fontWeight = FontWeight(700),
+                        color = Color(0xFF353334),
+
+                        textAlign = TextAlign.Right,
                     ),
                     textAlign = TextAlign.Start,
                     modifier = Modifier.fillMaxWidth()
@@ -203,7 +220,7 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse , modifier: Modifier
                     Text(
                         text = stringResource(
                             R.string.startmeeting,
-                            meeting.data?.startTime ?: "N/A"
+                            formatTimeToArabic(meeting.data?.startTime!!)
                         ),
                         style = TextStyle(fontSize = 12.sp, color = Color(0xFF212121))
                     )
@@ -220,17 +237,24 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse , modifier: Modifier
                     SvgIcon(R.drawable.timer_off)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = stringResource(R.string.meetingend, meeting.data?.endTime ?: "N/A"),
+                        text = stringResource(
+                            R.string.meetingend,
+                            formatTimeToArabic(meeting.data?.endTime!!)
+                        ),
                         style = TextStyle(fontSize = 12.sp, color = Color(0xFF212121))
                     )
                 }
             }
 
-            Row (modifier = modifier.fillMaxWidth(), ){
+            Row() {
                 Column {
                     Row {
-                        SvgIcon(R.drawable.calendar_today , defaultColor = Color(0xFF212121) , modifier = modifier.padding(horizontal = 4.dp))
-                        Text(text = "تاريخ الإجتماع",
+                        SvgIcon(
+                            R.drawable.calendar_today, defaultColor = Color(0xFF212121),
+                            modifier = modifier.padding(end = 4.dp)
+                        )
+                        Text(
+                            text = "تاريخ الإجتماع",
                             // Small/Regular
                             style = TextStyle(
                                 fontSize = 12.sp,
@@ -240,13 +264,53 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse , modifier: Modifier
                                 color = Color(0xFF353334),
 
                                 textAlign = TextAlign.Right,
-                            ))
+                            )
+                        )
+
+                        Text(
+                            text = formatDateToArabic(meeting.data?.date!!),
+
+                            // Small/Bold
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                lineHeight = 20.sp,
+
+                                fontWeight = FontWeight(700),
+                                color = Color(0xFF353334),
+                                textAlign = TextAlign.Right,
+                            )
+                        )
+
+                    }
+                    Row {
+                        SvgIcon(
+                            R.drawable.meeting_room, defaultColor = Color(0xFF212121),
+                            modifier = modifier.padding(end = 4.dp)
+                        )
+                        Text(
+                            text = "قاعة / غرفة  الإجتماعات",
+                            // Small/Regular
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                lineHeight = 20.sp,
+
+                                fontWeight = FontWeight(400),
+                                color = Color(0xFF353334),
+
+                                textAlign = TextAlign.Right,
+                            )
+                        )
 
                     }
 
                     Row {
-                        SvgIcon(R.drawable.meeting_room , defaultColor = Color(0xFF212121) , modifier = modifier.padding(horizontal = 4.dp))
-                        Text(text = "قاعة / غرفة  الإجتماعات",
+                        SvgIcon(
+                            R.drawable.other_houses,
+                            defaultColor = Color(0xFF212121),
+                            modifier = modifier.padding(end = 4.dp)
+                        )
+                        Text(
+                            text = "إسم المجلس/ اللجنة",
                             // Small/Regular
                             style = TextStyle(
                                 fontSize = 12.sp,
@@ -256,13 +320,18 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse , modifier: Modifier
                                 color = Color(0xFF353334),
 
                                 textAlign = TextAlign.Right,
-                            ))
+                            )
+                        )
 
                     }
 
                     Row {
-                        SvgIcon(R.drawable.other_houses , defaultColor = Color(0xFF212121) , modifier = modifier.padding(horizontal = 4.dp))
-                        Text(text = "إسم المجلس/ اللجنة",
+                        SvgIcon(
+                            R.drawable.person_outline, defaultColor = Color(0xFF212121),
+                            modifier = modifier.padding(end = 4.dp)
+                        )
+                        Text(
+                            text = "تم انشاؤه بواسطة",
                             // Small/Regular
                             style = TextStyle(
                                 fontSize = 12.sp,
@@ -272,82 +341,13 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse , modifier: Modifier
                                 color = Color(0xFF353334),
 
                                 textAlign = TextAlign.Right,
-                            ))
+                            )
+                        )
 
                     }
-                    Row {
-                        SvgIcon(R.drawable.person_outline , defaultColor = Color(0xFF212121) , modifier = modifier.padding(horizontal = 4.dp))
-                        Text(text = "تم انشاؤه بواسطة",
-                            // Small/Regular
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                lineHeight = 20.sp,
 
-                                fontWeight = FontWeight(400),
-                                color = Color(0xFF353334),
-
-                                textAlign = TextAlign.Right,
-                            ))
-
-                    }
                 }
-                Column (modifier = modifier.padding(start = 12.dp)){
 
-                    Text(
-                        text = "٠٢ أكتوبر ٢٠٢٤",
-
-                        // Small/Bold
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            lineHeight = 20.sp,
-
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFF353334),
-                            textAlign = TextAlign.Right,
-                        )
-                    )
-                    Text(
-                        text = "Intalio Meeting Room",
-// Small/Bold
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            lineHeight = 20.sp,
-
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFF353334),
-
-                            textAlign = TextAlign.Right,
-                        )
-                    )
-
-                    Text(
-                        text = "لجنة الضباط العليا",
-
-                        // Small/Bold
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            lineHeight = 20.sp,
-
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFF353334),
-                            textAlign = TextAlign.Right,
-                        )
-                    )
-
-                    Text(
-                        text = "مصطفى محمود",
-
-                        // Small/Bold
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            lineHeight = 20.sp,
-
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFF353334),
-                            textAlign = TextAlign.Right,
-                        )
-                    )
-                }
             }
             Text(
                 text = "ملاحظات",
@@ -364,7 +364,7 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse , modifier: Modifier
             )
 
             Text(
-                text = meeting.data?.notes!!,
+                text = meeting.data?.notes.toString(),
 
                 // Small/Bold
                 style = TextStyle(
@@ -378,8 +378,6 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse , modifier: Modifier
             )
 
             Spacer(modifier = Modifier.height(12.dp))
-
-
 
 
         }

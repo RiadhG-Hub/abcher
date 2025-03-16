@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -57,7 +59,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.absher.R
 import com.example.absher.services.viewmodel.HomeViewModel
-import com.example.absher.ui.theme.MyAppTheme
+import com.example.absher.ui.theme.AbsherTheme
 
 @Composable
 fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = viewModel()) {
@@ -65,7 +67,7 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = view
     val selectedNavItem by viewModel.selectedNavItem // No collectAsStateWithLifecycle needed
 
     Scaffold(
-        topBar = { TopAppBarWithTime() },
+        topBar = { AbcherTopAppBar(title = stringResource(id = R.string.top_bar_title)) },
         bottomBar = {
             BottomNavigationBar(
                 selectedNavItem = selectedNavItem,
@@ -96,7 +98,7 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = view
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarWithTime() {
+fun AbcherTopAppBar(title : String = "change me") {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -108,10 +110,12 @@ fun TopAppBarWithTime() {
                     bottomStart = 16.dp // Bottom-left corner
                 )
             )
+            ,     contentAlignment = Alignment.Center
     ) {
         Image(
 
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.size(width = 400.dp, height = 250.dp) // Set a larger size
+                .offset(x = 0.dp, y = 10.dp),
             painter = painterResource(id = R.drawable.top_app_bar_background),
             contentDescription = "My SVG Icon"
         )
@@ -129,7 +133,7 @@ fun TopAppBarWithTime() {
                     // Add spacing between icon and text
 
                     Text(
-                        text = stringResource(id = R.string.top_bar_title),
+                        text = title,
                         style = TextStyle(
                             fontSize = 14.sp,
                             lineHeight = 24.sp,
@@ -385,7 +389,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
 @Composable
 fun HomeScreenPreview() {
 
-    MyAppTheme {
+    AbsherTheme {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             HomeScreen(
                 navController = rememberNavController(), // Mock NavHostController

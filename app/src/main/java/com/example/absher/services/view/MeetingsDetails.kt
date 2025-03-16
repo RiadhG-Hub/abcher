@@ -38,7 +38,7 @@ import com.example.absher.services.adapter.MeetingApiAdapter
 import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.domain.repository.MeetingRepository
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
-import com.example.absher.services.view.ui.theme.AbsherTheme
+import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.services.viewmodel.FetchAgendaViewModel
 import com.example.absher.services.viewmodel.FetchMeetingAttendsViewModel
 import com.example.absher.services.viewmodel.FetchMeetingInfoViewModel
@@ -85,10 +85,12 @@ class MeetingsDetails : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         /// val meetingId = intent.getIntExtra("MEETING_ID", 0)
+        val meetingTitle = intent.getStringExtra("MEETING_TITLE" )
 
         setContent {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 DetailsWrapper(
+                    meetingTitle = meetingTitle.toString(),
                     fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel,
                     fetchAgendaViewModel = fetchAgendaViewModel
                 )
@@ -100,6 +102,7 @@ class MeetingsDetails : ComponentActivity() {
     @Composable
     fun DetailsWrapper(
         modifier: Modifier = Modifier,
+         meetingTitle: String = "Meeting Details",
         viewModel: MeetingDetailsNavigationViewModel = viewModel(),
         fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
         fetchAgendaViewModel: FetchAgendaViewModel = viewModel(),
@@ -107,7 +110,7 @@ class MeetingsDetails : ComponentActivity() {
         val selectedIndex = viewModel.selectedNavItem.value
         Scaffold(
             topBar = {
-                MeetingDetailsTopAppBar()
+                AbcherTopAppBar(title = meetingTitle)
             },
             content = { padding ->
                 Column(

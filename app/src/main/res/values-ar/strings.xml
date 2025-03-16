@@ -15,7 +15,11 @@
         <string name="nav_more">المزيد</string>
         <string name="nav_settings">الإعدادات</string>
         <string name="nav_profile">الحساب</string>
-    <string name="meetings">الإجتماع</string>
+    <string name="meeting">الإجتماع</string>
         <string name="meetingend">" نهاية الإجتماع   %1$s"</string>
         <string name="moredetails">المزيد من التفاصيل</string>
+        <string name="infonumber">الرقم التعريفي %1$s</string>
+        <string name="startmeeting">" بداية الإجتماع   %1$s"</string>
+        <string name="title_activity_meetings_attends_card_view">MeetingsAttendsCardView</string>
+        <string name="meetings">الإجتماعات</string>
 </resources>

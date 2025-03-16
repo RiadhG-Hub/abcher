@@ -55,7 +55,7 @@ import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.data.models.Meeting
 import com.example.absher.services.domain.repository.MeetingRepository
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
-import com.example.absher.services.view.ui.theme.AbsherTheme
+import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.services.viewmodel.FetchMeetingStateError
 import com.example.absher.services.viewmodel.FetchMeetingStateInit
 import com.example.absher.services.viewmodel.FetchMeetingStateLoading
@@ -77,7 +77,7 @@ class MeetingListPage : ComponentActivity() {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 Scaffold(
 
-                    topBar = { MeetingListScreenTopAppBar() },
+                    topBar = { AbcherTopAppBar(title = stringResource(id = R.string.meetings)) },
                     modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MeetingListScreen(
                         modifier = Modifier.padding(innerPadding), viewModel  = MeetingViewModel(
@@ -245,6 +245,7 @@ private fun SuccessView(
                     Log.e("TAG", "SuccessView: Clicked")
                         val intent = Intent(context, MeetingsDetails::class.java)
                         intent.putExtra("MEETING_ID", meetings[index].id)
+                    intent.putExtra("MEETING_TITLE", meetings[index].title)
                         context.startActivity(intent)
 
                 })
@@ -288,7 +289,7 @@ fun MeetingListScreenLoadingPreview() {
     AbsherTheme {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Scaffold(
-            topBar = { MeetingListScreenTopAppBar() }
+            topBar = { AbcherTopAppBar() }
         ) { paddingValues ->
             LoadingView(modifier = Modifier.padding(paddingValues))
         }

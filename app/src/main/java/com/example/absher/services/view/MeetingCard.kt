@@ -1,7 +1,10 @@
 package com.example.absher.services.view
 
+// Custom Arabic font (if available, e.g., "Noto Sans Arabic")
+// Replace with your font resource if you have one
+
+
 import android.util.Log
-import android.webkit.ConsoleMessage.MessageLevel.LOG
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -14,13 +17,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -28,163 +29,139 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.absher.R
 import com.example.absher.services.data.models.Meeting
-import com.example.absher.services.view.ui.theme.AbsherTheme
-
-// Custom Arabic font (if available, e.g., "Noto Sans Arabic")
-// Replace with your font resource if you have one
-
+import com.example.absher.services.helper.formatDateToArabic
+import com.example.absher.services.helper.formatTimeToArabic
+import com.example.absher.ui.theme.AbsherTheme
+import com.example.absher.ui.theme.BackgroundGray
+import com.example.absher.ui.theme.DarkGray
+import com.example.absher.ui.theme.GreenPrimary
+import com.example.absher.ui.theme.LightGray
+import com.example.absher.ui.theme.MediumGray
+import com.example.absher.ui.theme.StatusDefault
+import com.example.absher.ui.theme.StatusGreen
+import com.example.absher.ui.theme.StatusRed
+import com.example.absher.ui.theme.StatusYellow
 
 
 @Composable
 fun ClickableUnderlinedText(onClick: () -> Unit) {
     Text(
         text = stringResource(R.string.moredetails),
-        style = TextStyle(
-            fontSize = 12.sp,
-            color = Color(0xFF39836B),
-            textDecoration = TextDecoration.Underline // Adds underline
-        ),
+        style = MaterialTheme.typography.labelSmall,
+        color = GreenPrimary,
         textAlign = TextAlign.End,
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                Log.i(
-                    "ClickableUnderlinedText",
-                    "ClickableUnderlinedText: ClickableUnderlinedText"
-                )
+                Log.i("ClickableUnderlinedText", "Clicked")
                 onClick()
-            } // Makes the text clickable
-            .padding(4.dp) // Adds slight padding for better tap experience
+            }
+            .padding(4.dp)
     )
 }
 
 @Composable
-fun MeetingCard(meeting: Meeting,  onClick: () -> Unit) {
+fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
+    val statusColor = when (meeting.statusId) {
+        1 -> StatusGreen
+        2 -> StatusYellow
+        3 -> StatusRed
+        else -> StatusDefault
+    }
+
+    val statusText = when (meeting.statusId) {
+        1 -> "Approved"
+        2 -> "Pending"
+        3 -> "Rejected"
+        else -> "N/A"
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        shape = RoundedCornerShape(8.dp),
+        shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(
             modifier = Modifier
-                .background(Color.White)
-                .padding(12.dp) // Inner padding of the card
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(12.dp)
         ) {
-            // Header: Status button and ID
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Status button
-
-
-                // Meeting ID
                 Text(
-                    text = " ${meeting.id}#" ,
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF212121), // Dark gray
-                        // fontFamily = arabicFontFamily
-                    )
+                    text = " ${meeting.id}#",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
-
-                TextButton(
-                    onClick = { /* Handle click */ },
+                Box(
                     modifier = Modifier
-                        .border(
-                            width = 1.dp,
-                            color = Color(0xFFD4A017), // Gold color
-                            shape = RoundedCornerShape(4.dp)
-                        ),
-                    colors = ButtonDefaults.textButtonColors(
-                        contentColor = Color(0xFFD4A017)
-                    )
+                        .padding(8.dp)
+                        .background(color = Color(0x00E0F7FA), shape = MaterialTheme.shapes.small)
+                        .border(1.dp, statusColor, MaterialTheme.shapes.small)
+                        .padding(horizontal = 8.dp, vertical = 0.dp)
                 ) {
                     Text(
-                        text = meeting.statusName ?: "" ,
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                            // fontFamily = arabicFontFamily
-                        )
+                        text = statusText,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = statusColor
                     )
                 }
             }
 
-            // Date and Reference Number
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
-
             ) {
-
-
-                Box(modifier = Modifier
-
-                    .padding(8.dp)
-                    .background(color = Color(0x00E0F7FA), shape = RoundedCornerShape(8.dp))
-                    .border(1.dp, Color(0xFFCBCBCB), RoundedCornerShape(8.dp))
-                    .padding(12.dp)){
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .background(color = Color(0x00E0F7FA), shape = MaterialTheme.shapes.small)
+                        .border(1.dp, MediumGray, MaterialTheme.shapes.small)
+                        .padding(horizontal = 8.dp, vertical = 0.dp)
+                ) {
                     Text(
                         text = stringResource(R.string.infonumber, meeting.referenceNumber!!),
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            color = Color(0xFF757575),
-                            // fontFamily = arabicFontFamily
-                        )
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MediumGray
                     )
                 }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    SvgIcon(R.drawable.calendar_today)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    // SvgIcon(R.drawable.calendar_today) // Uncomment if you have this
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = meeting.date ?: "",
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            color = Color(0xFF757575),
-                            // fontFamily = arabicFontFamily
-                        )
+                        text = formatDateToArabic(meeting.date ?: ""),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = LightGray
                     )
                 }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Title
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
-                    .background(color = Color(0xFFF2F2F2))
-
+                    .background(color = BackgroundGray)
                     .padding(12.dp)
             ) {
                 Text(
                     text = meeting.notes ?: "",
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF353334),
-                    ),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = DarkGray,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -192,51 +169,43 @@ fun MeetingCard(meeting: Meeting,  onClick: () -> Unit) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Start and End Time
-            Column (
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    SvgIcon(R.drawable.timer)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    SvgIcon(R.drawable.timer) // Uncomment if you have this
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = stringResource(R.string.startmeeting, meeting.startTime!!),
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            color = Color(0xFF212121),
-                            // fontFamily = arabicFontFamily
-                        )
+                        text = stringResource(R.string.startmeeting, formatTimeToArabic(meeting.startTime!!)),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
-                HorizontalDivider(modifier = Modifier
-                    .padding(vertical = 4.dp)
-                    .background(Color(0XFFF2F2F2)), thickness = 1.dp)
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    SvgIcon(R.drawable.timer_off)
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 4.dp),
+                    color = BackgroundGray,
+                    thickness = 1.dp
+                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                     SvgIcon(R.drawable.timer_off) // Uncomment if you have this
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = stringResource(R.string.meetingend, meeting.endTime!!),
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            color = Color(0xFF212121),
-                            // fontFamily = arabicFontFamily
-                        )
+                        text = stringResource(R.string.meetingend, formatTimeToArabic(meeting.endTime!!)),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 4.dp),
+                    color = BackgroundGray,
+                    thickness = 1.dp
+                )
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Location
-            ClickableUnderlinedText{
-onClick()
-            }
+            ClickableUnderlinedText { onClick() }
         }
     }
 }
