@@ -1,7 +1,6 @@
 package com.example.absher.services.view
 
 
-
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
@@ -46,6 +45,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
@@ -93,21 +94,27 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = view
 }
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarWithTime() {
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .height(80.dp)
-        .background(
-            color = Color(0xFFCDB372),
-            shape = RoundedCornerShape(
-                bottomEnd = 16.dp, // Bottom-right corner
-                bottomStart = 16.dp // Bottom-left corner
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .background(
+                color = Color(0xFFCDB372),
+                shape = RoundedCornerShape(
+                    bottomEnd = 16.dp, // Bottom-right corner
+                    bottomStart = 16.dp // Bottom-left corner
+                )
             )
-        )){
-        SvgIcon(R.drawable.headers_background)
+    ) {
+        Image(
+
+            modifier = Modifier.fillMaxSize(),
+            painter = painterResource(id = R.drawable.top_app_bar_background),
+            contentDescription = "My SVG Icon"
+        )
         TopAppBar(
             title = {
                 Row(
@@ -115,21 +122,30 @@ fun TopAppBarWithTime() {
                     horizontalArrangement = Arrangement.Start, // Align content to the right
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    SvgIcon(R.drawable.right, modifier = Modifier.rotate(180f).padding())
+                    SvgIcon(R.drawable.right, modifier = Modifier
+                        .rotate(180f)
+                        .padding())
 
                     // Add spacing between icon and text
 
                     Text(
                         text = stringResource(id = R.string.top_bar_title),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 18.sp
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            lineHeight = 24.sp,
+
+                            fontWeight = FontWeight(700),
+                            color = Color(0xFFFFFFFF),
+
+                            textAlign = TextAlign.Right,
+                        )
                     )
                     Spacer(modifier = Modifier.width(8.dp))
 
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
+                containerColor = Color.Transparent,
                 titleContentColor = MaterialTheme.colorScheme.onPrimary
             )
         )
@@ -138,11 +154,11 @@ fun TopAppBarWithTime() {
 }
 
 @Composable
-fun SvgIcon(drawable : Int, modifier: Modifier = Modifier , defaultColor : Color? = null ) {
-    Box(modifier = modifier){
+fun SvgIcon(drawable: Int, modifier: Modifier = Modifier, defaultColor: Color? = null) {
+    Box(modifier = modifier) {
         Image(
-            modifier= modifier,
-            colorFilter = if (defaultColor != null ) {
+            modifier = modifier,
+            colorFilter = if (defaultColor != null) {
                 ColorFilter.tint(defaultColor)
             } else {
                 null
@@ -246,7 +262,7 @@ fun CardGrid() {
                 SvgIcon(R.drawable.groups)
                 Text(
                     text = stringResource(id = R.string.team),
-                    textAlign = TextAlign.Start ,
+                    textAlign = TextAlign.Start,
                     fontSize = 16.sp,
                     modifier = Modifier.padding(top = 8.dp),
                     color = MaterialTheme.colorScheme.onSurface
@@ -360,17 +376,21 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
 }
 
 @Preview(showBackground = true)
-@Preview(showBackground = true,
+@Preview(
+    showBackground = true,
 
-    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL, name = "homeScreenPreview")
+    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
+    name = "homeScreenPreview"
+)
 @Composable
 fun HomeScreenPreview() {
 
     MyAppTheme {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        HomeScreen(
-            navController = rememberNavController(), // Mock NavHostController
-            viewModel = HomeViewModel() // Instantiate a new ViewModel for preview
-        )
-    }}
+            HomeScreen(
+                navController = rememberNavController(), // Mock NavHostController
+                viewModel = HomeViewModel() // Instantiate a new ViewModel for preview
+            )
+        }
+    }
 }
