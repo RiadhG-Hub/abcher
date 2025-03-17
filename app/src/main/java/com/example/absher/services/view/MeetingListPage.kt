@@ -49,18 +49,19 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import com.example.absher.R
 import com.example.absher.services.adapter.MeetingApiAdapter
 import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.data.models.Meeting
 import com.example.absher.services.domain.repository.MeetingRepository
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
-import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.services.viewmodel.FetchMeetingStateError
 import com.example.absher.services.viewmodel.FetchMeetingStateInit
 import com.example.absher.services.viewmodel.FetchMeetingStateLoading
 import com.example.absher.services.viewmodel.FetchMeetingStateSuccess
 import com.example.absher.services.viewmodel.MeetingViewModel
+import com.example.absher.ui.theme.AbsherTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -71,13 +72,19 @@ import kotlinx.coroutines.flow.map
 class MeetingListPage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
             AbsherTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 Scaffold(
 
-                    topBar = { AbcherTopAppBar(title = stringResource(id = R.string.meetings)) },
+                    topBar = { AbcherTopAppBar(title = stringResource(id = R.string.meetings) , navigationIcon = {
+                        DefaultBackButton( )
+                    }, actions = {
+                        SvgIcon(R.drawable.notifications_active, modifier = Modifier.padding(end = 16.dp))
+                    } )},
                     modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MeetingListScreen(
                         modifier = Modifier.padding(innerPadding), viewModel  = MeetingViewModel(

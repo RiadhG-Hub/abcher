@@ -12,14 +12,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -67,18 +66,20 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = view
     val selectedNavItem by viewModel.selectedNavItem // No collectAsStateWithLifecycle needed
 
     Scaffold(
-        topBar = { AbcherTopAppBar(title = stringResource(id = R.string.top_bar_title)) },
+        topBar = { AbcherTopAppBar(title = stringResource(id = R.string.top_bar_title),
+            navigationIcon = {
+                DefaultBackButton()
+            }) },
+
         bottomBar = {
             BottomNavigationBar(
-                selectedNavItem = selectedNavItem,
-                onNavItemSelected = { item ->
+                selectedNavItem = selectedNavItem, onNavItemSelected = { item ->
                     viewModel.selectNavItem(item)
                     navController.navigate(item) {
                         popUpTo(navController.graph.startDestinationId)
                         launchSingleTop = true
                     }
-                }
-            )
+                })
         },
         content = { padding ->
             Column(
@@ -95,53 +96,52 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = view
     )
 }
 
+@Composable
+fun DefaultBackButton( ) {
+  val  context =  LocalContext.current
+    SvgIcon(drawable = R.drawable.right, modifier = Modifier.rotate(180f).clickable {
+        println("back button clicked")
+        (context as? Activity)?.finish()
+    })
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AbcherTopAppBar(title: String = "change me") {
+fun AbcherTopAppBar(
+    title: String = "change me",
+    actions: @Composable RowScope.() -> Unit = {},
+
+    navigationIcon: @Composable () -> Unit = {},
+) {
+
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp)
+            .height(110.dp)
             .background(
-                color = Color(0xFFCDB372),
-                shape = RoundedCornerShape(
+                color = Color(0xFFCDB372), shape = RoundedCornerShape(
                     bottomEnd = 16.dp, // Bottom-right corner
                     bottomStart = 16.dp // Bottom-left corner
                 )
-            ), contentAlignment = Alignment.Center
+            ), contentAlignment = Alignment.TopCenter
     ) {
         Image(
 
             modifier = Modifier
                 .size(width = 400.dp, height = 250.dp) // Set a larger size
-                .offset(x = 0.dp, y = 10.dp),
+                .offset(x = 0.dp, y = 20.dp),
             painter = painterResource(id = R.drawable.top_app_bar_background),
             contentDescription = "My SVG Icon"
         )
         TopAppBar(
             title = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start, // Align content to the right
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    SvgIcon(
-                        R.drawable.right, modifier = Modifier
-                            .rotate(180f)
-                            .padding()
-                    )
-
-                    // Add spacing between icon and text
-
-                    Text(
-                        text = title,
-                        style = CustomTextStyles.BaseBold
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                }
+                Text(
+                    text = title, style = CustomTextStyles.BaseBold
+                )
             },
+            actions = actions,
+            navigationIcon = navigationIcon,
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.Transparent,
                 titleContentColor = MaterialTheme.colorScheme.onPrimary
@@ -160,9 +160,7 @@ fun SvgIcon(drawable: Int, modifier: Modifier = Modifier, defaultColor: Color? =
                 ColorFilter.tint(defaultColor)
             } else {
                 null
-            },
-            painter = painterResource(id = drawable),
-            contentDescription = "My SVG Icon"
+            }, painter = painterResource(id = drawable), contentDescription = "My SVG Icon"
         )
     }
 }
@@ -171,50 +169,44 @@ fun SvgIcon(drawable: Int, modifier: Modifier = Modifier, defaultColor: Color? =
 fun CardGrid() {
     val context = LocalContext.current
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         CardElement(
             title = stringResource(id = R.string.tasks),
-            modifier = Modifier.weight(1f) ,
+            modifier = Modifier.weight(1f),
             onClick = {
 
             },
             subtitle = stringResource(id = R.string.tasks_desc),
             icon = R.drawable.task,
             titleColor = TaskColor,
-            backgroundIconColor =Color(0xFFFCFBF8),
+            backgroundIconColor = Color(0xFFFCFBF8),
         )
 
 
 
         CardElement(
             title = stringResource(id = R.string.files),
-            modifier = Modifier.weight(1f) ,
+            modifier = Modifier.weight(1f),
             onClick = {
 
             },
             subtitle = stringResource(id = R.string.files_desc),
             icon = R.drawable.note,
             titleColor = SubtitleColor,
-            backgroundIconColor =Color(0xFFFCFBF8),
+            backgroundIconColor = Color(0xFFFCFBF8),
         )
-
-
-
-
 
 
     }
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
 
         CardElement(
             title = stringResource(id = R.string.team),
-            modifier = Modifier.weight(1f) ,
+            modifier = Modifier.weight(1f),
             onClick = {
                 (context as? Activity)?.let {
                     val intent = Intent(it, MeetingListPage::class.java)
@@ -224,12 +216,12 @@ fun CardGrid() {
             subtitle = stringResource(id = R.string.team_desc),
             icon = R.drawable.groups,
             titleColor = GreenPrimary,
-            backgroundIconColor =GreenPrimary.copy(alpha = 0.1f),
+            backgroundIconColor = GreenPrimary.copy(alpha = 0.1f),
         )
 
         CardElement(
             title = stringResource(id = R.string.notifications),
-            modifier = Modifier.weight(1f) ,
+            modifier = Modifier.weight(1f),
             onClick = {
                 (context as? Activity)?.let {
                     val intent = Intent(it, MeetingListPage::class.java)
@@ -239,10 +231,8 @@ fun CardGrid() {
             subtitle = stringResource(id = R.string.notifications_desc),
             icon = R.drawable.online_prediction,
             titleColor = TaskColor,
-            backgroundIconColor =Color(0xFFFCFBF8),
+            backgroundIconColor = Color(0xFFFCFBF8),
         )
-
-
 
 
     }
@@ -250,15 +240,17 @@ fun CardGrid() {
 
 
 @Composable
-fun CardElement(modifier: Modifier= Modifier,
-                onClick: () -> Unit,
-                title : String ,
-                subtitle : String,
-                icon : Int,
-                titleColor : Color,
-                backgroundIconColor : Color){
+fun CardElement(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    title: String,
+    subtitle: String,
+    icon: Int,
+    titleColor: Color,
+    backgroundIconColor: Color
+) {
     Card(
-        modifier = modifier.clickable{
+        modifier = modifier.clickable {
             onClick()
         },
         shape = RoundedCornerShape(8.dp),
@@ -268,8 +260,7 @@ fun CardElement(modifier: Modifier= Modifier,
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.Start
+            modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.Start
         ) {
             SvgIcon(
                 icon, modifier = Modifier
@@ -300,12 +291,10 @@ fun CardElement(modifier: Modifier= Modifier,
 }
 
 
-
 @Composable
 fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> Unit) {
     NavigationBar(
-        containerColor = White,
-        contentColor = White, tonalElevation = 0.dp
+        containerColor = White, contentColor = White, tonalElevation = 0.dp
     ) {
         NavigationBarItem(
             icon = { SvgIcon(drawable = R.drawable.other_houses) },
@@ -345,7 +334,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
             )
         )
         NavigationBarItem(
-            icon = {SvgIcon(drawable = R.drawable.textsms) },
+            icon = { SvgIcon(drawable = R.drawable.textsms) },
             label = { Text("المحادثات", style = CustomTextStyles.SmallRegular12) },
             selected = selectedNavItem == "settings",
             onClick = { onNavItemSelected("settings") },

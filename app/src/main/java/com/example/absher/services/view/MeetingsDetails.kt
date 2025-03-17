@@ -38,12 +38,12 @@ import com.example.absher.services.adapter.MeetingApiAdapter
 import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.domain.repository.MeetingRepository
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
-import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.services.viewmodel.FetchAgendaViewModel
 import com.example.absher.services.viewmodel.FetchMeetingAttendsViewModel
 import com.example.absher.services.viewmodel.FetchMeetingInfoViewModel
 import com.example.absher.services.viewmodel.MeetingDetailsNavigationSections
 import com.example.absher.services.viewmodel.MeetingDetailsNavigationViewModel
+import com.example.absher.ui.theme.AbsherTheme
 
 class MeetingsDetails : ComponentActivity() {
     val fetchMeetingAttendsViewModel = FetchMeetingAttendsViewModel(
@@ -110,7 +110,12 @@ class MeetingsDetails : ComponentActivity() {
         val selectedIndex = viewModel.selectedNavItem.value
         Scaffold(
             topBar = {
-                AbcherTopAppBar(title = meetingTitle)
+                AbcherTopAppBar(title = meetingTitle , navigationIcon = {
+                    DefaultBackButton()
+                }, actions = {
+                    SvgIcon(R.drawable.notifications_active, modifier = Modifier.padding(end = 16.dp))
+                })
+
             },
             content = { padding ->
                 Column(
