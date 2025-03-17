@@ -1,4 +1,4 @@
-package com.example.absher.services.view
+package com.example.absher.services.view.meetings
 
 import android.content.Intent
 import android.os.Bundle
@@ -52,14 +52,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.absher.R
 import com.example.absher.services.adapter.MeetingApiAdapter
 import com.example.absher.services.data.datasource.RemoteMeetingDataSource
-import com.example.absher.services.data.models.Meeting
+import com.example.absher.services.data.models.meetings.Meeting
 import com.example.absher.services.domain.repository.MeetingRepository
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
-import com.example.absher.services.viewmodel.FetchMeetingStateError
-import com.example.absher.services.viewmodel.FetchMeetingStateInit
-import com.example.absher.services.viewmodel.FetchMeetingStateLoading
-import com.example.absher.services.viewmodel.FetchMeetingStateSuccess
-import com.example.absher.services.viewmodel.MeetingViewModel
+import com.example.absher.services.viewmodel.meetings.FetchMeetingStateError
+import com.example.absher.services.viewmodel.meetings.FetchMeetingStateInit
+import com.example.absher.services.viewmodel.meetings.FetchMeetingStateLoading
+import com.example.absher.services.viewmodel.meetings.FetchMeetingStateSuccess
+import com.example.absher.services.viewmodel.meetings.MeetingViewModel
 import com.example.absher.ui.theme.AbsherTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter

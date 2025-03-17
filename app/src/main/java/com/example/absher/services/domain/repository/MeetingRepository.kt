@@ -1,10 +1,10 @@
 package com.example.absher.services.domain.repository// domain/repository/MeetingRepository.kt
 import com.example.absher.services.data.datasource.RemoteMeetingDataSource
-import com.example.absher.services.data.models.AttendeeResponse
-import com.example.absher.services.data.models.Meeting
-import com.example.absher.services.data.models.MeetingAgendaResponse
-import com.example.absher.services.data.models.MeetingAttachmentResponse
-import com.example.absher.services.data.models.MeetingInfoResponse
+import com.example.absher.services.data.models.meetings.AttendeeResponse
+import com.example.absher.services.data.models.meetings.Meeting
+import com.example.absher.services.data.models.meetings.MeetingAgendaResponse
+import com.example.absher.services.data.models.meetings.MeetingAttachmentResponse
+import com.example.absher.services.data.models.meetings.MeetingInfoResponse
 import javax.inject.Inject
 
 class MeetingRepository @Inject constructor(

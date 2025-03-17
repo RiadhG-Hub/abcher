@@ -3,7 +3,7 @@ package com.example.absher.services.adapter
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.example.absher.services.data.models.RefreshTokenResponse
+import com.example.absher.services.data.models.meetings.RefreshTokenResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -1,9 +1,9 @@
-package com.example.absher.services.viewmodel// viewmodel/MeetingViewModel.kt
+package com.example.absher.services.viewmodel.meetings// viewmodel/MeetingViewModel.kt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.absher.services.data.models.MeetingAgendaResponse
+import com.example.absher.services.data.models.meetings.MeetingAgendaResponse
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
 import kotlinx.coroutines.launch
 

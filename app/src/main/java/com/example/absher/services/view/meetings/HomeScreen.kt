@@ -1,4 +1,4 @@
-package com.example.absher.services.view
+package com.example.absher.services.view.meetings
 
 
 import android.app.Activity
@@ -52,7 +52,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.absher.R
-import com.example.absher.services.viewmodel.HomeViewModel
+import com.example.absher.services.viewmodel.meetings.HomeViewModel
 import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.ui.theme.CustomTextStyles
 import com.example.absher.ui.theme.GreenPrimary

@@ -1,4 +1,4 @@
-package com.example.absher.services.data.models
+package com.example.absher.services.data.models.meetings
 
 import com.google.gson.annotations.SerializedName
 

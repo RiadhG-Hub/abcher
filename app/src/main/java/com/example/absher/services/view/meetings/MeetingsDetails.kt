@@ -1,4 +1,4 @@
-package com.example.absher.services.view
+package com.example.absher.services.view.meetings
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -41,12 +41,12 @@ import com.example.absher.services.adapter.MeetingApiAdapter
 import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.domain.repository.MeetingRepository
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
-import com.example.absher.services.viewmodel.FetchAgendaViewModel
-import com.example.absher.services.viewmodel.FetchMeetingAttachmentViewModel
-import com.example.absher.services.viewmodel.FetchMeetingAttendsViewModel
-import com.example.absher.services.viewmodel.FetchMeetingInfoViewModel
-import com.example.absher.services.viewmodel.MeetingDetailsNavigationSections
-import com.example.absher.services.viewmodel.MeetingDetailsNavigationViewModel
+import com.example.absher.services.viewmodel.meetings.FetchAgendaViewModel
+import com.example.absher.services.viewmodel.meetings.FetchMeetingAttachmentViewModel
+import com.example.absher.services.viewmodel.meetings.FetchMeetingAttendsViewModel
+import com.example.absher.services.viewmodel.meetings.FetchMeetingInfoViewModel
+import com.example.absher.services.viewmodel.meetings.MeetingDetailsNavigationSections
+import com.example.absher.services.viewmodel.meetings.MeetingDetailsNavigationViewModel
 import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.ui.theme.BackgroundGray
 

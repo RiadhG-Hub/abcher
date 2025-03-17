@@ -1,4 +1,4 @@
-package com.example.absher.services.data.models
+package com.example.absher.services.data.models.meetings
 
 data class MeetingAttachmentResponse(
 val data: MeetingAttachmentData?,

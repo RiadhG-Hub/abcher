@@ -1,4 +1,4 @@
-package com.example.absher.services.view
+package com.example.absher.services.view.meetings
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

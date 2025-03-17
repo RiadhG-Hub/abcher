@@ -10,7 +10,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
-import com.example.absher.services.view.AppNavigation
+import com.example.absher.services.view.meetings.AppNavigation
 import com.example.absher.ui.theme.AbsherTheme
 import dagger.hilt.android.AndroidEntryPoint
 

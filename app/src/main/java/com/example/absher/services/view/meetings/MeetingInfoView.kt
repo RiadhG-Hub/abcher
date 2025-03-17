@@ -1,4 +1,4 @@
-package com.example.absher.services.view
+package com.example.absher.services.view.meetings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,17 +35,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.absher.R
-import com.example.absher.services.data.models.MeetingAttendee
-import com.example.absher.services.data.models.MeetingInfoData
-import com.example.absher.services.data.models.MeetingInfoResponse
+import com.example.absher.services.data.models.meetings.MeetingAttendee
+import com.example.absher.services.data.models.meetings.MeetingInfoData
+import com.example.absher.services.data.models.meetings.MeetingInfoResponse
 import com.example.absher.services.helper.formatDateToArabic
 import com.example.absher.services.helper.formatTimeToArabic
-import com.example.absher.services.viewmodel.FetchMeetingInfoStateError
-import com.example.absher.services.viewmodel.FetchMeetingInfoStateInit
-import com.example.absher.services.viewmodel.FetchMeetingInfoStateLoading
-import com.example.absher.services.viewmodel.FetchMeetingInfoStateSuccess
-import com.example.absher.services.viewmodel.FetchMeetingInfoViewModel
-import com.example.absher.services.viewmodel.MeetingDetailsNavigationViewModel
+import com.example.absher.services.viewmodel.meetings.FetchMeetingInfoStateError
+import com.example.absher.services.viewmodel.meetings.FetchMeetingInfoStateInit
+import com.example.absher.services.viewmodel.meetings.FetchMeetingInfoStateLoading
+import com.example.absher.services.viewmodel.meetings.FetchMeetingInfoStateSuccess
+import com.example.absher.services.viewmodel.meetings.FetchMeetingInfoViewModel
+import com.example.absher.services.viewmodel.meetings.MeetingDetailsNavigationViewModel
 import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.ui.theme.CustomTextStyles
 import com.example.absher.ui.theme.Gray

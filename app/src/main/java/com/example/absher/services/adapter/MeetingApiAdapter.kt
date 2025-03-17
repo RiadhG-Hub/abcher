@@ -1,13 +1,13 @@
 package com.example.absher.services.adapter// adapter/MeetingApiAdapter.kt
-import com.example.absher.services.data.models.AttendeeResponse
-import com.example.absher.services.data.models.Meeting
-import com.example.absher.services.data.models.MeetingAgendaResponse
-import com.example.absher.services.data.models.MeetingAttachment
-import com.example.absher.services.data.models.MeetingAttachmentData
-import com.example.absher.services.data.models.MeetingAttachmentResponse
-import com.example.absher.services.data.models.MeetingInfoResponse
-import com.example.absher.services.data.models.MeetingRequestBody
-import com.example.absher.services.data.models.MeetingResponse
+import com.example.absher.services.data.models.meetings.AttendeeResponse
+import com.example.absher.services.data.models.meetings.Meeting
+import com.example.absher.services.data.models.meetings.MeetingAgendaResponse
+import com.example.absher.services.data.models.meetings.MeetingAttachment
+import com.example.absher.services.data.models.meetings.MeetingAttachmentData
+import com.example.absher.services.data.models.meetings.MeetingAttachmentResponse
+import com.example.absher.services.data.models.meetings.MeetingInfoResponse
+import com.example.absher.services.data.models.meetings.MeetingRequestBody
+import com.example.absher.services.data.models.meetings.MeetingResponse
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

@@ -1,5 +1,4 @@
-package com.example.absher.services.view
-
+package com.example.absher.services.view.meetings
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -25,31 +24,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.absher.services.viewmodel.FetchMeetingAttachmentStateError
-import com.example.absher.services.viewmodel.FetchMeetingAttachmentStateInit
-import com.example.absher.services.viewmodel.FetchMeetingAttachmentStateLoading
-import com.example.absher.services.viewmodel.FetchMeetingAttachmentStateSuccess
-import com.example.absher.services.viewmodel.FetchMeetingAttachmentViewModel
-import com.example.absher.services.viewmodel.MeetingDetailsNavigationViewModel
+import com.example.absher.services.viewmodel.meetings.FetchAgendaViewModel
+import com.example.absher.services.viewmodel.meetings.FetchMeetingAgendaStateError
+import com.example.absher.services.viewmodel.meetings.FetchMeetingAgendaStateInit
+import com.example.absher.services.viewmodel.meetings.FetchMeetingAgendaStateLoading
+import com.example.absher.services.viewmodel.meetings.FetchMeetingAgendaStateSuccess
+import com.example.absher.services.viewmodel.meetings.MeetingDetailsNavigationViewModel
 import com.example.absher.ui.theme.BackgroundGray
 
 @Composable
-fun AttachmentList(
+fun AgendaList(
     modifier: Modifier = Modifier,
     viewModel: MeetingDetailsNavigationViewModel = viewModel(),
     meetingId: Int = 0,
-    fetchMeetingAttachmentViewModel: FetchMeetingAttachmentViewModel = viewModel()
+    fetchAgendaViewModel: FetchAgendaViewModel = viewModel()
 ) {
-    val fetchMeetingState by fetchMeetingAttachmentViewModel.fetchMeetingAttachmentState.observeAsState(
-        FetchMeetingAttachmentStateInit()
+    val fetchMeetingState by fetchAgendaViewModel.fetchMeetingState.observeAsState(
+        FetchMeetingAgendaStateInit()
     )
 
     when (fetchMeetingState) {
-        is FetchMeetingAttachmentStateInit -> {
+        is FetchMeetingAgendaStateInit -> {
             Text(text = "Initializing...", modifier = modifier.padding(16.dp))
         }
 
-        is FetchMeetingAttachmentStateLoading -> {
+        is FetchMeetingAgendaStateLoading -> {
             Box(
                 modifier = modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -58,9 +57,9 @@ fun AttachmentList(
             }
         }
 
-        is FetchMeetingAttachmentStateSuccess -> {
-            val attachments =
-                (fetchMeetingState as FetchMeetingAttachmentStateSuccess).meetingAttachment!!.data!!.meetingAttachments
+        is FetchMeetingAgendaStateSuccess -> {
+            val attendees =
+                (fetchMeetingState as FetchMeetingAgendaStateSuccess).meetingAgenda!!.data
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -69,19 +68,21 @@ fun AttachmentList(
                 shape = MaterialTheme.shapes.medium,
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-            ){
-            Column(modifier = modifier.padding(8.dp)) {
-                attachments.forEach { attachment ->
-                    AttachmentListItem(
-                        title = attachment.name.toString(),
-                        subTitle = attachment.jobTitle.toString()
-                    )
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    attendees.forEach { agenda ->
+                        MeetingAgendaCardView(text = agenda.title)
+                    }
                 }
-            }}
+            }
         }
 
-        is FetchMeetingAttachmentStateError -> {
-            val errorMessage = (fetchMeetingState as FetchMeetingAttachmentStateError).error
+        is FetchMeetingAgendaStateError -> {
+            val errorMessage = (fetchMeetingState as FetchMeetingAgendaStateError).error
             Column(
                 modifier = modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
@@ -89,18 +90,16 @@ fun AttachmentList(
             ) {
                 Text(text = "Error: $errorMessage", color = Color.Red)
                 Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = { fetchMeetingAttachmentViewModel.fetchMeetingAttachments(meetingId) }) {
+                Button(onClick = { fetchAgendaViewModel.fetchMeetingAgendas(meetingId) }) {
                     Text("Retry")
                 }
             }
         }
-
-
     }
 }
 
 @Preview
 @Composable
-fun AttachmentListPreview() {
-    AttachmentList()
+fun PreviewAgendaList() {
+    AgendaList()
 }

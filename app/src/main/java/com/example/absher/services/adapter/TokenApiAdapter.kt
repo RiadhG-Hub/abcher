@@ -1,6 +1,6 @@
 package com.example.absher.services.adapter
 
-import com.example.absher.services.data.models.RefreshTokenResponse
+import com.example.absher.services.data.models.meetings.RefreshTokenResponse
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

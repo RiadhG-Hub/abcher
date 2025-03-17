@@ -1,5 +1,5 @@
 // Path: data/models/RefreshTokenResponse.kt
-package com.example.absher.services.data.models
+package com.example.absher.services.data.models.meetings
 
 // Data Classes for Token Response
 

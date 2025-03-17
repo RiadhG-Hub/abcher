@@ -1,4 +1,4 @@
-package com.example.absher.services.view
+package com.example.absher.services.view.meetings
 
 // Custom Arabic font (if available, e.g., "Noto Sans Arabic")
 // Replace with your font resource if you have one
@@ -34,7 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.absher.R
-import com.example.absher.services.data.models.Meeting
+import com.example.absher.services.data.models.meetings.Meeting
 import com.example.absher.services.helper.formatDateToArabic
 import com.example.absher.services.helper.formatTimeToArabic
 import com.example.absher.ui.theme.AbsherTheme
