@@ -3,6 +3,7 @@ import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.data.models.AttendeeResponse
 import com.example.absher.services.data.models.Meeting
 import com.example.absher.services.data.models.MeetingAgendaResponse
+import com.example.absher.services.data.models.MeetingAttachmentResponse
 import com.example.absher.services.data.models.MeetingInfoResponse
 import javax.inject.Inject
 
@@ -23,6 +24,9 @@ class MeetingRepository @Inject constructor(
 
     suspend fun fetchMeetingInfo(meetingId: Int): MeetingInfoResponse? {
         return remoteDataSource.fetchMeetingInfo(meetingId = meetingId)
+    }
+    suspend fun fetchMeetingAttachments(meetingId: Int): MeetingAttachmentResponse?{
+        return remoteDataSource.fetchMeetingAttachments(meetingId = meetingId)
     }
 
 

@@ -42,6 +42,7 @@ import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.domain.repository.MeetingRepository
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
 import com.example.absher.services.viewmodel.FetchAgendaViewModel
+import com.example.absher.services.viewmodel.FetchMeetingAttachmentViewModel
 import com.example.absher.services.viewmodel.FetchMeetingAttendsViewModel
 import com.example.absher.services.viewmodel.FetchMeetingInfoViewModel
 import com.example.absher.services.viewmodel.MeetingDetailsNavigationSections
@@ -86,6 +87,18 @@ class MeetingsDetails : ComponentActivity() {
         )
     )
 
+    val fetchAttachmentViewModel = FetchMeetingAttachmentViewModel(
+        GetMeetingsUseCase(
+            MeetingRepository(
+                RemoteMeetingDataSource(
+                    MeetingApiAdapter(
+
+                    )
+                )
+            )
+        )
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         /// val meetingId = intent.getIntExtra("MEETING_ID", 0)
@@ -97,6 +110,7 @@ class MeetingsDetails : ComponentActivity() {
                     meetingTitle = meetingTitle.toString(),
                     fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel,
                     fetchAgendaViewModel = fetchAgendaViewModel
+                    , fetchMeetingAttachmentViewModel = fetchAttachmentViewModel
                 )
 
             }
@@ -110,6 +124,7 @@ class MeetingsDetails : ComponentActivity() {
         viewModel: MeetingDetailsNavigationViewModel = viewModel(),
         fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
         fetchAgendaViewModel: FetchAgendaViewModel = viewModel(),
+        fetchMeetingAttachmentViewModel: FetchMeetingAttachmentViewModel = viewModel()
     ) {
         val selectedIndex = viewModel.selectedNavItem.value
         Scaffold(
@@ -139,7 +154,8 @@ class MeetingsDetails : ComponentActivity() {
                     Wrapper(
                         fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel,
                         fetchAgendaViewModel = fetchAgendaViewModel,
-                        fetchMeetingInfoViewModel = fetchMeetingInfoViewModel
+                        fetchMeetingInfoViewModel = fetchMeetingInfoViewModel,
+                                fetchMeetingAttachmentViewModel = fetchAttachmentViewModel
                     )
 
                 }
@@ -271,7 +287,8 @@ private fun Wrapper(
     viewModel: MeetingDetailsNavigationViewModel = viewModel(),
     fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
     fetchAgendaViewModel: FetchAgendaViewModel = viewModel(),
-    fetchMeetingInfoViewModel: FetchMeetingInfoViewModel = viewModel()
+    fetchMeetingInfoViewModel: FetchMeetingInfoViewModel = viewModel(),
+            fetchMeetingAttachmentViewModel: FetchMeetingAttachmentViewModel = viewModel()
 ) {
     when (viewModel.selectedNavItem.value) {
         MeetingDetailsNavigationSections.Meetings -> {
@@ -291,7 +308,8 @@ private fun Wrapper(
         }
 
         MeetingDetailsNavigationSections.Attachments -> {
-            Text(text = viewModel.selectedNavItem.value.name)
+            fetchMeetingAttachmentViewModel.fetchMeetingAttachments(meetingID = 2103)
+            AttachmentList(meetingId = 0, fetchMeetingAttachmentViewModel = fetchMeetingAttachmentViewModel)
         }
     }
 }

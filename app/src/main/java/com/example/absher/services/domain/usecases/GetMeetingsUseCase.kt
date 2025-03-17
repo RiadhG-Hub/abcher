@@ -2,6 +2,7 @@ package com.example.absher.services.domain.usecases// domain/usecases/GetMeeting
 import com.example.absher.services.data.models.AttendeeResponse
 import com.example.absher.services.data.models.Meeting
 import com.example.absher.services.data.models.MeetingAgendaResponse
+import com.example.absher.services.data.models.MeetingAttachmentResponse
 import com.example.absher.services.data.models.MeetingInfoResponse
 import com.example.absher.services.domain.repository.MeetingRepository
 import javax.inject.Inject
@@ -25,4 +26,8 @@ class GetMeetingsUseCase @Inject constructor(
     suspend fun fetchMeetingInfo(meetingId: Int): MeetingInfoResponse? {
         return meetingRepository.fetchMeetingInfo(meetingId = meetingId)
     }
+    suspend fun fetchMeetingAttachments(meetingId: Int): MeetingAttachmentResponse?{
+        return meetingRepository.fetchMeetingAttachments(meetingId = meetingId)
+    }
+
 }

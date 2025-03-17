@@ -15,3 +15,4 @@ val White = Color(0xFFFFFFFF)       // Card background
 val TaskColor = Color(0xFFC3A355) // Task color
 val SubtitleColor = Color(0xFF353334)
 val Gray = Color(0XFF808080)
+val BackgroundGreen = Color(0xFFEEF7F3)

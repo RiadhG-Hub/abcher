@@ -3,6 +3,7 @@ import com.example.absher.services.adapter.MeetingApiAdapter
 import com.example.absher.services.data.models.AttendeeResponse
 import com.example.absher.services.data.models.Meeting
 import com.example.absher.services.data.models.MeetingAgendaResponse
+import com.example.absher.services.data.models.MeetingAttachmentResponse
 import com.example.absher.services.data.models.MeetingInfoResponse
 import javax.inject.Inject
 
@@ -21,6 +22,9 @@ class RemoteMeetingDataSource @Inject constructor(private val apiAdapter: Meetin
 
     suspend fun fetchMeetingInfo(meetingId: Int): MeetingInfoResponse? {
         return apiAdapter.fetchMeetingInfo(meetingId = meetingId)
+    }
+    suspend fun fetchMeetingAttachments(meetingId: Int): MeetingAttachmentResponse?{
+        return apiAdapter.fetchMeetingAttachments(meetingId = meetingId)
     }
 
 

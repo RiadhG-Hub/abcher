@@ -2,6 +2,9 @@ package com.example.absher.services.adapter// adapter/MeetingApiAdapter.kt
 import com.example.absher.services.data.models.AttendeeResponse
 import com.example.absher.services.data.models.Meeting
 import com.example.absher.services.data.models.MeetingAgendaResponse
+import com.example.absher.services.data.models.MeetingAttachment
+import com.example.absher.services.data.models.MeetingAttachmentData
+import com.example.absher.services.data.models.MeetingAttachmentResponse
 import com.example.absher.services.data.models.MeetingInfoResponse
 import com.example.absher.services.data.models.MeetingRequestBody
 import com.example.absher.services.data.models.MeetingResponse
@@ -209,6 +212,44 @@ class MeetingApiAdapter {
             System.err.println("[ERROR] Unexpected error: ${e.message}")
             null
         }
+    }
+
+    suspend fun fetchMeetingAttachments(meetingId: Int): MeetingAttachmentResponse?{
+        val mockMeetingAttachmentResponse = MeetingAttachmentResponse(
+            data = MeetingAttachmentData(
+                meetingAttachments = listOf(
+                    MeetingAttachment(
+                        userId = 101,
+                        needsApproval = false,
+                        jobTitle = "Software Engineer",
+                        name = "John Doe",
+                        attended = true,
+                        hasProfilePicture = true
+                    ),
+                    MeetingAttachment(
+                        userId = 102,
+                        needsApproval = true,
+                        jobTitle = "Project Manager",
+                        name = "Jane Smith",
+                        attended = false,
+                        hasProfilePicture = false
+                    ),
+                    MeetingAttachment(
+                        userId = 103,
+                        needsApproval = false,
+                        jobTitle = "QA Analyst",
+                        name = "Michael Johnson",
+                        attended = true,
+                        hasProfilePicture = true
+                    )
+                )
+            ),
+            success = true,
+            message = "Data retrieved successfully"
+        )
+
+        return mockMeetingAttachmentResponse
+
     }
 }
 
