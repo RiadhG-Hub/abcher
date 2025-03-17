@@ -1,15 +1,20 @@
 package com.example.absher.services.view
 
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,6 +31,7 @@ import com.example.absher.services.viewmodel.FetchMeetingAttendStateLoading
 import com.example.absher.services.viewmodel.FetchMeetingAttendStateSuccess
 import com.example.absher.services.viewmodel.FetchMeetingAttendsViewModel
 import com.example.absher.services.viewmodel.MeetingDetailsNavigationViewModel
+import com.example.absher.ui.theme.BackgroundGray
 
 @Composable
 fun AttendsList(
@@ -55,11 +61,20 @@ fun AttendsList(
         is FetchMeetingAttendStateSuccess -> {
             val attendees =
                 (fetchMeetingState as FetchMeetingAttendStateSuccess).meetingAttends!!.data
-            Column(modifier = modifier.padding(16.dp)) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp)
+                    .border(1.dp, BackgroundGray, MaterialTheme.shapes.small),
+                shape = MaterialTheme.shapes.medium,
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+            ){
+            Column(modifier = modifier.padding(8.dp)) {
                 attendees.forEach { attendee ->
                     MeetingsAttendsCardView(title = attendee.fullName, subtitle = attendee.jobTitle)
                 }
-            }
+            }}
         }
 
         is FetchMeetingAttendStateError -> {

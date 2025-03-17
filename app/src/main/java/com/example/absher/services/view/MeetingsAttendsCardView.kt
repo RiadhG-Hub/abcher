@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -33,7 +34,7 @@ import com.example.absher.ui.theme.AbsherTheme
 @Composable
 fun MeetingsAttendsCardView(
     modifier: Modifier = Modifier, title: String, subtitle: String
-) {
+) {Column {
     Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Box(
             modifier = Modifier
@@ -72,6 +73,8 @@ fun MeetingsAttendsCardView(
             )
         }
     }
+    HorizontalDivider()
+}
 }
 
 
