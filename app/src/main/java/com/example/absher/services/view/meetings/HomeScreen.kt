@@ -52,6 +52,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.absher.R
+import com.example.absher.services.view.meetings.pages.MeetingListPage
+import com.example.absher.services.view.recommendations.pages.RecommendationsPage
 import com.example.absher.services.viewmodel.meetings.HomeViewModel
 import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.ui.theme.CustomTextStyles
@@ -194,7 +196,9 @@ fun CardGrid() {
             title = stringResource(id = R.string.files),
             modifier = Modifier.weight(1f),
             onClick = {
+                val intent = Intent(context, RecommendationsPage::class.java)
 
+                context.startActivity(intent)
             },
             subtitle = stringResource(id = R.string.files_desc),
             icon = R.drawable.note,

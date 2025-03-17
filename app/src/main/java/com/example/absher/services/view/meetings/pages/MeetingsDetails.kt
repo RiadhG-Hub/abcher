@@ -1,4 +1,4 @@
-package com.example.absher.services.view.meetings
+package com.example.absher.services.view.meetings.pages
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -41,6 +42,13 @@ import com.example.absher.services.adapter.MeetingApiAdapter
 import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.domain.repository.MeetingRepository
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
+import com.example.absher.services.view.meetings.AbcherTopAppBar
+import com.example.absher.services.view.meetings.AgendaList
+import com.example.absher.services.view.meetings.AttachmentList
+import com.example.absher.services.view.meetings.AttendsList
+import com.example.absher.services.view.meetings.DefaultBackButton
+import com.example.absher.services.view.meetings.MeetingInfo
+import com.example.absher.services.view.meetings.SvgIcon
 import com.example.absher.services.viewmodel.meetings.FetchAgendaViewModel
 import com.example.absher.services.viewmodel.meetings.FetchMeetingAttachmentViewModel
 import com.example.absher.services.viewmodel.meetings.FetchMeetingAttendsViewModel
@@ -128,6 +136,7 @@ class MeetingsDetails : ComponentActivity() {
     ) {
         val selectedIndex = viewModel.selectedNavItem.value
         Scaffold(
+            containerColor = MaterialTheme.colorScheme.surface,
             topBar = {
                 AbcherTopAppBar(title = meetingTitle, navigationIcon = {
                     DefaultBackButton()
@@ -309,7 +318,10 @@ private fun Wrapper(
 
         MeetingDetailsNavigationSections.Attachments -> {
             fetchMeetingAttachmentViewModel.fetchMeetingAttachments(meetingID = 2103)
-            AttachmentList(meetingId = 0, fetchMeetingAttachmentViewModel = fetchMeetingAttachmentViewModel)
+            AttachmentList(
+                meetingId = 0,
+                fetchMeetingAttachmentViewModel = fetchMeetingAttachmentViewModel
+            )
         }
     }
 }

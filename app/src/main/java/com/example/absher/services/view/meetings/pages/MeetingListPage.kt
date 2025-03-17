@@ -1,4 +1,4 @@
-package com.example.absher.services.view.meetings
+package com.example.absher.services.view.meetings.pages
 
 import android.content.Intent
 import android.os.Bundle
@@ -55,6 +55,10 @@ import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.data.models.meetings.Meeting
 import com.example.absher.services.domain.repository.MeetingRepository
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
+import com.example.absher.services.view.meetings.AbcherTopAppBar
+import com.example.absher.services.view.meetings.DefaultBackButton
+import com.example.absher.services.view.meetings.MeetingCard
+import com.example.absher.services.view.meetings.SvgIcon
 import com.example.absher.services.viewmodel.meetings.FetchMeetingStateError
 import com.example.absher.services.viewmodel.meetings.FetchMeetingStateInit
 import com.example.absher.services.viewmodel.meetings.FetchMeetingStateLoading
@@ -78,7 +82,7 @@ class MeetingListPage : ComponentActivity() {
             AbsherTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                     Scaffold(
-
+                        containerColor = MaterialTheme.colorScheme.surface,
                         topBar = {
                             AbcherTopAppBar(
                                 title = stringResource(id = R.string.meetings),
@@ -141,9 +145,11 @@ fun MeetingListScreenTopAppBar() {
 
 
                     // Add spacing between icon and text
-                    SvgIcon(R.drawable.right, modifier = Modifier
-                        .rotate(180f)
-                        .padding())
+                    SvgIcon(
+                        R.drawable.right, modifier = Modifier
+                            .rotate(180f)
+                            .padding()
+                    )
                     Text(
                         text = stringResource(id = R.string.team),
                         color = MaterialTheme.colorScheme.onPrimary,

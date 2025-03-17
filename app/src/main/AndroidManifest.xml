@@ -15,14 +15,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Absher"
         tools:targetApi="31">
-
         <activity
-            android:name=".services.view.meetings.MeetingListPage"
+            android:name=".services.view.recommendations.pages.RecommendationsPage"
+            android:exported="false"
+            android:label="@string/title_activity_recommendations_page"
+            android:theme="@style/Theme.Absher" />
+        <activity
+            android:name=".services.view.meetings.pages.MeetingListPage"
             android:exported="false"
             android:label="@string/title_activity_meeting_list_page"
             android:theme="@style/Theme.Absher" />
         <activity
-            android:name=".services.view.meetings.MeetingsDetails"
+            android:name=".services.view.meetings.pages.MeetingsDetails"
             android:exported="false"
             android:label="@string/title_activity_meeting"
             android:theme="@style/Theme.Absher" />
