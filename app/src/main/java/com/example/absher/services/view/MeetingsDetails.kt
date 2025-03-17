@@ -3,8 +3,10 @@ package com.example.absher.services.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -44,6 +47,7 @@ import com.example.absher.services.viewmodel.FetchMeetingInfoViewModel
 import com.example.absher.services.viewmodel.MeetingDetailsNavigationSections
 import com.example.absher.services.viewmodel.MeetingDetailsNavigationViewModel
 import com.example.absher.ui.theme.AbsherTheme
+import com.example.absher.ui.theme.BackgroundGray
 
 class MeetingsDetails : ComponentActivity() {
     val fetchMeetingAttendsViewModel = FetchMeetingAttendsViewModel(
@@ -123,10 +127,12 @@ class MeetingsDetails : ComponentActivity() {
                     modifier = Modifier
                         .padding(padding)
                         .fillMaxSize()
-                        .padding(16.dp),
+                        .padding(0.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    NavigationTopAppBar(selectedIndex = selectedIndex)
+                    Box(modifier = Modifier.background(BackgroundGray)){
+                        NavigationTopAppBar(selectedIndex = selectedIndex)
+                    }
                     Wrapper(
                         fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel,
                         fetchAgendaViewModel = fetchAgendaViewModel,
@@ -164,55 +170,58 @@ private fun NavigationTopAppBar(
     selectedIndex: MeetingDetailsNavigationSections,
     viewModel: MeetingDetailsNavigationViewModel = viewModel()
 ) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        NavigationItem(
-            title = stringResource(R.string.meetings),
-            icon = R.drawable.meetingtabicon,
-            index = MeetingDetailsNavigationSections.Meetings,
-            selectedIndex = selectedIndex,
+    Column(modifier= Modifier.padding(top = 12.dp)) {
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            NavigationItem(
+                title = stringResource(R.string.meetings),
+                icon = R.drawable.meetingtabicon,
+                index = MeetingDetailsNavigationSections.Meetings,
+                selectedIndex = selectedIndex,
 
-            onClick = { newSelection ->
+                onClick = { newSelection ->
 
-                viewModel.selectNavItem(newSelection)
-            }
-        )
-        NavigationItem(
-            title = "جدول الأعمال",
-            icon = R.drawable.calendar_today,
-            index = MeetingDetailsNavigationSections.Calendar,
-            selectedIndex = selectedIndex,
+                    viewModel.selectNavItem(newSelection)
+                }
+            )
+            NavigationItem(
+                title = "جدول الأعمال",
+                icon = R.drawable.event_note,
+                index = MeetingDetailsNavigationSections.Calendar,
+                selectedIndex = selectedIndex,
 
-            onClick = { newSelection ->
-                viewModel.selectNavItem(newSelection)
+                onClick = { newSelection ->
+                    viewModel.selectNavItem(newSelection)
 
-            }
-        )
-        NavigationItem(
-            title = "الحضور",
-            icon = R.drawable.meetingtabicon,
-            index = MeetingDetailsNavigationSections.Attends,
-            selectedIndex = selectedIndex,
+                }
+            )
+            NavigationItem(
+                title = "الحضور",
+                icon = R.drawable.meetingtabicon,
+                index = MeetingDetailsNavigationSections.Attends,
+                selectedIndex = selectedIndex,
 
-            onClick = { newSelection ->
+                onClick = { newSelection ->
 
-                viewModel.selectNavItem(newSelection)
-            }
-        )
-        NavigationItem(
-            title = "المرفقات",
-            icon = R.drawable.meetingtabicon,
-            index = MeetingDetailsNavigationSections.Attachments,
-            selectedIndex = selectedIndex,
+                    viewModel.selectNavItem(newSelection)
+                }
+            )
+            NavigationItem(
+                title = "المرفقات",
+                icon = R.drawable.file_copy,
+                index = MeetingDetailsNavigationSections.Attachments,
+                selectedIndex = selectedIndex,
 
-            onClick = { newSelection ->
-                viewModel.selectNavItem(newSelection)
+                onClick = { newSelection ->
+                    viewModel.selectNavItem(newSelection)
 
-            }
-        )
+                }
+            )
+        }
+        HorizontalDivider()
     }
 }
 

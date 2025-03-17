@@ -98,7 +98,7 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(top = 8.dp, start = 16.dp, end = 16.dp),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -106,7 +106,7 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
         Column(
             modifier = Modifier
                 .background(Color.White)
-                .padding(12.dp)
+                .padding(8.dp)
         ) {
 
             Row(

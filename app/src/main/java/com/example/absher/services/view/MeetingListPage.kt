@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.rememberNavController
 import com.example.absher.R
 import com.example.absher.services.adapter.MeetingApiAdapter
 import com.example.absher.services.data.datasource.RemoteMeetingDataSource
@@ -75,7 +74,7 @@ class MeetingListPage : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            val navController = rememberNavController()
+
             AbsherTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 Scaffold(
@@ -244,7 +243,7 @@ private fun SuccessView(
             state = lazyListState,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                ,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(meetings.size) { index ->

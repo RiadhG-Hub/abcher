@@ -85,7 +85,7 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding( start = 20.dp, end = 20.dp),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
@@ -93,7 +93,7 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(12.dp)
+                .padding(8.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
