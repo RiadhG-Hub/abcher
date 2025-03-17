@@ -14,22 +14,14 @@ class FetchMeetingAttendsViewModel(
     val fetchMeetingState: LiveData<FetchMeetingAttendState> = _fetchMeetingState
 
 
-
-
-
-
-
-
-
-    fun fetchMeetingAttendees(meetingID : Int) {
-
+    fun fetchMeetingAttendees(meetingID: Int) {
 
 
         _fetchMeetingState.value = FetchMeetingAttendStateLoading()
 
         viewModelScope.launch {
             try {
-                val response  = getMeetingsUseCase.fetchMeetingAttendees(meetingId = meetingID)
+                val response = getMeetingsUseCase.fetchMeetingAttendees(meetingId = meetingID)
 
 
 
@@ -42,15 +34,18 @@ class FetchMeetingAttendsViewModel(
                     FetchMeetingAttendStateError(e.message ?: "Unknown error")
                 )
 
+            }
         }
+
+
     }
-
-
-}}
+}
 
 // Define states
 sealed class FetchMeetingAttendState
 class FetchMeetingAttendStateInit : FetchMeetingAttendState()
 class FetchMeetingAttendStateLoading : FetchMeetingAttendState()
-data class FetchMeetingAttendStateSuccess(val meetingAttends : AttendeeResponse?) : FetchMeetingAttendState()
+data class FetchMeetingAttendStateSuccess(val meetingAttends: AttendeeResponse?) :
+    FetchMeetingAttendState()
+
 data class FetchMeetingAttendStateError(val error: String) : FetchMeetingAttendState()

@@ -15,7 +15,8 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 class MeetingApiAdapter {
-    private var tokenCore = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50Ijoib1NFY04rb0JsZTRsZ3BQWm1ZZ1F0eW9iaHV6YXdyS2VPaWZMZW1qYkFxVT0iLCJkZXBhcnRtZW50IjoiM0hZUkRmTVhmTUFKZWluYkZCUVZrSWc5K1ZzTFluY0E3MmFGQ012NUlNaz0iLCJuYW1lIjoiclZIRkRjQnpwSFN0ckwreUhreTQzd01memxtRDdESGx3T2ZabllWeHdGRT0iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjMwMjMiLCJsYW5nIjoiYXIiLCJleHAiOjE3NDIxMjQ2MzYsImlzcyI6IkludGFsaW8iLCJhdWQiOiJJbnRhbGlvIn0.33C1wad3j8GCMLZDSTzoM6ZC9Xz88m2cpvYvXIOgVBE"
+    private var tokenCore =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50Ijoib1NFY04rb0JsZTRsZ3BQWm1ZZ1F0eW9iaHV6YXdyS2VPaWZMZW1qYkFxVT0iLCJkZXBhcnRtZW50IjoiM0hZUkRmTVhmTUFKZWluYkZCUVZrSWc5K1ZzTFluY0E3MmFGQ012NUlNaz0iLCJuYW1lIjoiclZIRkRjQnpwSFN0ckwreUhreTQzd01memxtRDdESGx3T2ZabllWeHdGRT0iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjMwMjMiLCJsYW5nIjoiYXIiLCJleHAiOjE3NDIxMjQ2MzYsImlzcyI6IkludGFsaW8iLCJhdWQiOiJJbnRhbGlvIn0.33C1wad3j8GCMLZDSTzoM6ZC9Xz88m2cpvYvXIOgVBE"
     private val tokenApiAdapter = TokenApiAdapter()
 
     // TODO: Add token refresh logic using authInterceptor
@@ -26,10 +27,14 @@ class MeetingApiAdapter {
 
     private val apiService = retrofit.create(MeetingApiService::class.java)
 
-    suspend fun fetchMeetings(from: Int = 1, to: Int = 10, token: String = "Bearer $tokenCore"): MeetingResponse? {
+    suspend fun fetchMeetings(
+        from: Int = 1,
+        to: Int = 10,
+        token: String = "Bearer $tokenCore"
+    ): MeetingResponse? {
 
         // List of mock meetings
-        val  getMockMeetings: List<Meeting> = listOf(
+        val getMockMeetings: List<Meeting> = listOf(
             Meeting(
                 id = 1,
                 statusId = 5,
@@ -73,7 +78,12 @@ class MeetingApiAdapter {
                 statusName = "Approved"
             )
         )
-        return  MeetingResponse(data = MeetingResponse.MeetingData(getMockMeetings, getMockMeetings.size), success = true, message = "Success" )
+        return MeetingResponse(
+            data = MeetingResponse.MeetingData(
+                getMockMeetings,
+                getMockMeetings.size
+            ), success = true, message = "Success"
+        )
         val requestBody = MeetingRequestBody()
 
         return try {
@@ -104,39 +114,46 @@ class MeetingApiAdapter {
     }
 
 
-suspend fun fetchMeetingAttendees(meetingId: Int, token: String = "Bearer $tokenCore"): AttendeeResponse ? {
+    suspend fun fetchMeetingAttendees(
+        meetingId: Int,
+        token: String = "Bearer $tokenCore"
+    ): AttendeeResponse? {
 
 
-    return try {
-        val result = apiService.fetchMeetingAttendees(
-            meetingId = meetingId,
-            token = token
-        )
-        println("[INFO] Fetch meetings successful: $result")
+        return try {
+            val result = apiService.fetchMeetingAttendees(
+                meetingId = meetingId,
+                token = token
+            )
+            println("[INFO] Fetch meetings successful: $result")
 
-        result
-    } catch (e: HttpException) {
-        if (e.code() == 401) {
-            println("[WARNING] 401 Unauthorized: Token expired, attempting refresh...")
-            val tokenResult = tokenApiAdapter.testToken()
-            tokenResult?.data?.token?.let {
-                tokenCore = it
-                println("[INFO] Token refreshed successfully.")
-                return fetchMeetingAttendees(meetingId, "Bearer $tokenCore")
-            } ?: run {
-                println("[ERROR] Token refresh failed.")
+            result
+        } catch (e: HttpException) {
+            if (e.code() == 401) {
+                println("[WARNING] 401 Unauthorized: Token expired, attempting refresh...")
+                val tokenResult = tokenApiAdapter.testToken()
+                tokenResult?.data?.token?.let {
+                    tokenCore = it
+                    println("[INFO] Token refreshed successfully.")
+                    return fetchMeetingAttendees(meetingId, "Bearer $tokenCore")
+                } ?: run {
+                    println("[ERROR] Token refresh failed.")
+                    null
+                }
+            } else {
+                System.err.println("[ERROR] HTTP ${e.code()}: ${e.message()}")
                 null
             }
-        } else {
-            System.err.println("[ERROR] HTTP ${e.code()}: ${e.message()}")
+        } catch (e: Exception) {
+            System.err.println("[ERROR] Unexpected error: ${e.message}")
             null
         }
-    } catch (e: Exception) {
-        System.err.println("[ERROR] Unexpected error: ${e.message}")
-        null
     }
-}
-    suspend fun fetchMeetingAgendas(meetingId: Int, token: String = "Bearer $tokenCore"): MeetingAgendaResponse? {
+
+    suspend fun fetchMeetingAgendas(
+        meetingId: Int,
+        token: String = "Bearer $tokenCore"
+    ): MeetingAgendaResponse? {
         return try {
             val result = apiService.fetchMeetingAgendas(meetingId, token)
             println("[INFO] Fetch meeting agendas successful: $result")
@@ -164,7 +181,10 @@ suspend fun fetchMeetingAttendees(meetingId: Int, token: String = "Bearer $token
     }
 
 
-    suspend fun fetchMeetingInfo(meetingId: Int, token: String = "Bearer $tokenCore"): MeetingInfoResponse? {
+    suspend fun fetchMeetingInfo(
+        meetingId: Int,
+        token: String = "Bearer $tokenCore"
+    ): MeetingInfoResponse? {
         return try {
             val result = apiService.getMeetingInfo(meetingId, token)
             println("[INFO] Fetch meeting info successful: $result")
@@ -201,7 +221,6 @@ interface MeetingApiService {
         @Path("to") to: String,
         @Body requestBody: MeetingRequestBody
     ): MeetingResponse
-
 
 
     @GET("api/meetings/{meetingId}/attendees")

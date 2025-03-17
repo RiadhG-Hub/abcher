@@ -2,10 +2,10 @@
 package com.example.absher.services.adapter
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.example.absher.services.data.models.RefreshTokenResponse
 import javax.inject.Inject
 import javax.inject.Singleton
-import androidx.core.content.edit
 
 @Singleton
 class TokenManager @Inject constructor(
@@ -32,6 +32,6 @@ class TokenManager @Inject constructor(
     }
 
     fun refreshTokenSync(): RefreshTokenResponse? {
-        return  null
+        return null
     }
 }

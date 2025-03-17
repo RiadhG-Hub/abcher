@@ -7,13 +7,15 @@ import com.example.absher.services.data.models.MeetingInfoResponse
 import javax.inject.Inject
 
 class RemoteMeetingDataSource @Inject constructor(private val apiAdapter: MeetingApiAdapter) {
-    suspend fun getMeetings(from : Int = 0,    to : Int = 10): List<Meeting>? {
-        return apiAdapter.fetchMeetings(from  = from,    to = to)?.data?.data
-}
-suspend fun fetchMeetingAttendees(meetingId: Int): AttendeeResponse?{
-    return  apiAdapter.fetchMeetingAttendees(meetingId = meetingId)
-}
-    suspend fun fetchMeetingAgendas(meetingId: Int ): MeetingAgendaResponse? {
+    suspend fun getMeetings(from: Int = 0, to: Int = 10): List<Meeting>? {
+        return apiAdapter.fetchMeetings(from = from, to = to)?.data?.data
+    }
+
+    suspend fun fetchMeetingAttendees(meetingId: Int): AttendeeResponse? {
+        return apiAdapter.fetchMeetingAttendees(meetingId = meetingId)
+    }
+
+    suspend fun fetchMeetingAgendas(meetingId: Int): MeetingAgendaResponse? {
         return apiAdapter.fetchMeetingAgendas(meetingId = meetingId)
     }
 

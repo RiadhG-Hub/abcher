@@ -9,14 +9,15 @@ import javax.inject.Inject
 class MeetingRepository @Inject constructor(
     private val remoteDataSource: RemoteMeetingDataSource
 ) {
-    suspend fun getMeetings(from : Int = 0,    to : Int = 10): List<Meeting>? {
+    suspend fun getMeetings(from: Int = 0, to: Int = 10): List<Meeting>? {
         return remoteDataSource.getMeetings(from = from, to = to)
     }
 
     suspend fun fetchMeetingAttendees(meetingId: Int): AttendeeResponse? {
         return remoteDataSource.fetchMeetingAttendees(meetingId = meetingId)
     }
-    suspend fun fetchMeetingAgendas(meetingId: Int ): MeetingAgendaResponse? {
+
+    suspend fun fetchMeetingAgendas(meetingId: Int): MeetingAgendaResponse? {
         return remoteDataSource.fetchMeetingAgendas(meetingId = meetingId)
     }
 

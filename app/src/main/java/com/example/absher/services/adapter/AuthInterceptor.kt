@@ -34,17 +34,21 @@ class AuthInterceptor @Inject constructor(
             synchronized(this) {
                 val currentToken = tokenManager.getAccessToken()
                 if (currentToken != token) {
-                    return chain.proceed(originalRequest.newBuilder()
-                        .addAuthHeader(currentToken)
-                        .build())
+                    return chain.proceed(
+                        originalRequest.newBuilder()
+                            .addAuthHeader(currentToken)
+                            .build()
+                    )
                 }
 
                 val newToken = refreshToken()
                 if (newToken != null) {
                     tokenManager.saveAccessToken(newToken)
-                    return chain.proceed(originalRequest.newBuilder()
-                        .addAuthHeader(newToken)
-                        .build())
+                    return chain.proceed(
+                        originalRequest.newBuilder()
+                            .addAuthHeader(newToken)
+                            .build()
+                    )
                 }
             }
         }
@@ -59,7 +63,7 @@ class AuthInterceptor @Inject constructor(
         }
     }
 
-     fun refreshToken(): String? {
+    fun refreshToken(): String? {
         try {
             val refreshResponse = tokenManager.refreshTokenSync()
             return refreshResponse?.data!!.token
@@ -68,7 +72,7 @@ class AuthInterceptor @Inject constructor(
         }
     }
 
-    fun getToken() : String? {
-        return  tokenManager.getAccessToken()
+    fun getToken(): String? {
+        return tokenManager.getAccessToken()
     }
 }

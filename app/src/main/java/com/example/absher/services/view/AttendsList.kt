@@ -34,7 +34,9 @@ fun AttendsList(
     meetingId: Int = 0,
     fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel()
 ) {
-    val fetchMeetingState by fetchMeetingAttendsViewModel.fetchMeetingState.observeAsState(FetchMeetingAttendStateInit())
+    val fetchMeetingState by fetchMeetingAttendsViewModel.fetchMeetingState.observeAsState(
+        FetchMeetingAttendStateInit()
+    )
 
     when (fetchMeetingState) {
         is FetchMeetingAttendStateInit -> {
@@ -51,7 +53,8 @@ fun AttendsList(
         }
 
         is FetchMeetingAttendStateSuccess -> {
-            val attendees = (fetchMeetingState as FetchMeetingAttendStateSuccess).meetingAttends!!.data
+            val attendees =
+                (fetchMeetingState as FetchMeetingAttendStateSuccess).meetingAttends!!.data
             Column(modifier = modifier.padding(16.dp)) {
                 attendees.forEach { attendee ->
                     MeetingsAttendsCardView(title = attendee.fullName, subtitle = attendee.jobTitle)
@@ -66,7 +69,7 @@ fun AttendsList(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Error: $errorMessage", color = Color.Red )
+                Text(text = "Error: $errorMessage", color = Color.Red)
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(onClick = { fetchMeetingAttendsViewModel.fetchMeetingAttendees(meetingId) }) {
                     Text("Retry")

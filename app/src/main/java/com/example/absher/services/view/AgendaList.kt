@@ -36,7 +36,8 @@ fun AgendaList(
     fetchAgendaViewModel: FetchAgendaViewModel = viewModel()
 ) {
     val fetchMeetingState by fetchAgendaViewModel.fetchMeetingState.observeAsState(
-        FetchMeetingAgendaStateInit())
+        FetchMeetingAgendaStateInit()
+    )
 
     when (fetchMeetingState) {
         is FetchMeetingAgendaStateInit -> {
@@ -53,10 +54,13 @@ fun AgendaList(
         }
 
         is FetchMeetingAgendaStateSuccess -> {
-            val attendees = (fetchMeetingState as FetchMeetingAgendaStateSuccess).meetingAgenda!!.data
-            Column(modifier = Modifier.fillMaxWidth(),
+            val attendees =
+                (fetchMeetingState as FetchMeetingAgendaStateSuccess).meetingAgenda!!.data
+            Column(
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.Start ) {
+                horizontalAlignment = Alignment.Start
+            ) {
                 attendees.forEach { agenda ->
                     MeetingAgendaCardView(text = agenda.title)
                 }
@@ -70,7 +74,7 @@ fun AgendaList(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Error: $errorMessage", color = Color.Red )
+                Text(text = "Error: $errorMessage", color = Color.Red)
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(onClick = { fetchAgendaViewModel.fetchMeetingAgendas(meetingId) }) {
                     Text("Retry")

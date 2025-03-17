@@ -66,10 +66,13 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = view
     val selectedNavItem by viewModel.selectedNavItem // No collectAsStateWithLifecycle needed
 
     Scaffold(
-        topBar = { AbcherTopAppBar(title = stringResource(id = R.string.top_bar_title),
-            navigationIcon = {
-                DefaultBackButton()
-            }) },
+        topBar = {
+            AbcherTopAppBar(
+                title = stringResource(id = R.string.top_bar_title),
+                navigationIcon = {
+                    DefaultBackButton()
+                })
+        },
 
         bottomBar = {
             BottomNavigationBar(
@@ -97,12 +100,14 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = view
 }
 
 @Composable
-fun DefaultBackButton( ) {
-  val  context =  LocalContext.current
-    SvgIcon(drawable = R.drawable.right, modifier = Modifier.rotate(180f).clickable {
-        println("back button clicked")
-        (context as? Activity)?.finish()
-    })
+fun DefaultBackButton() {
+    val context = LocalContext.current
+    SvgIcon(drawable = R.drawable.right, modifier = Modifier
+        .rotate(180f)
+        .clickable {
+            println("back button clicked")
+            (context as? Activity)?.finish()
+        })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

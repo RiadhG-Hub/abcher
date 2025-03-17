@@ -32,7 +32,6 @@ object AppModule {
     }
 
 
-
     @Provides
     @Singleton
     fun provideMeetingApiAdapter(authInterceptor: AuthInterceptor): MeetingApiAdapter {

@@ -1,4 +1,5 @@
 package com.example.absher.services.data.models
+
 data class AttendeeResponse(
     val data: List<Attendee>,
     val success: Boolean,

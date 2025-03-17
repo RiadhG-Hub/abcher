@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-        <string name="app_name">Absher</string>
-        <string name="top_bar_title">المجالس واللجان</string>
-        <string name="files">التوصيات</string>
-        <string name="files_desc">للإطلاع على التوصيات مع إمكانية التعديل و إضافة الملاحظات و المرفقات اللازمة</string>
-        <string name="tasks">المهام</string>
-        <string name="tasks_desc">للإطلاع على المهام مع إمكانية الموافقة، الرفض أو التوقيع بعد الإطلاع على مرفقات الاجتماع</string>
-        <string name="notifications">الإجتماعات المباشرة</string>
-        <string name="notifications_desc">للإطلاع على الاجتماعات المباشرة، مع إمكانية الإطلاع على المرفقات اللازمة و جدول الأعمال</string>
-        <string name="team">الإجتماعات</string>
-        <string name="team_desc">للإطلاع على الاجتماعات، مع إمكانية الإطلاع على المرفقات اللازمة و جدول الأعمال</string>
-        <string name="nav_home">الرئيسية</string>
-        <string name="nav_chat">الدردشة</string>
-        <string name="nav_more">المزيد</string>
-        <string name="nav_settings">الإعدادات</string>
-        <string name="nav_profile">الحساب</string>
+    <string name="app_name">Absher</string>
+    <string name="top_bar_title">المجالس واللجان</string>
+    <string name="files">التوصيات</string>
+    <string name="files_desc">للإطلاع على التوصيات مع إمكانية التعديل و إضافة الملاحظات و المرفقات اللازمة</string>
+    <string name="tasks">المهام</string>
+    <string name="tasks_desc">للإطلاع على المهام مع إمكانية الموافقة، الرفض أو التوقيع بعد الإطلاع على مرفقات الاجتماع</string>
+    <string name="notifications">الإجتماعات المباشرة</string>
+    <string name="notifications_desc">للإطلاع على الاجتماعات المباشرة، مع إمكانية الإطلاع على المرفقات اللازمة و جدول الأعمال</string>
+    <string name="team">الإجتماعات</string>
+    <string name="team_desc">للإطلاع على الاجتماعات، مع إمكانية الإطلاع على المرفقات اللازمة و جدول الأعمال</string>
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_chat">الدردشة</string>
+    <string name="nav_more">المزيد</string>
+    <string name="nav_settings">الإعدادات</string>
+    <string name="nav_profile">الحساب</string>
     <string name="meeting">الإجتماع</string>
-        <string name="meetingend">" نهاية الإجتماع   %1$s"</string>
-        <string name="moredetails">المزيد من التفاصيل</string>
-        <string name="infonumber">الرقم التعريفي %1$s</string>
-        <string name="startmeeting">" بداية الإجتماع   %1$s"</string>
-        <string name="title_activity_meetings_attends_card_view">MeetingsAttendsCardView</string>
-        <string name="meetings">الإجتماعات</string>
+    <string name="meetingend">" نهاية الإجتماع   %1$s"</string>
+    <string name="moredetails">المزيد من التفاصيل</string>
+    <string name="infonumber">الرقم التعريفي %1$s</string>
+    <string name="startmeeting">" بداية الإجتماع   %1$s"</string>
+    <string name="title_activity_meetings_attends_card_view">MeetingsAttendsCardView</string>
+    <string name="meetings">الإجتماعات</string>
 </resources>

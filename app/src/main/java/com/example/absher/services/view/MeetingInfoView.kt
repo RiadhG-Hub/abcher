@@ -54,7 +54,6 @@ import com.example.absher.ui.theme.SubtitleColor
 
 @Composable
 fun MeetingInfo(
-    modifier: Modifier = Modifier,
     viewModel: MeetingDetailsNavigationViewModel = viewModel(),
     meetingId: Int = 0,
     fetchMeetingInfoViewModel: FetchMeetingInfoViewModel = viewModel()
@@ -115,11 +114,8 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "#${meeting.data?.id ?: "N/A"}",
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF212121)
+                    text = "#${meeting.data?.id ?: "N/A"}", style = TextStyle(
+                        fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFF212121)
                     )
                 )
 
@@ -132,8 +128,7 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                         .padding(horizontal = 8.dp, vertical = 0.dp)
                 ) {
                     Text(
-                        text = statusText,
-                        style = TextStyle(
+                        text = statusText, style = TextStyle(
                             fontSize = 10.sp,
                             lineHeight = 16.sp,
 
@@ -196,17 +191,14 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                     .padding(12.dp)
             ) {
                 Text(
-                    text = meeting.data?.title ?: "No title available",
-                    style = TextStyle(
+                    text = meeting.data?.title ?: "No title available", style = TextStyle(
                         fontSize = 12.sp,
                         lineHeight = 20.sp,
                         fontWeight = FontWeight(700),
                         color = Color(0xFF353334),
 
                         textAlign = TextAlign.Right,
-                    ),
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.fillMaxWidth()
+                    ), textAlign = TextAlign.Start, modifier = Modifier.fillMaxWidth()
                 )
             }
 
@@ -222,10 +214,8 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = stringResource(
-                            R.string.startmeeting,
-                            formatTimeToArabic(meeting.data?.startTime!!)
-                        ),
-                        style = TextStyle(fontSize = 12.sp, color = Color(0xFF212121))
+                            R.string.startmeeting, formatTimeToArabic(meeting.data?.startTime!!)
+                        ), style = TextStyle(fontSize = 12.sp, color = Color(0xFF212121))
                     )
                 }
 
@@ -241,10 +231,8 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = stringResource(
-                            R.string.meetingend,
-                            formatTimeToArabic(meeting.data?.endTime!!)
-                        ),
-                        style = TextStyle(fontSize = 12.sp, color = Color(0xFF212121))
+                            R.string.meetingend, formatTimeToArabic(meeting.data?.endTime!!)
+                        ), style = TextStyle(fontSize = 12.sp, color = Color(0xFF212121))
                     )
                 }
                 HorizontalDivider(
@@ -255,11 +243,12 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                 )
             }
 
-            Row() {
+            Row {
                 Column {
                     Row {
                         SvgIcon(
-                            R.drawable.calendar_today, defaultColor = Gray,
+                            R.drawable.calendar_today,
+                            defaultColor = Gray,
                             modifier = modifier.padding(end = 4.dp)
                         )
                         Text(
@@ -295,7 +284,8 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                     HorizontalDivider()
                     Row {
                         SvgIcon(
-                            R.drawable.meeting_room, defaultColor = Gray,
+                            R.drawable.meeting_room,
+                            defaultColor = Gray,
                             modifier = modifier.padding(end = 4.dp)
                         )
                         Text(
@@ -366,7 +356,8 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                     HorizontalDivider()
                     Row {
                         SvgIcon(
-                            R.drawable.person_outline, defaultColor = Gray,
+                            R.drawable.person_outline,
+                            defaultColor = Gray,
                             modifier = modifier.padding(end = 4.dp)
                         )
                         Text(
@@ -403,10 +394,13 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                 }
 
             }
-            Row(modifier = modifier.padding(top = 8.dp,)){
+            Row(modifier = modifier.padding(top = 8.dp)) {
 
-                SvgIcon(drawable = R.drawable.timer, defaultColor = Color(0XFF808080),
-                    modifier = modifier.padding(end = 4.dp,))
+                SvgIcon(
+                    drawable = R.drawable.timer,
+                    defaultColor = Color(0XFF808080),
+                    modifier = modifier.padding(end = 4.dp)
+                )
                 Text(
                     text = "ملاحظات",
 
@@ -434,9 +428,7 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
 @Composable
 fun MeetingDetailsCardPreview() {
     val sampleMeeting = MeetingInfoResponse(
-        success = true,
-        message = "Meeting details fetched successfully",
-        data = MeetingInfoData(
+        success = true, message = "Meeting details fetched successfully", data = MeetingInfoData(
             id = 12345,
             referenceNumber = "REF-98765",
             committeeName = "Finance Committee",
@@ -460,8 +452,7 @@ fun MeetingDetailsCardPreview() {
                     name = "John Doe",
                     attended = true,
                     hasProfilePicture = true
-                ),
-                MeetingAttendee(
+                ), MeetingAttendee(
                     userId = 2,
                     needsApproval = true,
                     jobTitle = "CFO",

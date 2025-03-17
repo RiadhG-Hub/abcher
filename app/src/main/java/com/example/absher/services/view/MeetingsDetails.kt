@@ -89,7 +89,7 @@ class MeetingsDetails : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         /// val meetingId = intent.getIntExtra("MEETING_ID", 0)
-        val meetingTitle = intent.getStringExtra("MEETING_TITLE" )
+        val meetingTitle = intent.getStringExtra("MEETING_TITLE")
 
         setContent {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -106,7 +106,7 @@ class MeetingsDetails : ComponentActivity() {
     @Composable
     fun DetailsWrapper(
         modifier: Modifier = Modifier,
-         meetingTitle: String = "Meeting Details",
+        meetingTitle: String = "Meeting Details",
         viewModel: MeetingDetailsNavigationViewModel = viewModel(),
         fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
         fetchAgendaViewModel: FetchAgendaViewModel = viewModel(),
@@ -114,10 +114,13 @@ class MeetingsDetails : ComponentActivity() {
         val selectedIndex = viewModel.selectedNavItem.value
         Scaffold(
             topBar = {
-                AbcherTopAppBar(title = meetingTitle , navigationIcon = {
+                AbcherTopAppBar(title = meetingTitle, navigationIcon = {
                     DefaultBackButton()
                 }, actions = {
-                    SvgIcon(R.drawable.notifications_active, modifier = Modifier.padding(end = 16.dp))
+                    SvgIcon(
+                        R.drawable.notifications_active,
+                        modifier = Modifier.padding(end = 16.dp)
+                    )
                 })
 
             },
@@ -130,13 +133,13 @@ class MeetingsDetails : ComponentActivity() {
                         .padding(0.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Box(modifier = Modifier.background(BackgroundGray)){
+                    Box(modifier = Modifier.background(BackgroundGray)) {
                         NavigationTopAppBar(selectedIndex = selectedIndex)
                     }
                     Wrapper(
                         fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel,
                         fetchAgendaViewModel = fetchAgendaViewModel,
-                        fetchMeetingInfoViewModel=fetchMeetingInfoViewModel
+                        fetchMeetingInfoViewModel = fetchMeetingInfoViewModel
                     )
 
                 }
@@ -170,7 +173,7 @@ private fun NavigationTopAppBar(
     selectedIndex: MeetingDetailsNavigationSections,
     viewModel: MeetingDetailsNavigationViewModel = viewModel()
 ) {
-    Column(modifier= Modifier.padding(top = 12.dp)) {
+    Column(modifier = Modifier.padding(top = 12.dp)) {
         Row(
             modifier = modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,

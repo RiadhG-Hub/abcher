@@ -17,7 +17,7 @@ fun formatDateToArabic(inputDate: String): String {
         // Convert numbers to Arabic numerals
         return convertToArabicNumbers(formattedDate)
     } catch (_: Exception) {
-        return  "not available"
+        return "not available"
     }
 }
 

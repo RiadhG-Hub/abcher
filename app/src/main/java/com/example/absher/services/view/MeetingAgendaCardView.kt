@@ -11,9 +11,9 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun  MeetingAgendaCardView( text : String){
+fun MeetingAgendaCardView(text: String) {
     Text(
-        text = text,  style = TextStyle(
+        text = text, style = TextStyle(
             fontSize = 12.sp,
             lineHeight = 20.sp,
 
@@ -27,7 +27,7 @@ fun  MeetingAgendaCardView( text : String){
 
 @Composable
 @Preview(showBackground = true)
-fun  MeetingAgendaCardViewPreview(){
+fun MeetingAgendaCardViewPreview() {
     MeetingAgendaCardView(text = "1- يمكن كتابة جدول الأعمال هنا، يمكن كتابة جدول الأعمال هنا، يمكن كتابة جدول الأعمال هنا، يمكن كتابة جدول الأعمال هنا، يمكن كتابة جدول الأعمال هنا، يمكن كتابة جدول الأعمال هنا، يمكن كتابة جدول الأعمال هنا، يمكن كتابة جدول الأعمال هنا، يمكن كتابة جدول الأعمال هنا، يمكن كتابة جدول الأعمال هنا، ")
 }
 

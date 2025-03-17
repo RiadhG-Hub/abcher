@@ -85,7 +85,7 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding( start = 20.dp, end = 20.dp),
+            .padding(start = 20.dp, end = 20.dp),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
@@ -177,7 +177,10 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                     SvgIcon(R.drawable.timer) // Uncomment if you have this
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = stringResource(R.string.startmeeting, formatTimeToArabic(meeting.startTime!!)),
+                        text = stringResource(
+                            R.string.startmeeting,
+                            formatTimeToArabic(meeting.startTime!!)
+                        ),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -188,10 +191,13 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                     thickness = 1.dp
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                     SvgIcon(R.drawable.timer_off) // Uncomment if you have this
+                    SvgIcon(R.drawable.timer_off) // Uncomment if you have this
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = stringResource(R.string.meetingend, formatTimeToArabic(meeting.endTime!!)),
+                        text = stringResource(
+                            R.string.meetingend,
+                            formatTimeToArabic(meeting.endTime!!)
+                        ),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -232,7 +238,7 @@ fun MeetingCardPreview() {
                 statusName = "تم الانتهاء"
             )
             MeetingCard(meeting = sampleMeeting, onClick = {
-                Log.e("MeetingCard ", "MeetingCardPreview: ${sampleMeeting.title}", )
+                Log.e("MeetingCard ", "MeetingCardPreview: ${sampleMeeting.title}")
             })
         }
     }

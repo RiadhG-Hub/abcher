@@ -1,7 +1,5 @@
 package com.example.absher.services.adapter
 
-import com.example.absher.services.data.models.MeetingRequestBody
-import com.example.absher.services.data.models.MeetingResponse
 import com.example.absher.services.data.models.RefreshTokenResponse
 import retrofit2.HttpException
 import retrofit2.Retrofit
@@ -41,7 +39,6 @@ class TokenApiAdapter {
 interface TokenApiService {
     @GET("api/absher-services/test-token")
     suspend fun testToken(
-
 
 
     ): RefreshTokenResponse

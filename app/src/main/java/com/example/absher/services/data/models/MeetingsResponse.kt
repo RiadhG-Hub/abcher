@@ -2,7 +2,6 @@
 package com.example.absher.services.data.models
 
 
-
 data class MeetingsResponse(
     val data: MeetingsData,
     val success: Boolean,

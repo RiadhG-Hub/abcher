@@ -32,7 +32,7 @@ class MeetingApiAdapterTest {
 
     @Test
     fun `fetchMeetingAttendees should return real MeetingResponse`() = runBlocking {
-        val result = meetingApiAdapter.fetchMeetingAttendees(meetingId = 2103 )
+        val result = meetingApiAdapter.fetchMeetingAttendees(meetingId = 2103)
 
 
 
@@ -41,7 +41,7 @@ class MeetingApiAdapterTest {
 
     @Test
     fun `fetchMeetingAgenda should return real MeetingResponse`() = runBlocking {
-        val result = meetingApiAdapter.fetchMeetingAgendas( meetingId = 2103)
+        val result = meetingApiAdapter.fetchMeetingAgendas(meetingId = 2103)
 
 
 
@@ -51,7 +51,7 @@ class MeetingApiAdapterTest {
 
     @Test
     fun `fetchMeetingInfo should return real MeetingInfo`() = runBlocking {
-        val result = meetingApiAdapter.fetchMeetingInfo( meetingId = 2103)
+        val result = meetingApiAdapter.fetchMeetingInfo(meetingId = 2103)
 
 
 

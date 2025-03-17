@@ -77,48 +77,60 @@ class MeetingListPage : ComponentActivity() {
 
             AbsherTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                Scaffold(
+                    Scaffold(
 
-                    topBar = { AbcherTopAppBar(title = stringResource(id = R.string.meetings) , navigationIcon = {
-                        DefaultBackButton( )
-                    }, actions = {
-                        SvgIcon(R.drawable.notifications_active, modifier = Modifier.padding(end = 16.dp))
-                    } )},
-                    modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MeetingListScreen(
-                        modifier = Modifier.padding(innerPadding), viewModel  = MeetingViewModel(
-                            GetMeetingsUseCase(
-                                MeetingRepository(
-                                    RemoteMeetingDataSource(
-                                        MeetingApiAdapter(
+                        topBar = {
+                            AbcherTopAppBar(
+                                title = stringResource(id = R.string.meetings),
+                                navigationIcon = {
+                                    DefaultBackButton()
+                                },
+                                actions = {
+                                    SvgIcon(
+                                        R.drawable.notifications_active,
+                                        modifier = Modifier.padding(end = 16.dp)
+                                    )
+                                })
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    ) { innerPadding ->
+                        MeetingListScreen(
+                            modifier = Modifier.padding(innerPadding),
+                            viewModel = MeetingViewModel(
+                                GetMeetingsUseCase(
+                                    MeetingRepository(
+                                        RemoteMeetingDataSource(
+                                            MeetingApiAdapter(
 
+                                            )
                                         )
                                     )
                                 )
-                            )
                             ),
-                    )
-                }}
+                        )
+                    }
+                }
             }
         }
     }
 }
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MeetingListScreenTopAppBar() {
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .height(80.dp)
-        .background(
-            color = Color(0xFFCDB372),
-            shape = RoundedCornerShape(
-                bottomEnd = 16.dp, // Bottom-right corner
-                bottomStart = 16.dp // Bottom-left corner
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .background(
+                color = Color(0xFFCDB372),
+                shape = RoundedCornerShape(
+                    bottomEnd = 16.dp, // Bottom-right corner
+                    bottomStart = 16.dp // Bottom-left corner
+                )
             )
-        )){
+    ) {
         TopAppBar(
             title = {
                 Row(
@@ -129,7 +141,9 @@ fun MeetingListScreenTopAppBar() {
 
 
                     // Add spacing between icon and text
-                    SvgIcon(R.drawable.right, modifier = Modifier.rotate(180f).padding())
+                    SvgIcon(R.drawable.right, modifier = Modifier
+                        .rotate(180f)
+                        .padding())
                     Text(
                         text = stringResource(id = R.string.team),
                         color = MaterialTheme.colorScheme.onPrimary,
@@ -154,9 +168,6 @@ private fun LoadingView(modifier: Modifier = Modifier) {
         CircularProgressIndicator()
     }
 }
-
-
-
 
 
 @Composable
@@ -204,7 +215,8 @@ fun MeetingListViewHandler(viewModel: MeetingViewModel) {
     when (meetingsState) {
         is FetchMeetingStateLoading -> {
             if ((meetingsState as FetchMeetingStateLoading) == FetchMeetingStateLoading() &&
-                viewModel.fetchMeetingState.value is FetchMeetingStateSuccess) {
+                viewModel.fetchMeetingState.value is FetchMeetingStateSuccess
+            ) {
                 // Show list with loading at bottom
                 SuccessView(
                     meetings = (viewModel.fetchMeetingState.value as FetchMeetingStateSuccess).meetings,
@@ -215,15 +227,18 @@ fun MeetingListViewHandler(viewModel: MeetingViewModel) {
                 LoadingView()
             }
         }
+
         is FetchMeetingStateSuccess -> SuccessView(
             meetings = (meetingsState as FetchMeetingStateSuccess).meetings,
             isLoadingMore = false,
             lazyListState = lazyListState
         )
+
         is FetchMeetingStateError -> ErrorView(
             message = (meetingsState as FetchMeetingStateError).error,
             onRetry = { viewModel.resetAndFetch() }
         )
+
         is FetchMeetingStateInit -> EmptyStateView()
     }
 }
@@ -242,17 +257,16 @@ private fun SuccessView(
         LazyColumn(
             state = lazyListState,
             modifier = Modifier
-                .fillMaxSize()
-                ,
+                .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(meetings.size) { index ->
                 MeetingCard(meetings[index], onClick = {
                     Log.e("TAG", "SuccessView: Clicked")
-                        val intent = Intent(context, MeetingsDetails::class.java)
-                        intent.putExtra("MEETING_ID", meetings[index].id)
+                    val intent = Intent(context, MeetingsDetails::class.java)
+                    intent.putExtra("MEETING_ID", meetings[index].id)
                     intent.putExtra("MEETING_TITLE", meetings[index].title)
-                        context.startActivity(intent)
+                    context.startActivity(intent)
 
                 })
             }
@@ -294,10 +308,11 @@ private fun ErrorView(message: String, onRetry: () -> Unit) {
 fun MeetingListScreenLoadingPreview() {
     AbsherTheme {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        Scaffold(
-            topBar = { AbcherTopAppBar() }
-        ) { paddingValues ->
-            LoadingView(modifier = Modifier.padding(paddingValues))
+            Scaffold(
+                topBar = { AbcherTopAppBar() }
+            ) { paddingValues ->
+                LoadingView(modifier = Modifier.padding(paddingValues))
+            }
         }
-    }}
+    }
 }

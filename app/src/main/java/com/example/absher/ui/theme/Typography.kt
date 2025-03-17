@@ -1,7 +1,6 @@
 package com.example.absher.ui.theme
 
 
-
 import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -49,10 +48,9 @@ val AbsherTypography = Typography(
         fontSize = 12.sp,
         lineHeight = 20.sp,
         fontWeight = FontWeight.Bold
-    )
-    ,
+    ),
 
-)
+    )
 
 
 // Custom text styles object
@@ -66,15 +64,15 @@ object CustomTextStyles {
     )
 
     val BaseBold = TextStyle(
-    fontSize = 14.sp,
-    lineHeight = 24.sp,
-    //fontFamily = FontFamily(Font(R.font.almarai)),
-    fontWeight = FontWeight(700),
-    color = Color(0xFFFFFFFF),
-    textAlign = TextAlign.Right,
+        fontSize = 14.sp,
+        lineHeight = 24.sp,
+        //fontFamily = FontFamily(Font(R.font.almarai)),
+        fontWeight = FontWeight(700),
+        color = Color(0xFFFFFFFF),
+        textAlign = TextAlign.Right,
     )
 
-    val SmallBold =  TextStyle(
+    val SmallBold = TextStyle(
         fontSize = 12.sp,
         lineHeight = 20.sp,
         //fontFamily = FontFamily(Font(R.font.almarai)),
@@ -93,14 +91,14 @@ object CustomTextStyles {
         textAlign = TextAlign.Right,
     )
 
-   val  XSmallBoldUnderLine=  TextStyle(
-    fontSize = 10.sp,
-    lineHeight = 16.sp,
+    val XSmallBoldUnderLine = TextStyle(
+        fontSize = 10.sp,
+        lineHeight = 16.sp,
 
-    fontWeight = FontWeight(700),
-    color = Color(0xFF39836B),
+        fontWeight = FontWeight(700),
+        color = Color(0xFF39836B),
 
-    textDecoration = TextDecoration.Underline,
+        textDecoration = TextDecoration.Underline,
     )
 
 }

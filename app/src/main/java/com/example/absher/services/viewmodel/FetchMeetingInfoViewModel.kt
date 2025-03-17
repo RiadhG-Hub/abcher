@@ -3,7 +3,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.absher.services.data.models.MeetingAgendaResponse
 import com.example.absher.services.data.models.MeetingInfoResponse
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
 import kotlinx.coroutines.launch

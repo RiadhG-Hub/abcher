@@ -21,14 +21,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             AbsherTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
 
-                    AppNavigation()
+                        AppNavigation()
+                    }
                 }
             }
-        }}
+        }
     }
 }
