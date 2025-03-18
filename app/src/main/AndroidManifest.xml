@@ -16,6 +16,11 @@
         android:theme="@style/Theme.Absher"
         tools:targetApi="31">
         <activity
+            android:name=".services.view.recommendations.pages.RecommendationsDetails"
+            android:exported="false"
+            android:label="@string/title_activity_recommendations_details"
+            android:theme="@style/Theme.Absher" />
+        <activity
             android:name=".services.view.recommendations.pages.RecommendationsPage"
             android:exported="false"
             android:label="@string/title_activity_recommendations_page"

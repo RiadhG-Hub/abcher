@@ -34,7 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.absher.R
-import com.example.absher.services.data.models.meetings.Meeting
+import com.example.absher.services.data.models.recommendations.Recommendation
 import com.example.absher.services.helper.formatDateToArabic
 import com.example.absher.services.helper.formatTimeToArabic
 import com.example.absher.services.view.meetings.SvgIcon
@@ -68,15 +68,15 @@ fun ClickableUnderlinedText(onClick: () -> Unit) {
 }
 
 @Composable
-fun RecommendationCard(meeting: Meeting, onClick: () -> Unit) {
-    val statusColor = when (meeting.statusId) {
+fun RecommendationCard(recommendation : Recommendation, onClick: () -> Unit) {
+    val statusColor = when (recommendation.statusId) {
         1 -> StatusGreen
         2 -> StatusYellow
         3 -> StatusRed
         else -> StatusDefault
     }
 
-    val statusText = when (meeting.statusId) {
+    val statusText = when (recommendation.statusId) {
         1 -> "Approved"
         2 -> "Pending"
         3 -> "Rejected"
@@ -102,7 +102,7 @@ fun RecommendationCard(meeting: Meeting, onClick: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = " ${meeting.id}#",
+                    text = " ${recommendation.id}#",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -134,7 +134,7 @@ fun RecommendationCard(meeting: Meeting, onClick: () -> Unit) {
                         .padding(horizontal = 8.dp, vertical = 0.dp)
                 ) {
                     Text(
-                        text = stringResource(R.string.infonumber, meeting.referenceNumber!!),
+                        text = stringResource(R.string.infonumber, recommendation.meetingReferenceNo!!),
                         style = MaterialTheme.typography.bodySmall,
                         color = MediumGray
                     )
@@ -143,7 +143,7 @@ fun RecommendationCard(meeting: Meeting, onClick: () -> Unit) {
                     // SvgIcon(R.drawable.calendar_today) // Uncomment if you have this
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = formatDateToArabic(meeting.date ?: ""),
+                        text = formatDateToArabic(recommendation.dueDate),
                         style = MaterialTheme.typography.bodyMedium,
                         color = LightGray
                     )
@@ -160,7 +160,7 @@ fun RecommendationCard(meeting: Meeting, onClick: () -> Unit) {
                     .padding(12.dp)
             ) {
                 Text(
-                    text = meeting.notes ?: "",
+                    text = recommendation.text,
                     style = MaterialTheme.typography.bodyLarge,
                     color = DarkGray,
                     textAlign = TextAlign.Start,
@@ -180,7 +180,7 @@ fun RecommendationCard(meeting: Meeting, onClick: () -> Unit) {
                     Text(
                         text = stringResource(
                             R.string.startmeeting,
-                            formatTimeToArabic(meeting.startTime!!)
+                            formatTimeToArabic("13:00")
                         ),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
@@ -197,7 +197,7 @@ fun RecommendationCard(meeting: Meeting, onClick: () -> Unit) {
                     Text(
                         text = stringResource(
                             R.string.meetingend,
-                            formatTimeToArabic(meeting.endTime!!)
+                            formatTimeToArabic("17:00")
                         ),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
@@ -212,7 +212,7 @@ fun RecommendationCard(meeting: Meeting, onClick: () -> Unit) {
 
             Spacer(modifier = Modifier.height(4.dp))
             CustomProgressBar(
-                progress = 100f, height = 16.dp
+                progress = recommendation.percentage.toFloat(), height = 16.dp
             )
             Spacer(modifier = Modifier.height(12.dp))
             ClickableUnderlinedText { onClick() }
@@ -225,24 +225,27 @@ fun RecommendationCard(meeting: Meeting, onClick: () -> Unit) {
 fun MeetingCardPreview() {
     AbsherTheme {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            val sampleMeeting = Meeting(
-                id = 7,
-                statusId = 5,
-                referenceNumber = "MTG-2024-0",
-                title = "إجتماع مناقشة نظام إدارة الجلسات الخاصة بالمجالس واللجان",
-                date = "2024-07-01T00:00:00",
-                startTime = "13:00",
-                endTime = "17:00",
-                location = "Intalio Meeting Room",
-                isCommittee = false,
-                notes = "جناح الديوان العام للمحاسبة بمؤتمر \"ليب 2024\" يشهد إقبالاً واسعاً للاطلاع على تجربة المراجعة الإلكترونية\n" +
-                        "جناح الديوان العام للمحاسبة بمؤتمر \"ليب 2024\" يشهد إقبالاً واسعاً للاطلاع على تجربة المراجعة الإلكترونية\n" +
-                        "جناح الديوان العام للمحاسبة بمؤتمر \"ليب 2024\" يشهد إقبالاً واسعاً للاطلاع على تجربة المراجعة الإلكترونية",
-                committeeName = "لجان النظر في المخالفات والتظلمات",
-                statusName = "تم الانتهاء"
+           val recommendation = Recommendation(
+                id = 1,
+                createdBy = 101,
+                dueDate = "2025-03-30",
+                createdAt = "2025-03-15",
+                meetingAgendaId = 10,
+                text = "Improve project delivery efficiency",
+                statusId = 2,
+                createdByName = "John Doe",
+                owner = 102,
+                ownerName = "Jane Smith",
+                percentage = 85,
+                status = "In Progress",
+                meetingId = 5,
+                meetingReferenceNo = "MTG-2025-01",
+                committeeName = "Project Oversight Committee",
+                recommendationName = "Efficiency Improvement Plan",
+                canEdit = true
             )
-            RecommendationCard(meeting = sampleMeeting, onClick = {
-                Log.e("MeetingCard ", "MeetingCardPreview: ${sampleMeeting.title}")
+            RecommendationCard(recommendation = recommendation, onClick = {
+                Log.e("MeetingCard ", "MeetingCardPreview: ${recommendation.meetingId}")
             })
         }
     }

@@ -36,10 +36,7 @@ class MeetingApiAdapter {
     ): MeetingResponse? {
 
 
-        val requestBody = MeetingRequestBody(
-            meetingReferenceNo = null
-                    fromDate =
-        )
+        val requestBody = MeetingRequestBody()
 
         return try {
             val result = apiService.getMeetings(token, from.toString(), to.toString(), requestBody)

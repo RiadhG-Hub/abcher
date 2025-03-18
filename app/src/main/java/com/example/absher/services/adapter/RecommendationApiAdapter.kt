@@ -29,13 +29,15 @@ class RecommendationApiAdapter {
         from: Int = 1,
         to: Int = 10,
          requestBody : MeetingRequestBody = MeetingRequestBody(
-             meetingReferenceNo = null,
+             meetingReferenceNo = 22,
              fromDate = null,
              toDate = null,
              title = null
          ),
         token: String = "Bearer $tokenCore"
     ): RecommendationResponse? {
+        println("request body from adapter")
+        println(requestBody)
 
 
         return try {
@@ -44,7 +46,7 @@ class RecommendationApiAdapter {
             result
         } catch (e: HttpException) {
             handleHttpException(e, "fetchRecommendations") { newToken ->
-                fetchRecommendations(from, to, newToken)
+                fetchRecommendations(from, to, requestBody, newToken)
             }
         } catch (e: Exception) {
             System.err.println("[ERROR] Unexpected error: ${e.message}")

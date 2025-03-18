@@ -28,7 +28,12 @@ class RecommendationViewModel(
         fetchRecommendations()
     }
 
-    fun fetchRecommendations() {
+    fun fetchRecommendations(requestBody : MeetingRequestBody = MeetingRequestBody(
+        meetingReferenceNo = null,
+        fromDate = null,
+        toDate = null,
+        title = null
+    )) {
         if (isLoading || !hasMoreData) return
 
         isLoading = true
@@ -40,12 +45,7 @@ class RecommendationViewModel(
                     from = currentPage,
                     to = pageSize,
 
-                    requestBody = MeetingRequestBody(
-                        meetingReferenceNo = null,
-                        fromDate = null,
-                        toDate = null,
-                        title = null
-                    ),
+                    requestBody = requestBody
 
                 )
 
