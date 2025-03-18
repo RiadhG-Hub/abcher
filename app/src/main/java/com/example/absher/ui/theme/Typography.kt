@@ -101,4 +101,14 @@ object CustomTextStyles {
         textDecoration = TextDecoration.Underline,
     )
 
+    val XSmallBold = TextStyle(
+        fontSize = 10.sp,
+        lineHeight = 16.sp,
+
+        fontWeight = FontWeight(700),
+
+
+
+    )
+
 }

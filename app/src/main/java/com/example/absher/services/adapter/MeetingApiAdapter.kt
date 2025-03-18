@@ -1,6 +1,5 @@
 package com.example.absher.services.adapter// adapter/MeetingApiAdapter.kt
 import com.example.absher.services.data.models.meetings.AttendeeResponse
-import com.example.absher.services.data.models.meetings.Meeting
 import com.example.absher.services.data.models.meetings.MeetingAgendaResponse
 import com.example.absher.services.data.models.meetings.MeetingAttachment
 import com.example.absher.services.data.models.meetings.MeetingAttachmentData
@@ -36,57 +35,7 @@ class MeetingApiAdapter {
         token: String = "Bearer $tokenCore"
     ): MeetingResponse? {
 
-        // List of mock meetings
-        val getMockMeetings: List<Meeting> = listOf(
-            Meeting(
-                id = 1,
-                statusId = 5,
-                referenceNumber = "MTG-2025-001",
-                title = "Weekly Team Sync",
-                date = "2025-03-20T00:00:00",
-                startTime = "09:00",
-                endTime = "10:00",
-                location = "Conference Room A",
-                isCommittee = false,
-                notes = "Discuss project updates and sprint planning",
-                committeeName = "Development Team",
-                statusName = "Scheduled"
-            ),
-            Meeting(
-                id = 2,
-                statusId = 2,
-                referenceNumber = "MTG-2025-002",
-                title = "Client Review Meeting",
-                date = "2025-03-21T00:00:00",
-                startTime = "14:00",
-                endTime = "15:30",
-                location = "Zoom Call",
-                isCommittee = false,
-                notes = "Review project deliverables with client",
-                committeeName = "Project Stakeholders",
-                statusName = "Pending Approval"
-            ),
-            Meeting(
-                id = 3,
-                statusId = 7,
-                referenceNumber = "MTG-2025-003",
-                title = "Board Committee Meeting",
-                date = "2025-03-22T00:00:00",
-                startTime = "10:00",
-                endTime = "12:00",
-                location = "Board Room",
-                isCommittee = true,
-                notes = "Quarterly performance review",
-                committeeName = "Executive Committee",
-                statusName = "Approved"
-            )
-        )
-        return MeetingResponse(
-            data = MeetingResponse.MeetingData(
-                getMockMeetings,
-                getMockMeetings.size
-            ), success = true, message = "Success"
-        )
+
         val requestBody = MeetingRequestBody()
 
         return try {
