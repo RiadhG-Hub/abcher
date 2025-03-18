@@ -7,5 +7,6 @@ data class MeetingRequestBody(
     val fromDate: Any? = null,
     val onlyMyMeetings: Boolean = true,
     val title: Any? = null,
-    val location: Any? = null
+    val location: Any? = null,
+    val meetingReferenceNo: Any? = null
 )

@@ -28,14 +28,15 @@ class RecommendationApiAdapter {
     suspend fun fetchRecommendations(
         from: Int = 1,
         to: Int = 10,
+         requestBody : MeetingRequestBody = MeetingRequestBody(
+             meetingReferenceNo = null,
+             fromDate = null,
+             toDate = null,
+             title = null
+         ),
         token: String = "Bearer $tokenCore"
     ): RecommendationResponse? {
-        val requestBody = MeetingRequestBody(
 
-            fromDate = null,
-            toDate = null,
-            title = null
-        )
 
         return try {
             val result = apiService.getRecommendations(token, from.toString(), to.toString(), requestBody)

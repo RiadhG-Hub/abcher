@@ -1,4 +1,5 @@
 package com.example.absher.services.domain.usecases// domain/usecases/GetMeetingsUseCase.kt
+import com.example.absher.services.data.models.meetings.MeetingRequestBody
 import com.example.absher.services.data.models.recommendations.FetchRecommendationInfoResponse
 import com.example.absher.services.data.models.recommendations.RecommendationResponse
 import com.example.absher.services.data.models.recommendations.RecommendationStatusResponse
@@ -11,9 +12,14 @@ class GetRecommendationUseCase @Inject constructor(
     suspend fun fetchRecommendations(
         from: Int = 1,
         to: Int = 10,
-
+        requestBody : MeetingRequestBody = MeetingRequestBody(
+            meetingReferenceNo = null,
+            fromDate = null,
+            toDate = null,
+            title = null
+        ),
         ): RecommendationResponse? {
-        return recommendationRepository.fetchRecommendations(from, to)
+        return recommendationRepository.fetchRecommendations(from, to, requestBody)
 
 
 

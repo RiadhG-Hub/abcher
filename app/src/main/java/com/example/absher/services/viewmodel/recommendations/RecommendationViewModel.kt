@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.absher.services.data.models.meetings.MeetingRequestBody
 import com.example.absher.services.data.models.recommendations.Recommendation
 import com.example.absher.services.data.models.recommendations.RecommendationResponse
 import com.example.absher.services.domain.usecases.GetRecommendationUseCase
@@ -37,7 +38,15 @@ class RecommendationViewModel(
             try {
                 val requestResponse : RecommendationResponse? = getRecommendationsUseCase.fetchRecommendations(
                     from = currentPage,
-                    to = pageSize
+                    to = pageSize,
+
+                    requestBody = MeetingRequestBody(
+                        meetingReferenceNo = null,
+                        fromDate = null,
+                        toDate = null,
+                        title = null
+                    ),
+
                 )
 
                 if(requestResponse == null){
