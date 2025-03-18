@@ -203,7 +203,7 @@ class MeetingApiAdapter {
 }
 
 
-interface RecommendationApiService {
+interface MeetingApiService {
     @POST("api/meetings/search/{from}/{to}")
     suspend fun getMeetings(
         @Header("Authorization") token: String,
