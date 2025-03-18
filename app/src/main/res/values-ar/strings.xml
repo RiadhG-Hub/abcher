@@ -21,5 +21,12 @@
     <string name="infonumber">الرقم التعريفي %1$s</string>
     <string name="startmeeting">" بداية الإجتماع   %1$s"</string>
     <string name="title_activity_meetings_attends_card_view">MeetingsAttendsCardView</string>
-    <string name="meetings">الإجتماعات</string>
+    <string name="meetings">Meetings</string>
+    <string name="title_activity_recommendations_page">RecommendationsPage</string>
+
+    <!-- New strings added -->
+    <string name="meeting_details">Meeting Details</string>
+    <string name="calendar">جدول الأعمال</string>
+    <string name="attends">الحضور</string>
+    <string name="attachments">المرفقات</string>
 </resources>

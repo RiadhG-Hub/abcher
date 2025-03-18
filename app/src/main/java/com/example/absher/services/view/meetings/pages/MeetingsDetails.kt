@@ -12,17 +12,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -109,7 +102,7 @@ class MeetingsDetails : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /// val meetingId = intent.getIntExtra("MEETING_ID", 0)
+        val meetingId = intent.getIntExtra("MEETING_ID", 0)
         val meetingTitle = intent.getStringExtra("MEETING_TITLE")
 
         setContent {
@@ -117,8 +110,9 @@ class MeetingsDetails : ComponentActivity() {
                 DetailsWrapper(
                     meetingTitle = meetingTitle.toString(),
                     fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel,
-                    fetchAgendaViewModel = fetchAgendaViewModel
-                    , fetchMeetingAttachmentViewModel = fetchAttachmentViewModel
+                    fetchAgendaViewModel = fetchAgendaViewModel,
+                    fetchMeetingAttachmentViewModel = fetchAttachmentViewModel,
+                    meetingID = meetingId
                 )
 
             }
@@ -127,68 +121,48 @@ class MeetingsDetails : ComponentActivity() {
 
     @Composable
     fun DetailsWrapper(
-        modifier: Modifier = Modifier,
+
         meetingTitle: String = "Meeting Details",
         viewModel: MeetingDetailsNavigationViewModel = viewModel(),
         fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
         fetchAgendaViewModel: FetchAgendaViewModel = viewModel(),
-        fetchMeetingAttachmentViewModel: FetchMeetingAttachmentViewModel = viewModel()
+        fetchMeetingAttachmentViewModel: FetchMeetingAttachmentViewModel = viewModel(),
+        meetingID: Int
     ) {
         val selectedIndex = viewModel.selectedNavItem.value
-        Scaffold(
-            containerColor = MaterialTheme.colorScheme.surface,
-            topBar = {
-                AbcherTopAppBar(title = meetingTitle, navigationIcon = {
-                    DefaultBackButton()
-                }, actions = {
-                    SvgIcon(
-                        R.drawable.notifications_active,
-                        modifier = Modifier.padding(end = 16.dp)
-                    )
-                })
-
-            },
-            content = { padding ->
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .padding(padding)
-                        .fillMaxSize()
-                        .padding(0.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    Box(modifier = Modifier.background(BackgroundGray)) {
-                        NavigationTopAppBar(selectedIndex = selectedIndex)
-                    }
-                    Wrapper(
-                        fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel,
-                        fetchAgendaViewModel = fetchAgendaViewModel,
-                        fetchMeetingInfoViewModel = fetchMeetingInfoViewModel,
-                                fetchMeetingAttachmentViewModel = fetchAttachmentViewModel
-                    )
-
-                }
-
+        Scaffold(containerColor = MaterialTheme.colorScheme.surface, topBar = {
+            AbcherTopAppBar(title = meetingTitle, navigationIcon = {
+                DefaultBackButton()
+            }, actions = {
+                SvgIcon(
+                    R.drawable.notifications_active, modifier = Modifier.padding(end = 16.dp)
+                )
             })
-    }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MeetingDetailsTopAppBar() {
-    TopAppBar(
-        title = { Text("My App") },
-        navigationIcon = {
-            IconButton(onClick = { /* Handle navigation */ }) {
-                Icon(Icons.Default.Menu, contentDescription = "Menu")
+        }, content = { padding ->
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(padding)
+                    .fillMaxSize()
+                    .padding(0.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Box(modifier = Modifier.background(BackgroundGray)) {
+                    NavigationTopAppBar(selectedIndex = selectedIndex)
+                }
+                Wrapper(
+                    fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel,
+                    fetchAgendaViewModel = fetchAgendaViewModel,
+                    fetchMeetingInfoViewModel = fetchMeetingInfoViewModel,
+                    fetchMeetingAttachmentViewModel = fetchMeetingAttachmentViewModel,
+                    meetingID = meetingID
+                )
+
             }
-        },
-        actions = {
-            IconButton(onClick = { /* Handle search */ }) {
-                Icon(Icons.Default.Search, contentDescription = "Search")
-            }
-        }
-    )
+
+        })
+    }
 }
 
 
@@ -213,10 +187,11 @@ private fun NavigationTopAppBar(
                 onClick = { newSelection ->
 
                     viewModel.selectNavItem(newSelection)
-                }
-            )
+                })
             NavigationItem(
-                title = "جدول الأعمال",
+                title = stringResource(
+                    id = R.string.calendar
+                ),
                 icon = R.drawable.event_note,
                 index = MeetingDetailsNavigationSections.Calendar,
                 selectedIndex = selectedIndex,
@@ -224,10 +199,11 @@ private fun NavigationTopAppBar(
                 onClick = { newSelection ->
                     viewModel.selectNavItem(newSelection)
 
-                }
-            )
+                })
             NavigationItem(
-                title = "الحضور",
+                title = stringResource(
+                    id = R.string.attends
+                ),
                 icon = R.drawable.meetingtabicon,
                 index = MeetingDetailsNavigationSections.Attends,
                 selectedIndex = selectedIndex,
@@ -235,10 +211,11 @@ private fun NavigationTopAppBar(
                 onClick = { newSelection ->
 
                     viewModel.selectNavItem(newSelection)
-                }
-            )
+                })
             NavigationItem(
-                title = "المرفقات",
+                title = stringResource(
+                    id = R.string.attachments
+                ),
                 icon = R.drawable.file_copy,
                 index = MeetingDetailsNavigationSections.Attachments,
                 selectedIndex = selectedIndex,
@@ -246,8 +223,7 @@ private fun NavigationTopAppBar(
                 onClick = { newSelection ->
                     viewModel.selectNavItem(newSelection)
 
-                }
-            )
+                })
         }
         HorizontalDivider()
     }
@@ -263,12 +239,12 @@ fun NavigationItem(
     selectedIndex: MeetingDetailsNavigationSections,
     onClick: (MeetingDetailsNavigationSections) -> Unit
 ) {
-    val color = if (index == selectedIndex) Color(0xff39836B) else
-        Color(0xff757575)
+    val color = if (index == selectedIndex) Color(0xff39836B) else Color(0xff757575)
     Column(
         verticalArrangement = Arrangement.Center,
 
-        horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
             .padding(8.dp)
             .clickable {
                 onClick(index)
@@ -297,21 +273,22 @@ private fun Wrapper(
     fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
     fetchAgendaViewModel: FetchAgendaViewModel = viewModel(),
     fetchMeetingInfoViewModel: FetchMeetingInfoViewModel = viewModel(),
-            fetchMeetingAttachmentViewModel: FetchMeetingAttachmentViewModel = viewModel()
+    fetchMeetingAttachmentViewModel: FetchMeetingAttachmentViewModel = viewModel(),
+    meetingID: Int
 ) {
     when (viewModel.selectedNavItem.value) {
         MeetingDetailsNavigationSections.Meetings -> {
-            fetchMeetingInfoViewModel.FetchMeetingInfos(meetingID = 2103)
+            fetchMeetingInfoViewModel.FetchMeetingInfos(meetingID = meetingID)
             MeetingInfo(meetingId = 0, fetchMeetingInfoViewModel = fetchMeetingInfoViewModel)
         }
 
         MeetingDetailsNavigationSections.Calendar -> {
-            fetchAgendaViewModel.fetchMeetingAgendas(meetingID = 2103)
+            fetchAgendaViewModel.fetchMeetingAgendas(meetingID = meetingID)
             AgendaList(meetingId = 0, fetchAgendaViewModel = fetchAgendaViewModel)
         }
 
         MeetingDetailsNavigationSections.Attends -> {
-            fetchMeetingAttendsViewModel.fetchMeetingAttendees(meetingID = 2103)
+            fetchMeetingAttendsViewModel.fetchMeetingAttendees(meetingID = meetingID)
             AttendsList(meetingId = 0, fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel)
 
         }
@@ -319,8 +296,7 @@ private fun Wrapper(
         MeetingDetailsNavigationSections.Attachments -> {
             fetchMeetingAttachmentViewModel.fetchMeetingAttachments(meetingID = 2103)
             AttachmentList(
-                meetingId = 0,
-                fetchMeetingAttachmentViewModel = fetchMeetingAttachmentViewModel
+                meetingId = 0, fetchMeetingAttachmentViewModel = fetchMeetingAttachmentViewModel
             )
         }
     }

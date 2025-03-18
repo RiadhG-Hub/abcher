@@ -73,7 +73,7 @@ fun MeetingsAttendsCardView(
             )
         }
     }
-    HorizontalDivider()
+    HorizontalDivider(modifier.padding(top = 8.dp, bottom = 8.dp))
 }
 }
 
