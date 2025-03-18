@@ -38,7 +38,7 @@ class MeetingViewModel(
                     from = currentPage,
                     to = pageSize
                 )
-                val newMeetings = response ?: emptyList()
+                val newMeetings  = response ?: emptyList()
 
                 allMeetings.addAll(newMeetings)
                 hasMoreData = newMeetings.size == pageSize
