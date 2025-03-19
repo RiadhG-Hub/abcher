@@ -1,4 +1,4 @@
-package com.example.absher.services.view.meetings
+package com.example.absher.services.view.recommendations
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,17 +35,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.absher.R
-import com.example.absher.services.data.models.meetings.MeetingAttendee
-import com.example.absher.services.data.models.meetings.MeetingInfoData
-import com.example.absher.services.data.models.meetings.MeetingInfoResponse
+import com.example.absher.services.data.models.recommendations.FetchRecommendationInfoData
+import com.example.absher.services.data.models.recommendations.FetchRecommendationInfoResponse
 import com.example.absher.services.helper.formatDateToArabic
 import com.example.absher.services.helper.formatTimeToArabic
-import com.example.absher.services.viewmodel.meetings.FetchMeetingInfoStateError
-import com.example.absher.services.viewmodel.meetings.FetchMeetingInfoStateInit
-import com.example.absher.services.viewmodel.meetings.FetchMeetingInfoStateLoading
-import com.example.absher.services.viewmodel.meetings.FetchMeetingInfoStateSuccess
-import com.example.absher.services.viewmodel.meetings.FetchMeetingInfoViewModel
+import com.example.absher.services.view.meetings.SvgIcon
 import com.example.absher.services.viewmodel.meetings.MeetingDetailsNavigationViewModel
+import com.example.absher.services.viewmodel.recommendations.FetchRecommendationInfoStateError
+import com.example.absher.services.viewmodel.recommendations.FetchRecommendationInfoStateInit
+import com.example.absher.services.viewmodel.recommendations.FetchRecommendationInfoStateLoading
+import com.example.absher.services.viewmodel.recommendations.FetchRecommendationInfoStateSuccess
+import com.example.absher.services.viewmodel.recommendations.RecommendationViewModel
 import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.ui.theme.CustomTextStyles
 import com.example.absher.ui.theme.Gray
@@ -53,42 +53,40 @@ import com.example.absher.ui.theme.SubtitleColor
 
 
 @Composable
-fun MeetingInfo(
+fun RecommendationInfo(
     viewModel: MeetingDetailsNavigationViewModel = viewModel(),
     meetingId: Int = 0,
-    fetchMeetingInfoViewModel: FetchMeetingInfoViewModel = viewModel()
+    recommendationViewModel: RecommendationViewModel = viewModel()
 ) {
-    val fetchMeetingInfo by fetchMeetingInfoViewModel.fetchMeetingState.observeAsState(
-        FetchMeetingInfoStateInit()
+    val fetchMeetingInfo by recommendationViewModel.fetchRecommendationInfoState.observeAsState(
+        FetchRecommendationInfoStateInit()
     )
 
     when (fetchMeetingInfo) {
-        is FetchMeetingInfoStateError -> Text("Error fetching meeting info", color = Color.Red)
-        is FetchMeetingInfoStateInit -> Text("Initializing meeting info...")
-        is FetchMeetingInfoStateLoading -> CircularProgressIndicator()
-        is FetchMeetingInfoStateSuccess -> {
-            val meetingData = (fetchMeetingInfo as FetchMeetingInfoStateSuccess).meetingAgenda
-            if (meetingData != null) {
-                MeetingDetailsCard(meetingData)
-            } else {
-                Text("Meeting data not available", color = Color.Gray)
-            }
+        is FetchRecommendationInfoStateError -> Text("Error fetching meeting info", color = Color.Red)
+        is FetchRecommendationInfoStateInit -> Text("Initializing meeting info...")
+        is FetchRecommendationInfoStateLoading -> CircularProgressIndicator()
+        is FetchRecommendationInfoStateSuccess -> {
+            val recommendation = (fetchMeetingInfo as FetchRecommendationInfoStateSuccess).recommendation
+
+                RecommendationInfoCard(recommendation)
+
         }
     }
 }
 
 
 @Composable
-private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier = Modifier) {
+private fun RecommendationInfoCard(recommendation: FetchRecommendationInfoData, modifier: Modifier = Modifier) {
 
-    val statusColor = when (meeting.data?.statusId) {
+    val statusColor = when (recommendation.statusId) {
         1 -> Color(0xFF28A745) // Green for status 1
         2 -> Color(0xFFFFC107) // Yellow for status 2
         3 -> Color(0xFFDC3545) // Red for status 3
         else -> Color(0xFFD4A017) // Default color
     }
 
-    val statusText = when (meeting.data?.statusId) {
+    val statusText = when (recommendation.statusId) {
         1 -> "Approved"   // Text for status 1
         2 -> "Pending"    // Text for status 2
         3 -> "Rejected"   // Text for status 3
@@ -114,7 +112,7 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "#${meeting.data?.id ?: "N/A"}", style = TextStyle(
+                    text = "#${recommendation.id ?: "N/A"}", style = TextStyle(
                         fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFF212121)
                     )
                 )
@@ -158,7 +156,7 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                         .padding(horizontal = 8.dp, vertical = 0.dp)
                 ) {
                     Text(
-                        text = stringResource(R.string.infonumber, meeting.data?.referenceNumber.toString()),
+                        text = stringResource(R.string.infonumber, recommendation.id),
                         style = TextStyle(
                             fontSize = 10.sp,
                             lineHeight = 16.sp,
@@ -174,7 +172,7 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                     SvgIcon(R.drawable.calendar_today)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = formatDateToArabic(meeting.data?.date ?: ""),
+                        text = formatDateToArabic(recommendation.id.toString() ?: ""),
                         style = TextStyle(fontSize = 12.sp, color = Color(0xFF757575))
                     )
                 }
@@ -190,8 +188,9 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                     .background(Color(0xFFF2F2F2))
                     .padding(12.dp)
             ) {
+                //todo check this entity title
                 Text(
-                    text = meeting.data?.title ?: "No title available", style = TextStyle(
+                    text = recommendation.id.toString() , style = TextStyle(
                         fontSize = 12.sp,
                         lineHeight = 20.sp,
                         fontWeight = FontWeight(700),
@@ -212,9 +211,10 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     SvgIcon(R.drawable.timer)
                     Spacer(modifier = Modifier.width(4.dp))
+                    //todo check this entity title
                     Text(
                         text = stringResource(
-                            R.string.startmeeting, formatTimeToArabic(meeting.data?.startTime.toString())
+                            R.string.startmeeting, formatTimeToArabic(recommendation.id.toString())
                         ), style = TextStyle(fontSize = 12.sp, color = Color(0xFF212121))
                     )
                 }
@@ -229,9 +229,10 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     SvgIcon(R.drawable.timer_off)
                     Spacer(modifier = Modifier.width(4.dp))
+                    //todo check this entity endTime
                     Text(
                         text = stringResource(
-                            R.string.meetingend, formatTimeToArabic(meeting.data?.endTime.toString())
+                            R.string.meetingend, formatTimeToArabic(recommendation.id.toString())
                         ), style = TextStyle(fontSize = 12.sp, color = Color(0xFF212121))
                     )
                 }
@@ -264,9 +265,9 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                                 textAlign = TextAlign.Right,
                             )
                         )
-
+//todo check this entity date
                         Text(
-                            text = formatDateToArabic(meeting.data?.date.toString()),
+                            text = formatDateToArabic(recommendation.id.toString()),
                             modifier = modifier.padding(start = 62.dp),
 
                             // Small/Bold
@@ -301,9 +302,9 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                                 textAlign = TextAlign.Right,
                             )
                         )
-
+//todo check this entity location
                         Text(
-                            text = meeting.data?.location.toString(),
+                            text = recommendation.id.toString(),
                             modifier = modifier.padding(start = 18.dp),
                             // Small/Bold
                             style = TextStyle(
@@ -337,9 +338,9 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                                 textAlign = TextAlign.Right,
                             )
                         )
-
+//todo check this entity committeeName
                         Text(
-                            text = meeting.data?.committeeName.toString(),
+                            text = recommendation.id.toString(),
                             modifier = modifier.padding(start = 36.dp),
                             // Small/Bold
                             style = TextStyle(
@@ -373,9 +374,9 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                                 textAlign = TextAlign.Right,
                             )
                         )
-
+//todo check this entity createdBy
                         Text(
-                            text = meeting.data?.createdby.toString(),
+                            text = recommendation.id.toString(),
                             modifier = modifier.padding(start = 49.dp),
 
                             // Small/Bold
@@ -408,9 +409,9 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                     style = CustomTextStyles.SmallRegular12
                 )
             }
-
+//todo check this entity notes
             Text(
-                text = meeting.data?.notes.toString(),
+                text = recommendation.id.toString(),
 
                 // Small/Bold
                 style = CustomTextStyles.SmallBold.copy(color = SubtitleColor)
@@ -427,45 +428,31 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
 @Preview(showBackground = true)
 @Composable
 fun MeetingDetailsCardPreview() {
-    val sampleMeeting = MeetingInfoResponse(
-        success = true, message = "Meeting details fetched successfully", data = MeetingInfoData(
-            id = 12345,
-            referenceNumber = "REF-98765",
-            committeeName = "Finance Committee",
-            createdby = 101,
+
+    val response = FetchRecommendationInfoResponse(
+        data = FetchRecommendationInfoData(
+            id = 1,
+            createdBy = 101,
+            createdAt = "2024-03-19T10:00:00Z",
+            dueDate = "2024-04-01T23:59:59Z",
+            meetingAgendaId = 55,
+            text = "Enhance project efficiency by automating daily reports.",
             statusId = 2,
-            title = "Quarterly Financial Review",
-            date = "2025-03-16",
-            startTime = "10:00 AM",
-            endTime = "11:00 AM",
-            location = "Conference Room A",
-            isCommittee = true,
-            committeeId = 201,
-            councilSessionId = 301,
-            notes = "Discuss Q1 financials and projections for Q2",
-            readOnly = false,
-            meetingAttendees = listOf(
-                MeetingAttendee(
-                    userId = 1,
-                    needsApproval = false,
-                    jobTitle = "CEO",
-                    name = "John Doe",
-                    attended = true,
-                    hasProfilePicture = true
-                ), MeetingAttendee(
-                    userId = 2,
-                    needsApproval = true,
-                    jobTitle = "CFO",
-                    name = "Jane Smith",
-                    attended = false,
-                    hasProfilePicture = false
-                )
-            )
-        )
+            createdByName = "John Doe",
+            owner = 102,
+            ownerName = "Jane Smith",
+            recommendationTypeId = 3,
+            recommendationTypeName = "Process Improvement",
+            percentage = 75,
+            status = "In Progress"
+        ),
+        success = true,
+        message = "Recommendation info fetched successfully."
     )
+
     AbsherTheme {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            MeetingDetailsCard(meeting = sampleMeeting)
+            RecommendationInfoCard(response.data)
         }
     }
 }

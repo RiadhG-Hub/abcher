@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.absher.services.data.models.meetings.MeetingRequestBody
+import com.example.absher.services.data.models.recommendations.FetchRecommendationInfoData
+import com.example.absher.services.data.models.recommendations.FetchRecommendationInfoResponse
 import com.example.absher.services.data.models.recommendations.Recommendation
 import com.example.absher.services.data.models.recommendations.RecommendationResponse
 import com.example.absher.services.domain.usecases.GetRecommendationUseCase
@@ -15,6 +17,10 @@ class RecommendationViewModel(
 ) : ViewModel() {
     private val _fetchRecommendationState = MutableLiveData<FetchRecommendationState>()
     val fetchRecommendationState: LiveData<FetchRecommendationState> = _fetchRecommendationState
+
+
+    private val _fetchRecommendationInfoState = MutableLiveData<FetchRecommendationInfoState>()
+    val fetchRecommendationInfoState: LiveData<FetchRecommendationInfoState> = _fetchRecommendationInfoState
 
 
 
@@ -79,6 +85,46 @@ class RecommendationViewModel(
         }
     }
 
+
+    fun fetchRecommendationInfo(recommendationID : Int ) {
+
+
+
+        _fetchRecommendationInfoState.value = FetchRecommendationInfoStateLoading()
+
+        viewModelScope.launch {
+            try {
+                val requestResponse : FetchRecommendationInfoResponse? = getRecommendationsUseCase.fetchRecommendationInfo(recommendationID )
+
+                if(requestResponse == null){
+                    _fetchRecommendationInfoState.postValue(
+                        FetchRecommendationInfoStateError( "Null Response")
+                    )
+
+                }else {
+                    val  response : FetchRecommendationInfoData = requestResponse.data
+
+
+
+
+
+                    _fetchRecommendationInfoState.postValue(
+                        FetchRecommendationInfoStateSuccess(response)
+                    )
+                }
+
+
+            } catch (e: Exception) {
+                _fetchRecommendationInfoState.postValue(
+                    FetchRecommendationInfoStateError(e.message ?: "Unknown error")
+                )
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+
     fun resetAndFetch() {
         currentPage = 1
         allRecommendations.clear()
@@ -93,3 +139,11 @@ class FetchRecommendationStateInit : FetchRecommendationState()
 class FetchRecommendationStateLoading : FetchRecommendationState()
 data class FetchRecommendationStateSuccess(val recommendations: List<Recommendation>?) : FetchRecommendationState()
 data class FetchRecommendationStateError(val error: String) : FetchRecommendationState()
+
+
+
+sealed class FetchRecommendationInfoState
+class FetchRecommendationInfoStateInit : FetchRecommendationInfoState()
+class FetchRecommendationInfoStateLoading : FetchRecommendationInfoState()
+data class FetchRecommendationInfoStateSuccess(val recommendation: FetchRecommendationInfoData) : FetchRecommendationInfoState()
+data class FetchRecommendationInfoStateError(val error: String) : FetchRecommendationInfoState()

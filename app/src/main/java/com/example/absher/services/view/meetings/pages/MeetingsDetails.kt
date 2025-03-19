@@ -120,7 +120,7 @@ class MeetingsDetails : ComponentActivity() {
     }
 
     @Composable
-    fun DetailsWrapper(
+    private fun DetailsWrapper(
 
         meetingTitle: String = "Meeting Details",
         viewModel: MeetingDetailsNavigationViewModel = viewModel(),
@@ -278,7 +278,7 @@ private fun Wrapper(
 ) {
     when (viewModel.selectedNavItem.value) {
         MeetingDetailsNavigationSections.Meetings -> {
-            fetchMeetingInfoViewModel.FetchMeetingInfos(meetingID = meetingID)
+            fetchMeetingInfoViewModel.fetchMeetingInfos(meetingID = meetingID)
             MeetingInfo(meetingId = 0, fetchMeetingInfoViewModel = fetchMeetingInfoViewModel)
         }
 

@@ -14,7 +14,7 @@ class FetchMeetingInfoViewModel(
     val fetchMeetingState: LiveData<FetchMeetingInfoState> = _fetchMeetingState
 
 
-    fun FetchMeetingInfos(meetingID: Int) {
+    fun fetchMeetingInfos(meetingID: Int) {
 
 
         _fetchMeetingState.value = FetchMeetingInfoStateLoading()
