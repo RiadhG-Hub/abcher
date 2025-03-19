@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.absher.R
 import com.example.absher.services.view.meetings.AbcherTopAppBar
 import com.example.absher.services.view.meetings.AgendaList
@@ -45,7 +45,9 @@ import com.example.absher.services.viewmodel.recommendations.RecommendationDetai
 import com.example.absher.services.viewmodel.recommendations.RecommendationDetailsNavigationViewModel
 import com.example.absher.services.viewmodel.recommendations.RecommendationViewModel
 import com.example.absher.ui.theme.BackgroundGray
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecommendationsDetails : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,14 +69,14 @@ class RecommendationsDetails : ComponentActivity() {
 private fun DetailsWrapper(
     meetingTitle: String,
     meetingID: Int,
-    viewModel: RecommendationDetailsNavigationViewModel = viewModel(),
-    fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
-    fetchAgendaViewModel: FetchAgendaViewModel = viewModel(),
-    fetchMeetingAttachmentViewModel: FetchMeetingAttachmentViewModel = viewModel(),
-    recommendationViewModel: RecommendationViewModel = viewModel()
+    viewModel: RecommendationDetailsNavigationViewModel = hiltViewModel(),
+    fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = hiltViewModel(),
+    fetchAgendaViewModel: FetchAgendaViewModel = hiltViewModel(),
+    fetchMeetingAttachmentViewModel: FetchMeetingAttachmentViewModel = hiltViewModel(),
+    recommendationViewModel: RecommendationViewModel = hiltViewModel()
 ) {
     val selectedIndex = viewModel.selectedNavItem.value
-    
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
@@ -116,7 +118,7 @@ private fun DetailsWrapper(
 private fun NavigationTopAppBar(
     modifier: Modifier = Modifier,
     selectedIndex: RecommendationDetailsNavigationSections,
-    viewModel: RecommendationDetailsNavigationViewModel = viewModel()
+    viewModel: RecommendationDetailsNavigationViewModel = hiltViewModel()
 ) {
     Column(modifier = Modifier.padding(top = 12.dp)) {
         Row(
@@ -133,9 +135,7 @@ private fun NavigationTopAppBar(
                     viewModel.selectNavItem(newSelection)
                 })
             NavigationItem(
-                title = stringResource(
-                    id = R.string.calendar
-                ),
+                title = stringResource(id = R.string.calendar),
                 icon = R.drawable.show_chart,
                 index = RecommendationDetailsNavigationSections.Progress,
                 selectedIndex = selectedIndex,
@@ -143,9 +143,7 @@ private fun NavigationTopAppBar(
                     viewModel.selectNavItem(newSelection)
                 })
             NavigationItem(
-                title = stringResource(
-                    id = R.string.attends
-                ),
+                title = stringResource(id = R.string.attends),
                 icon = R.drawable.meetingtabicon,
                 index = RecommendationDetailsNavigationSections.Attends,
                 selectedIndex = selectedIndex,
@@ -153,9 +151,7 @@ private fun NavigationTopAppBar(
                     viewModel.selectNavItem(newSelection)
                 })
             NavigationItem(
-                title = stringResource(
-                    id = R.string.attachments
-                ),
+                title = stringResource(id = R.string.attachments),
                 icon = R.drawable.file_copy,
                 index = RecommendationDetailsNavigationSections.Attachments,
                 selectedIndex = selectedIndex,

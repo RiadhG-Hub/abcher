@@ -8,6 +8,7 @@ import com.example.absher.services.adapter.MeetingApiAdapter
 import com.example.absher.services.adapter.TokenManager
 import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.domain.repository.MeetingRepository
+import com.example.absher.services.domain.usecases.GetMeetingsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,5 +49,11 @@ object AppModule {
     @Singleton
     fun provideMeetingRepository(dataSource: RemoteMeetingDataSource): MeetingRepository {
         return MeetingRepository(dataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetMeetingsUseCase(repository: MeetingRepository): GetMeetingsUseCase {
+        return GetMeetingsUseCase(repository)
     }
 }

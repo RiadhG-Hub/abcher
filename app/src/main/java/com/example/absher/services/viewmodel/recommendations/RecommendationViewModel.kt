@@ -11,9 +11,12 @@ import com.example.absher.services.data.models.recommendations.Recommendation
 import com.example.absher.services.data.models.recommendations.RecommendationResponse
 import com.example.absher.services.domain.usecases.GetRecommendationUseCase
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RecommendationViewModel(
-    private val getRecommendationsUseCase: GetRecommendationUseCase
+@HiltViewModel
+class RecommendationViewModel @Inject constructor(
+    private val getRecommendationUseCase: GetRecommendationUseCase
 ) : ViewModel() {
     private val _fetchRecommendationState = MutableLiveData<FetchRecommendationState>()
     val fetchRecommendationState: LiveData<FetchRecommendationState> = _fetchRecommendationState
@@ -47,7 +50,7 @@ class RecommendationViewModel(
 
         viewModelScope.launch {
             try {
-                val requestResponse : RecommendationResponse? = getRecommendationsUseCase.fetchRecommendations(
+                val requestResponse : RecommendationResponse? = getRecommendationUseCase.fetchRecommendations(
                     from = currentPage,
                     to = pageSize,
 
@@ -94,7 +97,7 @@ class RecommendationViewModel(
 
         viewModelScope.launch {
             try {
-                val requestResponse : FetchRecommendationInfoResponse? = getRecommendationsUseCase.fetchRecommendationInfo(recommendationID )
+                val requestResponse : FetchRecommendationInfoResponse? = getRecommendationUseCase.fetchRecommendationInfo(recommendationID )
 
                 if(requestResponse == null){
                     _fetchRecommendationInfoState.postValue(

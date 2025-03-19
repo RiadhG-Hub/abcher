@@ -6,8 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.absher.services.data.models.meetings.MeetingAttachmentResponse
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class FetchMeetingAttachmentViewModel(
+@HiltViewModel
+class FetchMeetingAttachmentViewModel @Inject constructor(
     private val getMeetingsUseCase: GetMeetingsUseCase
 ) : ViewModel() {
     private val _fetchMeetingState = MutableLiveData<FetchMeetingAttachmentState>()

@@ -4,8 +4,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RecommendationDetailsNavigationViewModel : ViewModel() {
+@HiltViewModel
+class RecommendationDetailsNavigationViewModel @Inject constructor() : ViewModel() {
     // Use mutableStateOf for Compose state
     private val _selectedNavItem = mutableStateOf(RecommendationDetailsNavigationSections.Info)
     val selectedNavItem = _selectedNavItem // Expose as a read-only State
