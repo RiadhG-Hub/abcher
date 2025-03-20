@@ -7,15 +7,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -61,13 +64,44 @@ fun RecommendationInfo(
         FetchRecommendationInfoStateInit()
     )
 
-    when (fetchMeetingInfo) {
-        is FetchRecommendationInfoStateError -> Text("Error fetching meeting info", color = Color.Red)
-        is FetchRecommendationInfoStateInit -> Text("Initializing meeting info...")
-        is FetchRecommendationInfoStateLoading -> CircularProgressIndicator()
-        is FetchRecommendationInfoStateSuccess -> {
-            val recommendation = (fetchMeetingInfo as FetchRecommendationInfoStateSuccess).recommendation
-            RecommendationInfoCard(recommendation)
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        when (fetchMeetingInfo) {
+            is FetchRecommendationInfoStateError -> {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = (fetchMeetingInfo as FetchRecommendationInfoStateError).error,
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                        onClick = { recommendationViewModel.fetchRecommendationInfo(recommendationID = meetingId) }
+                    ) {
+                        Text(text = stringResource(R.string.retry))
+                    }
+                }
+            }
+            is FetchRecommendationInfoStateInit -> {
+                Text(
+                    text = stringResource(R.string.loading),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+            is FetchRecommendationInfoStateLoading -> {
+                CircularProgressIndicator()
+            }
+            is FetchRecommendationInfoStateSuccess -> {
+                val recommendation = (fetchMeetingInfo as FetchRecommendationInfoStateSuccess).recommendation
+                RecommendationInfoCard(recommendation)
+            }
         }
     }
 }

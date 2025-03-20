@@ -12,17 +12,24 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,6 +54,19 @@ import com.example.absher.services.viewmodel.recommendations.RecommendationViewM
 import com.example.absher.ui.theme.BackgroundGray
 import dagger.hilt.android.AndroidEntryPoint
 
+private object RecommendationDetailsStyles {
+    val selectedColor = Color(0xff39836B)
+    val unselectedColor = Color(0xff757575)
+    val backgroundColor = Color(0xFFF2F2F2)
+    
+    val navigationItemText = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 20.sp,
+        fontWeight = FontWeight(400),
+        textAlign = TextAlign.Center,
+    )
+}
+
 @AndroidEntryPoint
 class RecommendationsDetails : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +85,37 @@ class RecommendationsDetails : ComponentActivity() {
     }
 }
 
+/**
+ * Top app bar for the recommendation details screen.
+ * 
+ * @param title The title to display in the app bar
+ */
+@Composable
+private fun RecommendationDetailsTopBar(title: String) {
+    AbcherTopAppBar(
+        title = title,
+        navigationIcon = { DefaultBackButton() },
+        actions = {
+            SvgIcon(
+                R.drawable.notifications_active,
+                modifier = Modifier.padding(end = 16.dp)
+            )
+        }
+    )
+}
+
+/**
+ * Main wrapper composable for the recommendation details screen.
+ * Handles the overall layout and navigation between different sections.
+ *
+ * @param meetingTitle The title of the meeting/recommendation
+ * @param meetingID The ID of the meeting/recommendation
+ * @param viewModel The view model for navigation
+ * @param fetchMeetingAttendsViewModel The view model for fetching attendees
+ * @param fetchAgendaViewModel The view model for fetching agenda
+ * @param fetchMeetingAttachmentViewModel The view model for fetching attachments
+ * @param recommendationViewModel The view model for recommendation details
+ */
 @Composable
 private fun DetailsWrapper(
     meetingTitle: String,
@@ -79,18 +130,7 @@ private fun DetailsWrapper(
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
-        topBar = {
-            AbcherTopAppBar(
-                title = meetingTitle,
-                navigationIcon = { DefaultBackButton() },
-                actions = {
-                    SvgIcon(
-                        R.drawable.notifications_active,
-                        modifier = Modifier.padding(end = 16.dp)
-                    )
-                }
-            )
-        }
+        topBar = { RecommendationDetailsTopBar(title = meetingTitle) }
     ) { padding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -163,6 +203,17 @@ private fun NavigationTopAppBar(
     }
 }
 
+/**
+ * A navigation item composable that displays an icon and text.
+ * The item's appearance changes based on whether it is selected or not.
+ *
+ * @param modifier Modifier to be applied to the composable
+ * @param title The text to be displayed below the icon
+ * @param icon The resource ID of the icon to be displayed
+ * @param index The section this navigation item represents
+ * @param selectedIndex The currently selected section
+ * @param onClick Callback invoked when the item is clicked
+ */
 @Composable
 private fun NavigationItem(
     modifier: Modifier = Modifier,
@@ -172,23 +223,22 @@ private fun NavigationItem(
     selectedIndex: RecommendationDetailsNavigationSections,
     onClick: (RecommendationDetailsNavigationSections) -> Unit
 ) {
-    val color = if (index == selectedIndex) Color(0xff39836B) else Color(0xff757575)
+    val color = if (index == selectedIndex) RecommendationDetailsStyles.selectedColor else RecommendationDetailsStyles.unselectedColor
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .padding(8.dp)
-            .clickable {
-                onClick(index)
-            }) {
+            .clickable(
+                onClick = { onClick(index) },
+                role = androidx.compose.ui.semantics.Role.Tab
+            )
+    ) {
         SvgIcon(drawable = icon, defaultColor = color)
         Text(
             text = title,
             color = color,
-            fontSize = 12.sp,
-            lineHeight = 20.sp,
-            fontWeight = FontWeight(400),
-            textAlign = TextAlign.Center,
+            style = RecommendationDetailsStyles.navigationItemText
         )
     }
 }
@@ -202,25 +252,54 @@ private fun Wrapper(
     recommendationId: Int,
     recommendationViewModel: RecommendationViewModel
 ) {
-    when (viewModel.selectedNavItem.value) {
-        RecommendationDetailsNavigationSections.Info -> {
-            recommendationViewModel.fetchRecommendationInfo(recommendationID = recommendationId)
-            RecommendationInfo(meetingId = recommendationId, recommendationViewModel = recommendationViewModel)
-        }
-        RecommendationDetailsNavigationSections.Progress -> {
-            fetchAgendaViewModel.fetchMeetingAgendas(meetingID = recommendationId)
-            AgendaList(meetingId = recommendationId, fetchAgendaViewModel = fetchAgendaViewModel)
-        }
-        RecommendationDetailsNavigationSections.Attends -> {
-            fetchMeetingAttendsViewModel.fetchMeetingAttendees(meetingID = recommendationId)
-            AttendsList(meetingId = recommendationId, fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel)
-        }
-        RecommendationDetailsNavigationSections.Attachments -> {
-            fetchMeetingAttachmentViewModel.fetchMeetingAttachments(meetingID = recommendationId)
-            AttachmentList(
-                meetingId = recommendationId,
-                fetchMeetingAttachmentViewModel = fetchMeetingAttachmentViewModel
-            )
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        when (viewModel.selectedNavItem.value) {
+            RecommendationDetailsNavigationSections.Info -> {
+                recommendationViewModel.fetchRecommendationInfo(recommendationID = recommendationId)
+                RecommendationInfo(meetingId = recommendationId, recommendationViewModel = recommendationViewModel)
+            }
+            RecommendationDetailsNavigationSections.Progress -> {
+                var isLoading by remember { mutableStateOf(true) }
+                LaunchedEffect(recommendationId) {
+                    fetchAgendaViewModel.fetchMeetingAgendas(meetingID = recommendationId)
+                    isLoading = false
+                }
+                if (isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    AgendaList(meetingId = recommendationId, fetchAgendaViewModel = fetchAgendaViewModel)
+                }
+            }
+            RecommendationDetailsNavigationSections.Attends -> {
+                var isLoading by remember { mutableStateOf(true) }
+                LaunchedEffect(recommendationId) {
+                    fetchMeetingAttendsViewModel.fetchMeetingAttendees(meetingID = recommendationId)
+                    isLoading = false
+                }
+                if (isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    AttendsList(meetingId = recommendationId, fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel)
+                }
+            }
+            RecommendationDetailsNavigationSections.Attachments -> {
+                var isLoading by remember { mutableStateOf(true) }
+                LaunchedEffect(recommendationId) {
+                    fetchMeetingAttachmentViewModel.fetchMeetingAttachments(meetingID = recommendationId)
+                    isLoading = false
+                }
+                if (isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    AttachmentList(
+                        meetingId = recommendationId,
+                        fetchMeetingAttachmentViewModel = fetchMeetingAttachmentViewModel
+                    )
+                }
+            }
         }
     }
 }

@@ -6,7 +6,9 @@ import com.example.absher.services.data.models.meetings.MeetingAttachmentRespons
 import com.example.absher.services.data.models.meetings.MeetingInfoResponse
 import com.example.absher.services.domain.repository.MeetingRepository
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class GetMeetingsUseCase @Inject constructor(
     private val meetingRepository: MeetingRepository
 ) {

@@ -70,7 +70,7 @@ class RecommendationApiAdapter @Inject constructor(
         token: String = "Bearer ${HttpExceptionHandler.tokenCore}"
     ): FetchRecommendationInfoResponse? {
         return try {
-            val result = apiService.getRecommendationInfo(recommendationId, token)
+            val result = apiService.getRecommendationInfo(5059, token)
             println("[INFO] Fetch recommendation info successful: $result")
             result
         } catch (e: HttpException) {

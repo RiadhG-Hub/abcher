@@ -30,5 +30,7 @@
     <string name="attends">الحضور</string>
     <string name="attachments">المرفقات</string>
     <string name="title_activity_recommendations_details">RecommendationsDetails</string>
+    <string name="loading">جارٍ التحميل</string>
+    <string name="retry">إعادة المحاولة</string>
 
 </resources>

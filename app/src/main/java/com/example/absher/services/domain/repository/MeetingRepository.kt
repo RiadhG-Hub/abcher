@@ -6,7 +6,9 @@ import com.example.absher.services.data.models.meetings.MeetingAgendaResponse
 import com.example.absher.services.data.models.meetings.MeetingAttachmentResponse
 import com.example.absher.services.data.models.meetings.MeetingInfoResponse
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class MeetingRepository @Inject constructor(
     private val remoteDataSource: RemoteMeetingDataSource
 ) {
