@@ -52,21 +52,23 @@ import com.example.absher.services.viewmodel.recommendations.FetchRecommendation
 import com.example.absher.services.viewmodel.recommendations.FetchRecommendationStateSuccess
 import com.example.absher.services.viewmodel.recommendations.RecommendationViewModel
 import com.example.absher.ui.theme.AbsherTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 
+@AndroidEntryPoint
 class RecommendationsPage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
         setContent {
-
             AbsherTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                     Scaffold(
-                        containerColor = MaterialTheme.colorScheme.surface, topBar = {
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        topBar = {
                             AbcherTopAppBar(
                                 title = stringResource(id = R.string.files),
                                 navigationIcon = {
@@ -78,11 +80,12 @@ class RecommendationsPage : ComponentActivity() {
                                         modifier = Modifier.padding(end = 16.dp)
                                     )
                                 })
-                        }, modifier = Modifier.fillMaxSize()
+                        },
+                        modifier = Modifier.fillMaxSize()
                     ) { innerPadding ->
                         RecommendationListScreen(
                             modifier = Modifier.padding(innerPadding),
-                            viewModel = hiltViewModel(),
+                            viewModel = hiltViewModel()
                         )
                     }
                 }

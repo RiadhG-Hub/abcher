@@ -10,8 +10,8 @@ import com.example.absher.services.data.models.recommendations.FetchRecommendati
 import com.example.absher.services.data.models.recommendations.Recommendation
 import com.example.absher.services.data.models.recommendations.RecommendationResponse
 import com.example.absher.services.domain.usecases.GetRecommendationUseCase
-import kotlinx.coroutines.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,7 +37,7 @@ class RecommendationViewModel @Inject constructor(
         fetchRecommendations()
     }
 
-    fun fetchRecommendations(requestBody : MeetingRequestBody = MeetingRequestBody(
+    fun fetchRecommendations(requestBody: MeetingRequestBody = MeetingRequestBody(
         meetingReferenceNo = null,
         fromDate = null,
         toDate = null,
@@ -50,23 +50,19 @@ class RecommendationViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val requestResponse : RecommendationResponse? = getRecommendationUseCase.fetchRecommendations(
+                val requestResponse: RecommendationResponse? = getRecommendationUseCase.fetchRecommendations(
                     from = currentPage,
                     to = pageSize,
-
                     requestBody = requestBody
-
                 )
 
-                if(requestResponse == null){
+                if (requestResponse == null) {
                     _fetchRecommendationState.postValue(
-                        FetchRecommendationStateError( "Null Response")
+                        FetchRecommendationStateError("Null Response")
                     )
-
-                }else {
-                    val  response = requestResponse.data
-
-                    val newRecommendations   = response?.data ?: emptyList<Recommendation>()
+                } else {
+                    val response = requestResponse.data
+                    val newRecommendations = response?.data ?: emptyList<Recommendation>()
 
                     allRecommendations.addAll(newRecommendations)
                     hasMoreData = newRecommendations.size == pageSize
@@ -76,8 +72,6 @@ class RecommendationViewModel @Inject constructor(
                         FetchRecommendationStateSuccess(allRecommendations.toList())
                     )
                 }
-
-
             } catch (e: Exception) {
                 _fetchRecommendationState.postValue(
                     FetchRecommendationStateError(e.message ?: "Unknown error")
@@ -89,7 +83,7 @@ class RecommendationViewModel @Inject constructor(
     }
 
 
-    fun fetchRecommendationInfo(recommendationID : Int ) {
+    fun fetchRecommendationInfo(recommendationID: Int) {
 
 
 
@@ -97,15 +91,15 @@ class RecommendationViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val requestResponse : FetchRecommendationInfoResponse? = getRecommendationUseCase.fetchRecommendationInfo(recommendationID )
+                val requestResponse: FetchRecommendationInfoResponse? = getRecommendationUseCase.fetchRecommendationInfo(recommendationID)
 
-                if(requestResponse == null){
+                if (requestResponse == null) {
                     _fetchRecommendationInfoState.postValue(
-                        FetchRecommendationInfoStateError( "Null Response")
+                        FetchRecommendationInfoStateError("Null Response")
                     )
 
                 }else {
-                    val  response : FetchRecommendationInfoData = requestResponse.data
+                    val  response: FetchRecommendationInfoData = requestResponse.data
 
 
 

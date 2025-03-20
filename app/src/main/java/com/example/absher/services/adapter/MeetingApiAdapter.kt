@@ -24,10 +24,16 @@ class MeetingApiAdapter @Inject constructor(
     private val httpExceptionHandler: HttpExceptionHandler,
     private val okHttpClient: OkHttpClient
 ) {
+
+    val okHttpClientForTest = OkHttpClient.Builder()
+        .build()
     private val retrofit = Retrofit.Builder()
+
         .baseUrl("https://mmsksa.d-intalio.com/MMS_Api/")
-        .client(okHttpClient)
+        .client(okHttpClientForTest)
         .addConverterFactory(GsonConverterFactory.create())
+
+        
         .build()
 
     private val apiService = retrofit.create(MeetingApiService::class.java)
@@ -37,15 +43,17 @@ class MeetingApiAdapter @Inject constructor(
         to: Int = 10, token: String = "Bearer ${HttpExceptionHandler.tokenCore}"
     ): MeetingResponse? {
         val requestBody = MeetingRequestBody()
+        assert(token != "Bearer null") { "Token is null" }
 
         return try {
-            val result = apiService.getMeetings(from.toString(), to.toString(), token, requestBody)
-            println("[INFO] Fetch meetings successful: $result")
-            println("[INFO] Message: ${result.message}")
+            val result = apiService.getMeetings(from = from, to = to, token = token, requestBody =  requestBody)
+
             result
         } catch (e: HttpException) {
             if(e.code()==401){
                 httpExceptionHandler.handleHttpException(e, "fetchRecommendations") { newToken ->
+
+
                     fetchMeetings(from, to, newToken)
                 }
 
@@ -164,8 +172,8 @@ interface MeetingApiService {
     @POST("api/meetings/search/{from}/{to}")
     suspend fun getMeetings(
         @Header("Authorization") token: String,
-        @Path("from") from: String,
-        @Path("to") to: String,
+        @Path("from") from: Int,
+        @Path("to") to: Int,
         @Body requestBody: MeetingRequestBody
     ): MeetingResponse
 

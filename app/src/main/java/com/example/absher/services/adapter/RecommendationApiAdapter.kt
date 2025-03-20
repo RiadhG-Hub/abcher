@@ -21,9 +21,12 @@ class RecommendationApiAdapter @Inject constructor(
     private val httpExceptionHandler: HttpExceptionHandler,
     private val okHttpClient: OkHttpClient
 ) {
+
+    val okHttpClientForTest = OkHttpClient.Builder()
+        .build()
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://mmsksa.d-intalio.com/MMS_Api/api/")
-        .client(okHttpClient)
+        .client(okHttpClientForTest)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

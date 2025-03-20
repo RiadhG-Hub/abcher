@@ -5,7 +5,7 @@ data class MeetingRequestBody(
     val committeeId: Any? = null,
     val toDate: Any? = null,
     val fromDate: Any? = null,
-    val onlyMyMeetings: Boolean = true,
+    val onlyMyMeetings: Boolean = false,
     val title: Any? = null,
     val location: Any? = null,
     val meetingReferenceNo: Any? = null

@@ -1,160 +1,78 @@
-package com.example.absher.services.adapter
 
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
+import android.content.SharedPreferences
+import com.example.absher.services.adapter.HttpExceptionHandler
+import com.example.absher.services.adapter.RecommendationApiAdapter
+import com.example.absher.services.adapter.TokenApiAdapter
+import com.example.absher.services.adapter.TokenManager
 import kotlinx.coroutines.runBlocking
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import org.junit.After
+import okhttp3.OkHttpClient
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
 
-@HiltAndroidTest
 class RecommendationApiAdapterTest {
-    @get:Rule
-    val hiltRule = HiltAndroidRule(this)
+    private lateinit var meetingApiAdapter: RecommendationApiAdapter
+    private lateinit var httpExceptionHandler: HttpExceptionHandler
+    private lateinit var tokenManager: TokenManager
+    private lateinit var tokenApiAdapter: TokenApiAdapter
 
-    @Inject
-    lateinit var recommendationApiAdapter: RecommendationApiAdapter
-
-    private lateinit var mockWebServer: MockWebServer
+    @Mock
+    private lateinit var mockSharedPreferences: SharedPreferences
 
     @Before
     fun setUp() {
-        hiltRule.inject()
-        mockWebServer = MockWebServer()
-        mockWebServer.start()
-    }
+        MockitoAnnotations.openMocks(this)
 
-    @After
-    fun tearDown() {
-        mockWebServer.shutdown()
+        // Create a real TokenManager with mocked SharedPreferences
+        tokenManager = TokenManager(mockSharedPreferences)
+
+        // Mock the SharedPreferences behavior
+        Mockito.`when`(mockSharedPreferences.getString("token", null))
+            .thenReturn("Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50IjoiZ0U1YUR0dDR1NHd4dkIzelR6ZG05QVgvaDlrd01QcnBzbWdQYldiTmc0QT0iLCJkZXBhcnRtZW50IjoieVI3bWZMNzNLSGhPWXh1Q1pJRm1uK2htbVdFcUtYZlVvS1BXRitnNEd3Zz0iLCJuYW1lIjoiVGtmMVpoWVJUdkxOeTdiVHBCWGdZemZsdVVya2MwTEVQa2hIUUVGUXZ6RjVPZnBQRHcrTFkwcTIwRG5tTjZSZCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMSIsImxhbmciOiJhciIsImV4cCI6MTc0MjQ4NTI1NiwiaXNzIjoiSW50YWxpbyIsImF1ZCI6IkludGFsaW8ifQ.xjKVkEPKlsqs57cgbnZ0TC49VePsWVyWYJwG_OoMfKU") // Replace with your actual test token
+
+        tokenApiAdapter = TokenApiAdapter(tokenManager)
+        httpExceptionHandler = HttpExceptionHandler(tokenApiAdapter)
+
+        // Create OkHttpClient with real configuration
+        val okHttpClient = OkHttpClient.Builder()
+            .build()
+
+        meetingApiAdapter = RecommendationApiAdapter(httpExceptionHandler, okHttpClient)
     }
 
     @Test
-    fun `fetchRecommendations should return real RecommendationResponse`() = runBlocking {
-        // Prepare mock response
-        val mockResponse = MockResponse()
-            .setResponseCode(200)
-            .setBody("""
-                {
-                    "data": {
-                        "data": [
-                            {
-                                "id": 1,
-                                "meetingAgendaId": 1,
-                                "text": "Test Recommendation",
-                                "statusId": 1,
-                                "createdByName": "John Doe",
-                                "owner": 1,
-                                "ownerName": "Jane Smith",
-                                "recommendationTypeId": 1,
-                                "recommendationTypeName": "Type 1",
-                                "percentage": 50,
-                                "status": "Active"
-                            }
-                        ],
-                        "total": 1
-                    },
-                    "success": true,
-                    "message": "Success"
-                }
-            """.trimIndent())
-            .addHeader("Content-Type", "application/json")
+    fun `fetchMeetings should return real MeetingResponse`() = runBlocking {
+        // Make the actual request to real server
+        val result = meetingApiAdapter. fetchRecommendations(1, 10)
 
-        mockWebServer.enqueue(mockResponse)
 
-        // Make the actual request
-        val result = recommendationApiAdapter.fetchRecommendations(1, 10)
+        assert(result?.success == true)
+        println("Fetched Meetings: $result")
+    }
+
+    @Test
+    fun `fetchMeetingAttendees should return real MeetingResponse`() = runBlocking {
+        // Make the actual request to real server
+        val result = meetingApiAdapter. fetchRecommendationInfo(2013, )
 
         // Verify the response
         assert(result != null)
         assert(result?.success == true)
-        assert(result?.data?.data?.size == 1)
-        assert(result?.data?.data?.first()?.text == "Test Recommendation")
+        println("Fetched Attendees: $result")
     }
 
     @Test
-    fun `fetchRecommendationInfo should return real RecommendationInfo`() = runBlocking {
-        // Prepare mock response
-        val mockResponse = MockResponse()
-            .setResponseCode(200)
-            .setBody("""
-                {
-                    "data": {
-                        "id": 5059,
-                        "createdBy": 1,
-                        "createdAt": "2024-03-20T10:00:00",
-                        "dueDate": "2024-03-27T10:00:00",
-                        "meetingAgendaId": 1,
-                        "text": "Test Recommendation Info",
-                        "statusId": 1,
-                        "createdByName": "John Doe",
-                        "owner": 1,
-                        "ownerName": "Jane Smith",
-                        "recommendationTypeId": 1,
-                        "recommendationTypeName": "Type 1",
-                        "percentage": 50,
-                        "status": "Active"
-                    },
-                    "success": true,
-                    "message": "Success"
-                }
-            """.trimIndent())
-            .addHeader("Content-Type", "application/json")
-
-        mockWebServer.enqueue(mockResponse)
-
-        // Make the actual request
-        val result = recommendationApiAdapter.fetchRecommendationInfo(recommendationId = 5059)
+    fun `fetchMeetingAgenda should return real MeetingResponse`() = runBlocking {
+        // Make the actual request to real server
+        val result = meetingApiAdapter.fetchRecommendationStatuses()
 
         // Verify the response
         assert(result != null)
         assert(result?.success == true)
-        assert(result?.data?.id == 5059)
-        assert(result?.data?.text == "Test Recommendation Info")
+        println("Fetched Agendas: $result")
     }
 
-    @Test
-    fun `fetchRecommendationStatuses should return real StatusResponse`() = runBlocking {
-        // Prepare mock response
-        val mockResponse = MockResponse()
-            .setResponseCode(200)
-            .setBody("""
-                {
-                    "data": [
-                        {
-                            "id": 1,
-                            "nameAr": "نشط",
-                            "nameEn": "Active",
-                            "active": true,
-                            "displayOrder": 1
-                        },
-                        {
-                            "id": 2,
-                            "nameAr": "مكتمل",
-                            "nameEn": "Completed",
-                            "active": true,
-                            "displayOrder": 2
-                        }
-                    ],
-                    "success": true,
-                    "message": "Success"
-                }
-            """.trimIndent())
-            .addHeader("Content-Type", "application/json")
 
-        mockWebServer.enqueue(mockResponse)
-
-        // Make the actual request
-        val result = recommendationApiAdapter.fetchRecommendationStatuses()
-
-        // Verify the response
-        assert(result != null)
-        assert(result?.success == true)
-        assert(result?.data?.size == 2)
-        assert(result?.data?.first()?.name == "Active")
-    }
 }

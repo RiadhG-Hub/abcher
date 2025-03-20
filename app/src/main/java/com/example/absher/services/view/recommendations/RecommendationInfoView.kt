@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.absher.R
 import com.example.absher.services.data.models.recommendations.FetchRecommendationInfoData
 import com.example.absher.services.data.models.recommendations.FetchRecommendationInfoResponse
@@ -51,12 +51,11 @@ import com.example.absher.ui.theme.CustomTextStyles
 import com.example.absher.ui.theme.Gray
 import com.example.absher.ui.theme.SubtitleColor
 
-
 @Composable
 fun RecommendationInfo(
-    viewModel: MeetingDetailsNavigationViewModel = viewModel(),
+    viewModel: MeetingDetailsNavigationViewModel = hiltViewModel(),
     meetingId: Int = 0,
-    recommendationViewModel: RecommendationViewModel = viewModel()
+    recommendationViewModel: RecommendationViewModel = hiltViewModel()
 ) {
     val fetchMeetingInfo by recommendationViewModel.fetchRecommendationInfoState.observeAsState(
         FetchRecommendationInfoStateInit()
@@ -68,13 +67,10 @@ fun RecommendationInfo(
         is FetchRecommendationInfoStateLoading -> CircularProgressIndicator()
         is FetchRecommendationInfoStateSuccess -> {
             val recommendation = (fetchMeetingInfo as FetchRecommendationInfoStateSuccess).recommendation
-
-                RecommendationInfoCard(recommendation)
-
+            RecommendationInfoCard(recommendation)
         }
     }
 }
-
 
 @Composable
 private fun RecommendationInfoCard(recommendation: FetchRecommendationInfoData, modifier: Modifier = Modifier) {
@@ -112,7 +108,7 @@ private fun RecommendationInfoCard(recommendation: FetchRecommendationInfoData, 
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "#${recommendation.id ?: "N/A"}", style = TextStyle(
+                    text = "#${recommendation.id}", style = TextStyle(
                         fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFF212121)
                     )
                 )
