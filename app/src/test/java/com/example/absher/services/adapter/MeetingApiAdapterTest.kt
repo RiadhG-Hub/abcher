@@ -1,50 +1,84 @@
 package com.example.absher.services.adapter
 
-import com.example.absher.services.adapter.HttpExceptionHandler
-import com.example.absher.services.adapter.TokenApiAdapter
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
+import android.content.SharedPreferences
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
 
-@HiltAndroidTest
 class MeetingApiAdapterTest {
-    @get:Rule
-    val hiltRule = HiltAndroidRule(this)
+    private lateinit var meetingApiAdapter: MeetingApiAdapter
+    private lateinit var httpExceptionHandler: HttpExceptionHandler
+    private lateinit var tokenManager: TokenManager
+    private lateinit var tokenApiAdapter: TokenApiAdapter
 
-    @Inject
-    lateinit var meetingApiAdapter: MeetingApiAdapter
+    @Mock
+    private lateinit var mockSharedPreferences: SharedPreferences
 
     @Before
     fun setUp() {
-        hiltRule.inject()
+        MockitoAnnotations.openMocks(this)
+        
+        // Create a real TokenManager with mocked SharedPreferences
+        tokenManager = TokenManager(mockSharedPreferences)
+        
+        // Mock the SharedPreferences behavior
+        Mockito.`when`(mockSharedPreferences.getString("token", null))
+            .thenReturn("Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50IjoiZ0U1YUR0dDR1NHd4dkIzelR6ZG05QVgvaDlrd01QcnBzbWdQYldiTmc0QT0iLCJkZXBhcnRtZW50IjoieVI3bWZMNzNLSGhPWXh1Q1pJRm1uK2htbVdFcUtYZlVvS1BXRitnNEd3Zz0iLCJuYW1lIjoiVGtmMVpoWVJUdkxOeTdiVHBCWGdZemZsdVVya2MwTEVQa2hIUUVGUXZ6RjVPZnBQRHcrTFkwcTIwRG5tTjZSZCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMSIsImxhbmciOiJhciIsImV4cCI6MTc0MjQ4NTI1NiwiaXNzIjoiSW50YWxpbyIsImF1ZCI6IkludGFsaW8ifQ.xjKVkEPKlsqs57cgbnZ0TC49VePsWVyWYJwG_OoMfKU") // Replace with your actual test token
+        
+        tokenApiAdapter = TokenApiAdapter(tokenManager)
+        httpExceptionHandler = HttpExceptionHandler(tokenApiAdapter)
+        
+        // Create OkHttpClient with real configuration
+        val okHttpClient = OkHttpClient.Builder()
+            .build()
+
+        meetingApiAdapter = MeetingApiAdapter(httpExceptionHandler, okHttpClient)
     }
 
     @Test
     fun `fetchMeetings should return real MeetingResponse`() = runBlocking {
+        // Make the actual request to real server
         val result = meetingApiAdapter.fetchMeetings(1, 10)
+
+
+        assert(result?.success == true)
         println("Fetched Meetings: $result")
     }
 
     @Test
     fun `fetchMeetingAttendees should return real MeetingResponse`() = runBlocking {
+        // Make the actual request to real server
         val result = meetingApiAdapter.fetchMeetingAttendees(meetingId = 2103)
-        println("Fetch meeting attends $result")
+
+        // Verify the response
+        assert(result != null)
+        assert(result?.success == true)
+        println("Fetched Attendees: $result")
     }
 
     @Test
     fun `fetchMeetingAgenda should return real MeetingResponse`() = runBlocking {
+        // Make the actual request to real server
         val result = meetingApiAdapter.fetchMeetingAgendas(meetingId = 2103)
-        println("Fetch meeting attends $result")
+
+        // Verify the response
+        assert(result != null)
+        assert(result?.success == true)
+        println("Fetched Agendas: $result")
     }
 
     @Test
     fun `fetchMeetingInfo should return real MeetingInfo`() = runBlocking {
+        // Make the actual request to real server
         val result = meetingApiAdapter.fetchMeetingInfo(meetingId = 2103)
-        println("Fetch meeting attends $result")
+
+        // Verify the response
+        assert(result != null)
+        assert(result?.success == true)
+        println("Fetched Meeting Info: $result")
     }
 }

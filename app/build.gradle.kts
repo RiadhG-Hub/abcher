@@ -46,7 +46,6 @@ android {
 
 dependencies {
     // Core Libraries
-
     implementation(libs.androidx.activity.compose)
 
     // Compose Libraries
@@ -58,6 +57,7 @@ dependencies {
     implementation(libs.androidx.ui.test.junit4)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.compose.runtime.livedata)
+    
     // Lifecycle Libraries
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel)
@@ -68,35 +68,52 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp.logging.interceptor)
     implementation("androidx.compose.material3:material3:1.2.0")
+    
     // Navigation
     implementation(libs.androidx.navigation.compose)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-
-    // Testing Libraries
-
-
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-
-    implementation(libs.kotlinx.coroutines.android.v139)
+    
+    // Hilt
     implementation(libs.hilt.android.v2511)
     kapt(libs.hilt.android.compiler)
-    implementation(libs.androidx.datastore.preferences.v100)
-
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose.v100)
     implementation(libs.hilt.android.v250)
+    
+    // DataStore
+    implementation(libs.androidx.datastore.preferences.v100)
+    
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android.v139)
 
+    // Testing Libraries
     testImplementation(libs.mockito.kotlin)
-
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin.v410)
     testImplementation(libs.kotlinx.coroutines.test)
+    
+    // Hilt Testing
+    testImplementation("com.google.dagger:hilt-android-testing:2.48")
+    kaptTest("com.google.dagger:hilt-android-compiler:2.48")
+    
+    // MockWebServer
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+    
+    // JUnit
+    testImplementation("junit:junit:4.13.2")
+    
+    // AndroidX Test
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.48")
 
-    kotlin("kapt")
-
+    // Debug
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
+
 kapt {
     correctErrorTypes = true
 }
