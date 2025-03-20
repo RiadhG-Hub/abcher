@@ -26,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,15 +37,7 @@ import com.example.absher.services.data.models.meetings.Meeting
 import com.example.absher.services.helper.formatDateToArabic
 import com.example.absher.services.helper.formatTimeToArabic
 import com.example.absher.ui.theme.AbsherTheme
-import com.example.absher.ui.theme.BackgroundGray
-
 import com.example.absher.ui.theme.GreenPrimary
-
-import com.example.absher.ui.theme.MediumGray
-import com.example.absher.ui.theme.StatusDefault
-import com.example.absher.ui.theme.StatusGreen
-import com.example.absher.ui.theme.StatusRed
-import com.example.absher.ui.theme.StatusYellow
 import com.example.absher.ui.theme.statusDefaultColor
 import com.example.absher.ui.theme.statusGreenColor
 import com.example.absher.ui.theme.statusRedColor
@@ -106,7 +97,7 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
             ) {
                 Text(
                     text = " ${meeting.id}#",
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.displayMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Box(
@@ -121,7 +112,7 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                 ) {
                     Text(
                         text = statusText,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = MaterialTheme.typography.labelLarge,
                         color = statusColor
                     )
                 }
@@ -148,7 +139,7 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                 ) {
                     Text(
                         text = stringResource(R.string.infonumber, meeting.referenceNumber!!),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -157,7 +148,7 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = formatDateToArabic(meeting.date ?: ""),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -177,7 +168,7 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
             ) {
                 Text(
                     text = meeting.notes ?: "",
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.fillMaxWidth()
@@ -196,9 +187,18 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                     Text(
                         text = stringResource(
                             R.string.startmeeting,
-                            formatTimeToArabic(meeting.startTime!!)
-                        ),
-                        style = MaterialTheme.typography.bodyMedium,
+                           )
+                        ,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Text(
+                        modifier = Modifier.padding(start = 4.dp),
+                        text =
+                            formatTimeToArabic(meeting.startTime!!),
+
+                        style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -215,7 +215,15 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                             R.string.meetingend,
                             formatTimeToArabic(meeting.endTime!!)
                         ),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        modifier = Modifier.padding(start = 4.dp),
+                        text =
+                            formatTimeToArabic(meeting.endTime),
+
+                        style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -230,8 +238,8 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
 
             Text(
                 text = stringResource(R.string.moredetails),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.labelMedium.copy(MaterialTheme.colorScheme.primary),
+
                 textAlign = TextAlign.End,
                 modifier = Modifier
                     .fillMaxWidth()

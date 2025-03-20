@@ -18,10 +18,10 @@
     <string name="title_activity_meeting" translatable="false">MeetingActivity</string>
     <string name="title_activity_meeting_list_page" translatable="false">MeetingListPage</string>
     <string name="meeting">الإجتماع</string>
-    <string name="meetingend">" نهاية الإجتماع   %1$s"</string>
+    <string name="meetingend">" نهاية الإجتماع"</string>
     <string name="moredetails">المزيد من التفاصيل</string>
     <string name="infonumber">الرقم التعريفي %1$s</string>
-    <string name="startmeeting">" بداية الإجتماع   %1$s"</string>
+    <string name="startmeeting">" بداية الإجتماع"</string>
     <string name="title_activity_meetings_attends_card_view">MeetingsAttendsCardView</string>
     <string name="meetings">Meetings</string>
     <string name="title_activity_recommendations_page">RecommendationsPage</string>
