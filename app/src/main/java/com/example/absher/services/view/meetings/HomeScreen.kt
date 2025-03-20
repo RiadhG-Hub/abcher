@@ -55,10 +55,8 @@ import com.example.absher.services.view.meetings.pages.MeetingListPage
 import com.example.absher.services.view.recommendations.pages.RecommendationsPage
 import com.example.absher.services.viewmodel.meetings.HomeViewModel
 import com.example.absher.ui.theme.AbsherTheme
-
 import com.example.absher.ui.theme.GreenPrimary
 import com.example.absher.ui.theme.SubtitleColor
-import com.example.absher.ui.theme.TaskColor
 import com.example.absher.ui.theme.White
 
 @Composable
@@ -185,7 +183,7 @@ fun CardGrid() {
             },
             subtitle = stringResource(id = R.string.tasks_desc),
             icon = R.drawable.task,
-            titleColor = TaskColor,
+            titleColor = Color(color = 0XFFC3A355),
             backgroundIconColor = Color(0xFFFCFBF8),
         )
 
@@ -238,7 +236,7 @@ fun CardGrid() {
             },
             subtitle = stringResource(id = R.string.notifications_desc),
             icon = R.drawable.online_prediction,
-            titleColor = TaskColor,
+            titleColor = Color(color = 0XFFC3A355),
             backgroundIconColor = Color(0xFFFCFBF8),
         )
 
@@ -283,11 +281,11 @@ fun CardElement(
             )
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMedium.copy(color = Color.White)
+                style = MaterialTheme.typography.titleMedium.copy(color = titleColor)
             )
             Text(
                 text = subtitle,
-                style = MaterialTheme.typography.bodyLarge.copy(color = titleColor)
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     }
@@ -307,8 +305,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
+
 
             )
         )
@@ -320,8 +317,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
+
             )
         )
         NavigationBarItem(
@@ -332,8 +328,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
+
             )
         )
         NavigationBarItem(
@@ -344,8 +339,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
+
             )
         )
         NavigationBarItem(
@@ -356,8 +350,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
+
                 indicatorColor = Color.Transparent
             )
         )

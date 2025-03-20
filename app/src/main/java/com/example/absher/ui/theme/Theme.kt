@@ -151,7 +151,7 @@ val Typography = androidx.compose.material3.Typography(
     displayMedium = TextStyle(
         fontSize = 14.sp,
         lineHeight = 24.sp,
-//fontFamily = FontFamily(Font(R.font.almarai)),
+
         fontWeight = FontWeight(700),
         color = Color(0xFFFFFFFF),
         textAlign = TextAlign.Right,
