@@ -46,7 +46,7 @@ object CustomTextStyles {
         lineHeight = 20.sp,
 
         fontWeight = FontWeight(400),
-        color = Color(0xFF353334),
+
 
         textAlign = TextAlign.Right,
     )

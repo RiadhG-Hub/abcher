@@ -285,7 +285,7 @@ fun CardElement(
             )
             Text(
                 text = subtitle,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.displaySmall.copy(color = Color(0XFF353334))
             )
         }
     }
@@ -299,7 +299,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
     ) {
         NavigationBarItem(
             icon = { SvgIcon(drawable = R.drawable.other_houses) },
-            label = { Text("الرئيسية", style = MaterialTheme.typography.bodyMedium) },
+            label = { Text("الرئيسية", style = MaterialTheme.typography.bodySmall) },
             selected = selectedNavItem == "home",
             onClick = { onNavItemSelected("home") },
             colors = NavigationBarItemDefaults.colors(
@@ -311,7 +311,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
         )
         NavigationBarItem(
             icon = { SvgIcon(drawable = R.drawable.absher) },
-            label = { Text("مجتمع الوزارة", style = MaterialTheme.typography.bodyMedium) },
+            label = { Text("مجتمع الوزارة", style = MaterialTheme.typography.bodySmall) },
             selected = selectedNavItem == "chat",
             onClick = { onNavItemSelected("chat") },
             colors = NavigationBarItemDefaults.colors(
@@ -322,7 +322,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
         )
         NavigationBarItem(
             icon = { SvgIcon(drawable = R.drawable.apps) },
-            label = { Text("الخدمات", style = MaterialTheme.typography.bodyMedium) },
+            label = { Text("الخدمات", style = MaterialTheme.typography.bodySmall) },
             selected = selectedNavItem == "more",
             onClick = { onNavItemSelected("more") },
             colors = NavigationBarItemDefaults.colors(
@@ -333,7 +333,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
         )
         NavigationBarItem(
             icon = { SvgIcon(drawable = R.drawable.textsms) },
-            label = { Text("المحادثات", style = MaterialTheme.typography.bodyMedium) },
+            label = { Text("المحادثات", style = MaterialTheme.typography.bodySmall) },
             selected = selectedNavItem == "settings",
             onClick = { onNavItemSelected("settings") },
             colors = NavigationBarItemDefaults.colors(
@@ -344,7 +344,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
         )
         NavigationBarItem(
             icon = { SvgIcon(drawable = R.drawable.wallet) },
-            label = { Text("وثائقى", style = MaterialTheme.typography.bodyMedium) },
+            label = { Text("وثائقى", style = MaterialTheme.typography.bodySmall) },
             selected = selectedNavItem == "profile",
             onClick = { onNavItemSelected("profile") },
             colors = NavigationBarItemDefaults.colors(
