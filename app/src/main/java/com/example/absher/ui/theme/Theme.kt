@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 
@@ -130,6 +131,14 @@ val Typography = androidx.compose.material3.Typography(
         fontSize = 11.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
+    ),
+    displayMedium = TextStyle(
+        fontSize = 14.sp,
+        lineHeight = 24.sp,
+//fontFamily = FontFamily(Font(R.font.almarai)),
+        fontWeight = FontWeight(700),
+        color = Color(0xFFFFFFFF),
+        textAlign = TextAlign.Right,
     )
 )
 
@@ -145,6 +154,7 @@ fun AbsherTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
+
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }

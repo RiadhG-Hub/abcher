@@ -44,7 +44,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -56,7 +55,7 @@ import com.example.absher.services.view.meetings.pages.MeetingListPage
 import com.example.absher.services.view.recommendations.pages.RecommendationsPage
 import com.example.absher.services.viewmodel.meetings.HomeViewModel
 import com.example.absher.ui.theme.AbsherTheme
-import com.example.absher.ui.theme.CustomTextStyles
+
 import com.example.absher.ui.theme.GreenPrimary
 import com.example.absher.ui.theme.SubtitleColor
 import com.example.absher.ui.theme.TaskColor
@@ -144,7 +143,7 @@ fun AbcherTopAppBar(
         TopAppBar(
             title = {
                 Text(
-                    text = title, style = CustomTextStyles.BaseBold
+                    text = title, style = MaterialTheme.typography.displayMedium
                 )
             },
             actions = actions,
@@ -284,16 +283,11 @@ fun CardElement(
             )
             Text(
                 text = title,
-                textAlign = TextAlign.Start,
-
-                modifier = Modifier.padding(top = 8.dp),
-                style = CustomTextStyles.SmallBold.copy(titleColor)
+                style = MaterialTheme.typography.titleMedium.copy(color = Color.White)
             )
             Text(
                 text = subtitle,
-                textAlign = TextAlign.Start,
-                style = CustomTextStyles.SmallRegular12.copy(color = SubtitleColor)
-
+                style = MaterialTheme.typography.bodyLarge.copy(color = titleColor)
             )
         }
     }
@@ -307,7 +301,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
     ) {
         NavigationBarItem(
             icon = { SvgIcon(drawable = R.drawable.other_houses) },
-            label = { Text("الرئيسية", style = CustomTextStyles.SmallRegular12) },
+            label = { Text("الرئيسية", style = MaterialTheme.typography.bodyMedium) },
             selected = selectedNavItem == "home",
             onClick = { onNavItemSelected("home") },
             colors = NavigationBarItemDefaults.colors(
@@ -320,7 +314,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
         )
         NavigationBarItem(
             icon = { SvgIcon(drawable = R.drawable.absher) },
-            label = { Text("مجتمع الوزارة", style = CustomTextStyles.SmallRegular12) },
+            label = { Text("مجتمع الوزارة", style = MaterialTheme.typography.bodyMedium) },
             selected = selectedNavItem == "chat",
             onClick = { onNavItemSelected("chat") },
             colors = NavigationBarItemDefaults.colors(
@@ -332,7 +326,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
         )
         NavigationBarItem(
             icon = { SvgIcon(drawable = R.drawable.apps) },
-            label = { Text("الخدمات", style = CustomTextStyles.SmallRegular12) },
+            label = { Text("الخدمات", style = MaterialTheme.typography.bodyMedium) },
             selected = selectedNavItem == "more",
             onClick = { onNavItemSelected("more") },
             colors = NavigationBarItemDefaults.colors(
@@ -344,7 +338,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
         )
         NavigationBarItem(
             icon = { SvgIcon(drawable = R.drawable.textsms) },
-            label = { Text("المحادثات", style = CustomTextStyles.SmallRegular12) },
+            label = { Text("المحادثات", style = MaterialTheme.typography.bodyMedium) },
             selected = selectedNavItem == "settings",
             onClick = { onNavItemSelected("settings") },
             colors = NavigationBarItemDefaults.colors(
@@ -356,7 +350,7 @@ fun BottomNavigationBar(selectedNavItem: String, onNavItemSelected: (String) -> 
         )
         NavigationBarItem(
             icon = { SvgIcon(drawable = R.drawable.wallet) },
-            label = { Text("وثائقى", style = CustomTextStyles.SmallRegular12) },
+            label = { Text("وثائقى", style = MaterialTheme.typography.bodyMedium) },
             selected = selectedNavItem == "profile",
             onClick = { onNavItemSelected("profile") },
             colors = NavigationBarItemDefaults.colors(

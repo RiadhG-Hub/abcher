@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -23,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import com.example.absher.R
 import com.example.absher.services.view.meetings.SvgIcon
 import com.example.absher.ui.theme.AbsherTheme
-import com.example.absher.ui.theme.CustomTextStyles
 import com.example.absher.ui.theme.GreenPrimary
 
 @Composable
@@ -70,8 +70,14 @@ fun CustomProgressBar(
                 modifier = modifier.padding(start = 16.dp, end = 16.dp).fillMaxWidth(),
                 horizontalArrangement =Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically,  ){
 
-                Text(text = "مستوى التقدم" , style = CustomTextStyles.XSmallBold.copy(Color.White))
-                Text(text = "$progress %" , style = CustomTextStyles.XSmallBold.copy(Color.White))
+                Text(
+                    text = "مستوى التقدم",
+                    style = MaterialTheme.typography.labelMedium.copy(color = Color.White)
+                )
+                Text(
+                    text = "$progress %",
+                    style = MaterialTheme.typography.labelMedium.copy(color = Color.White)
+                )
 
             }
         }

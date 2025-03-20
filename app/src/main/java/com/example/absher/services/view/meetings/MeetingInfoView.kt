@@ -16,6 +16,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -114,8 +115,10 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "#${meeting.data?.id ?: "N/A"}", style = TextStyle(
-                        fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFF212121)
+                    text = "#${meeting.data?.id ?: "N/A"}",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF212121)
                     )
                 )
 
@@ -128,14 +131,10 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                         .padding(horizontal = 8.dp, vertical = 0.dp)
                 ) {
                     Text(
-                        text = statusText, style = TextStyle(
-                            fontSize = 10.sp,
-                            lineHeight = 16.sp,
-
-                            fontWeight = FontWeight(700),
-
+                        text = statusText,
+                        style = MaterialTheme.typography.labelMedium.copy(
                             color = statusColor,
-                            // fontFamily = arabicFontFamily
+                            fontWeight = FontWeight.Bold
                         )
                     )
                 }
@@ -191,14 +190,14 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                     .padding(12.dp)
             ) {
                 Text(
-                    text = meeting.data?.title ?: "No title available", style = TextStyle(
-                        fontSize = 12.sp,
-                        lineHeight = 20.sp,
-                        fontWeight = FontWeight(700),
+                    text = meeting.data?.title ?: "No title available",
+                    style = MaterialTheme.typography.bodyLarge.copy(
                         color = Color(0xFF353334),
-
-                        textAlign = TextAlign.Right,
-                    ), textAlign = TextAlign.Start, modifier = Modifier.fillMaxWidth()
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Right
+                    ),
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
 
@@ -214,8 +213,12 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = stringResource(
-                            R.string.startmeeting, formatTimeToArabic(meeting.data?.startTime.toString())
-                        ), style = TextStyle(fontSize = 12.sp, color = Color(0xFF212121))
+                            R.string.startmeeting,
+                            formatTimeToArabic(meeting.data?.startTime ?: "")
+                        ),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = Color(0xFF212121)
+                        )
                     )
                 }
 
@@ -231,8 +234,12 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = stringResource(
-                            R.string.meetingend, formatTimeToArabic(meeting.data?.endTime.toString())
-                        ), style = TextStyle(fontSize = 12.sp, color = Color(0xFF212121))
+                            R.string.meetingend,
+                            formatTimeToArabic(meeting.data?.endTime ?: "")
+                        ),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = Color(0xFF212121)
+                        )
                     )
                 }
                 HorizontalDivider(
@@ -403,17 +410,19 @@ private fun MeetingDetailsCard(meeting: MeetingInfoResponse, modifier: Modifier 
                 )
                 Text(
                     text = "ملاحظات",
-
-                    // Small/Regular
-                    style = CustomTextStyles.SmallRegular12
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = Color(0xFF353334),
+                        textAlign = TextAlign.Right
+                    )
                 )
             }
 
             Text(
-                text = meeting.data?.notes.toString(),
-
-                // Small/Bold
-                style = CustomTextStyles.SmallBold.copy(color = SubtitleColor)
+                text = meeting.data?.notes ?: "",
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = SubtitleColor,
+                    fontWeight = FontWeight.Bold
+                )
             )
 
             Spacer(modifier = Modifier.height(12.dp))

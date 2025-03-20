@@ -34,4 +34,5 @@
     <string name="title_activity_recommendations_details">RecommendationsDetails</string>
     <string name="loading">جارٍ التحميل</string>
     <string name="retry">إعادة المحاولة</string>
+    <string name="no_attendees">لا يوجد حضور</string>
 </resources>

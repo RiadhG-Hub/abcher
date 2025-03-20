@@ -1,4 +1,3 @@
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -61,11 +60,8 @@ fun AbsherDatePicker(
         ){
         Row(modifier = Modifier.fillMaxWidth().padding(end = 8.dp, start = 8.dp, top = 8.dp, bottom = 8.dp),horizontalArrangement = Arrangement.SpaceBetween){
             Text(
-                text = if (selectedDate.isNotEmpty())
-                    selectedDate
-                else
-                    "لم يتم اختيار تاريخ"
-                , style = CustomTextStyles.SmallRegular12.copy(SubtitleColor)
+                text = selectedDate,
+                style = MaterialTheme.typography.bodyMedium.copy(color = SubtitleColor)
             )
             SvgIcon(R.drawable.date_range)
         }

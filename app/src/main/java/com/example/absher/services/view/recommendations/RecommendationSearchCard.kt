@@ -76,7 +76,10 @@ fun RecommendationsSearchCard(
                         .padding(end = 8.dp)) {
                         Text(
                             text = "البحث بإسم المهمة",
-                            style = CustomTextStyles.SmallBold.copy(color = SubtitleColor)
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                color = SubtitleColor,
+                                fontWeight = FontWeight.Bold
+                            )
                         )
 
                         Box(
@@ -104,7 +107,10 @@ fun RecommendationsSearchCard(
                         Text(
                             modifier = Modifier.padding(top = 4.dp),
                             text = "البحث بتاريخ البداية",
-                            style = CustomTextStyles.SmallBold.copy(color = SubtitleColor)
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                color = SubtitleColor,
+                                fontWeight = FontWeight.Bold
+                            )
                         )
 
                         AbsherDatePicker(
@@ -117,7 +123,10 @@ fun RecommendationsSearchCard(
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
                             text = "البحث برقم التعريف",
-                            style = CustomTextStyles.SmallBold.copy(color = SubtitleColor)
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                color = SubtitleColor,
+                                fontWeight = FontWeight.Bold
+                            )
                         )
 
                         Box(
@@ -145,7 +154,10 @@ fun RecommendationsSearchCard(
                         Text(
                             modifier = Modifier.padding(top = 4.dp),
                             text = "البحث بتاريخ النهاية",
-                            style = CustomTextStyles.SmallBold.copy(color = SubtitleColor)
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                color = SubtitleColor,
+                                fontWeight = FontWeight.Bold
+                            )
                         )
 
                         AbsherDatePicker(
@@ -179,7 +191,9 @@ fun RecommendationsSearchCard(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Text("بحث", style = CustomTextStyles.SmallBold)
+                        Text("بحث", style = MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.Bold
+                        ))
                     }
                 }
             }
