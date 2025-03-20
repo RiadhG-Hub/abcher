@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.absher.R
 import com.example.absher.services.data.models.meetings.MeetingAttendee
 import com.example.absher.services.data.models.meetings.MeetingInfoData
@@ -54,9 +54,9 @@ import com.example.absher.ui.theme.SubtitleColor
 
 @Composable
 fun MeetingInfo(
-    viewModel: MeetingDetailsNavigationViewModel = viewModel(),
+    viewModel: MeetingDetailsNavigationViewModel = hiltViewModel(),
     meetingId: Int = 0,
-    fetchMeetingInfoViewModel: FetchMeetingInfoViewModel = viewModel()
+    fetchMeetingInfoViewModel: FetchMeetingInfoViewModel = hiltViewModel()
 ) {
     val fetchMeetingInfo by fetchMeetingInfoViewModel.fetchMeetingState.observeAsState(
         FetchMeetingInfoStateInit()

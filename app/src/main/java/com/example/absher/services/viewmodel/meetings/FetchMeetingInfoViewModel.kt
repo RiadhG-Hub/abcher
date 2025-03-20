@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.absher.services.data.models.meetings.MeetingInfoResponse
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FetchMeetingInfoViewModel(
+@HiltViewModel
+class FetchMeetingInfoViewModel @Inject constructor(
     private val getMeetingsUseCase: GetMeetingsUseCase
 ) : ViewModel() {
     private val _fetchMeetingState = MutableLiveData<FetchMeetingInfoState>()

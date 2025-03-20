@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.absher.services.viewmodel.meetings.FetchAgendaViewModel
 import com.example.absher.services.viewmodel.meetings.FetchMeetingAgendaStateError
 import com.example.absher.services.viewmodel.meetings.FetchMeetingAgendaStateInit
@@ -35,9 +35,9 @@ import com.example.absher.ui.theme.BackgroundGray
 @Composable
 fun AgendaList(
     modifier: Modifier = Modifier,
-    viewModel: MeetingDetailsNavigationViewModel = viewModel(),
+    viewModel: MeetingDetailsNavigationViewModel = hiltViewModel(),
     meetingId: Int = 0,
-    fetchAgendaViewModel: FetchAgendaViewModel = viewModel()
+    fetchAgendaViewModel: FetchAgendaViewModel = hiltViewModel()
 ) {
     val fetchMeetingState by fetchAgendaViewModel.fetchMeetingState.observeAsState(
         FetchMeetingAgendaStateInit()

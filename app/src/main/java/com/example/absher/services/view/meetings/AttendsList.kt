@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.absher.services.viewmodel.meetings.FetchMeetingAttendStateError
 import com.example.absher.services.viewmodel.meetings.FetchMeetingAttendStateInit
 import com.example.absher.services.viewmodel.meetings.FetchMeetingAttendStateLoading
@@ -36,9 +36,9 @@ import com.example.absher.ui.theme.BackgroundGray
 @Composable
 fun AttendsList(
     modifier: Modifier = Modifier,
-    viewModel: MeetingDetailsNavigationViewModel = viewModel(),
+    viewModel: MeetingDetailsNavigationViewModel = hiltViewModel(),
     meetingId: Int = 0,
-    fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel()
+    fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = hiltViewModel()
 ) {
     val fetchMeetingState by fetchMeetingAttendsViewModel.fetchMeetingState.observeAsState(
         FetchMeetingAttendStateInit()

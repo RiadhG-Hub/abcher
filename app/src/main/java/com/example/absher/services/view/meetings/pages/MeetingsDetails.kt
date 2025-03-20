@@ -47,7 +47,9 @@ import com.example.absher.services.viewmodel.meetings.MeetingDetailsNavigationSe
 import com.example.absher.services.viewmodel.meetings.MeetingDetailsNavigationViewModel
 import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.ui.theme.BackgroundGray
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MeetingsDetails : ComponentActivity() {
 
 
@@ -75,12 +77,11 @@ class MeetingsDetails : ComponentActivity() {
 
     @Composable
     private fun DetailsWrapper(
-
         meetingTitle: String = "Meeting Details",
-        viewModel: MeetingDetailsNavigationViewModel = viewModel(),
-        fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
-        fetchAgendaViewModel: FetchAgendaViewModel = viewModel(),
-        fetchMeetingAttachmentViewModel: FetchMeetingAttachmentViewModel = viewModel(),
+        viewModel: MeetingDetailsNavigationViewModel = hiltViewModel(),
+        fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = hiltViewModel(),
+        fetchAgendaViewModel: FetchAgendaViewModel = hiltViewModel(),
+        fetchMeetingAttachmentViewModel: FetchMeetingAttachmentViewModel = hiltViewModel(),
         meetingID: Int
     ) {
         val selectedIndex = viewModel.selectedNavItem.value
@@ -124,7 +125,7 @@ class MeetingsDetails : ComponentActivity() {
 private fun NavigationTopAppBar(
     modifier: Modifier = Modifier,
     selectedIndex: MeetingDetailsNavigationSections,
-    viewModel: MeetingDetailsNavigationViewModel = viewModel()
+    viewModel: MeetingDetailsNavigationViewModel = hiltViewModel()
 ) {
     Column(modifier = Modifier.padding(top = 12.dp)) {
         Row(
@@ -137,46 +138,32 @@ private fun NavigationTopAppBar(
                 icon = R.drawable.meetingtabicon,
                 index = MeetingDetailsNavigationSections.Meetings,
                 selectedIndex = selectedIndex,
-
                 onClick = { newSelection ->
-
                     viewModel.selectNavItem(newSelection)
                 })
             NavigationItem(
-                title = stringResource(
-                    id = R.string.calendar
-                ),
+                title = stringResource(id = R.string.calendar),
                 icon = R.drawable.event_note,
                 index = MeetingDetailsNavigationSections.Calendar,
                 selectedIndex = selectedIndex,
-
                 onClick = { newSelection ->
                     viewModel.selectNavItem(newSelection)
-
                 })
             NavigationItem(
-                title = stringResource(
-                    id = R.string.attends
-                ),
+                title = stringResource(id = R.string.attends),
                 icon = R.drawable.meetingtabicon,
                 index = MeetingDetailsNavigationSections.Attends,
                 selectedIndex = selectedIndex,
-
                 onClick = { newSelection ->
-
                     viewModel.selectNavItem(newSelection)
                 })
             NavigationItem(
-                title = stringResource(
-                    id = R.string.attachments
-                ),
+                title = stringResource(id = R.string.attachments),
                 icon = R.drawable.file_copy,
                 index = MeetingDetailsNavigationSections.Attachments,
                 selectedIndex = selectedIndex,
-
                 onClick = { newSelection ->
                     viewModel.selectNavItem(newSelection)
-
                 })
         }
         HorizontalDivider()
@@ -223,11 +210,11 @@ fun NavigationItem(
 
 @Composable
 private fun Wrapper(
-    viewModel: MeetingDetailsNavigationViewModel = viewModel(),
-    fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = viewModel(),
-    fetchAgendaViewModel: FetchAgendaViewModel = viewModel(),
-    fetchMeetingInfoViewModel: FetchMeetingInfoViewModel = viewModel(),
-    fetchMeetingAttachmentViewModel: FetchMeetingAttachmentViewModel = viewModel(),
+    viewModel: MeetingDetailsNavigationViewModel = hiltViewModel(),
+    fetchMeetingAttendsViewModel: FetchMeetingAttendsViewModel = hiltViewModel(),
+    fetchAgendaViewModel: FetchAgendaViewModel = hiltViewModel(),
+    fetchMeetingInfoViewModel: FetchMeetingInfoViewModel = hiltViewModel(),
+    fetchMeetingAttachmentViewModel: FetchMeetingAttachmentViewModel = hiltViewModel(),
     meetingID: Int
 ) {
     when (viewModel.selectedNavItem.value) {
@@ -244,11 +231,10 @@ private fun Wrapper(
         MeetingDetailsNavigationSections.Attends -> {
             fetchMeetingAttendsViewModel.fetchMeetingAttendees(meetingID = meetingID)
             AttendsList(meetingId = 0, fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel)
-
         }
 
         MeetingDetailsNavigationSections.Attachments -> {
-            fetchMeetingAttachmentViewModel.fetchMeetingAttachments(meetingID = 2103)
+            fetchMeetingAttachmentViewModel.fetchMeetingAttachments(meetingID = meetingID)
             AttachmentList(
                 meetingId = 0, fetchMeetingAttachmentViewModel = fetchMeetingAttachmentViewModel
             )
