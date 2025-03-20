@@ -426,7 +426,6 @@ private fun RecommendationInfoCard(recommendation: FetchRecommendationInfoData, 
 
             }
             Row(modifier = modifier.padding(top = 8.dp)) {
-
                 SvgIcon(
                     drawable = R.drawable.timer,
                     defaultColor = Color(0XFF808080),
@@ -434,17 +433,19 @@ private fun RecommendationInfoCard(recommendation: FetchRecommendationInfoData, 
                 )
                 Text(
                     text = "ملاحظات",
-
-                    // Small/Regular
-                    style = CustomTextStyles.SmallRegular12
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = Color(0xFF353334),
+                        textAlign = TextAlign.Right
+                    )
                 )
             }
-//todo check this entity notes
+
             Text(
                 text = recommendation.id.toString(),
-
-                // Small/Bold
-                style = CustomTextStyles.SmallBold.copy(color = SubtitleColor)
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = SubtitleColor,
+                    fontWeight = FontWeight.Bold
+                )
             )
 
             Spacer(modifier = Modifier.height(12.dp))
