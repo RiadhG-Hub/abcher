@@ -9,6 +9,8 @@ import com.example.absher.services.adapter.TokenManager
 import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.domain.repository.MeetingRepository
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
+import com.example.absher.services.adapter.TokenApiAdapter
+import com.example.absher.services.adapter.HttpExceptionHandler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,39 +39,40 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .build()
+    fun provideTokenApiAdapter(tokenManager: TokenManager): TokenApiAdapter {
+        return TokenApiAdapter(tokenManager)
     }
 
     @Provides
     @Singleton
-    fun provideMeetingApiAdapter(okHttpClient: OkHttpClient): MeetingApiAdapter {
-        return MeetingApiAdapter(okHttpClient)
+    fun provideHttpExceptionHandler(tokenApiAdapter: TokenApiAdapter): HttpExceptionHandler {
+        return HttpExceptionHandler(tokenApiAdapter)
     }
 
     @Provides
     @Singleton
-    fun provideRemoteMeetingDataSource(apiAdapter: MeetingApiAdapter): RemoteMeetingDataSource {
-        return RemoteMeetingDataSource(apiAdapter)
+    fun provideMeetingApiAdapter(
+        httpExceptionHandler: HttpExceptionHandler,
+        okHttpClient: OkHttpClient
+    ): MeetingApiAdapter {
+        return MeetingApiAdapter(httpExceptionHandler, okHttpClient)
     }
 
     @Provides
     @Singleton
-    fun provideMeetingRepository(dataSource: RemoteMeetingDataSource): MeetingRepository {
-        return MeetingRepository(dataSource)
+    fun provideRemoteMeetingDataSource(meetingApiAdapter: MeetingApiAdapter): RemoteMeetingDataSource {
+        return RemoteMeetingDataSource(meetingApiAdapter)
     }
 
     @Provides
     @Singleton
-    fun provideGetMeetingsUseCase(repository: MeetingRepository): GetMeetingsUseCase {
-        return GetMeetingsUseCase(repository)
+    fun provideMeetingRepository(remoteDataSource: RemoteMeetingDataSource): MeetingRepository {
+        return MeetingRepository(remoteDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetMeetingsUseCase(meetingRepository: MeetingRepository): GetMeetingsUseCase {
+        return GetMeetingsUseCase(meetingRepository)
     }
 }

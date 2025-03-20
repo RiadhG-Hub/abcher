@@ -4,6 +4,7 @@ import com.example.absher.services.data.models.meetings.MeetingRequestBody
 import com.example.absher.services.data.models.recommendations.FetchRecommendationInfoResponse
 import com.example.absher.services.data.models.recommendations.RecommendationResponse
 import com.example.absher.services.data.models.recommendations.RecommendationStatusResponse
+import okhttp3.OkHttpClient
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -12,13 +13,17 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RecommendationApiAdapter(private val httpExceptionHandler: HttpExceptionHandler = HttpExceptionHandler(
-    tokenApiAdapter = TokenApiAdapter()
-)){
-
+@Singleton
+class RecommendationApiAdapter @Inject constructor(
+    private val httpExceptionHandler: HttpExceptionHandler,
+    private val okHttpClient: OkHttpClient
+) {
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://mmsksa.d-intalio.com/MMS_Api/api/")
+        .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
@@ -47,7 +52,6 @@ class RecommendationApiAdapter(private val httpExceptionHandler: HttpExceptionHa
                 httpExceptionHandler.handleHttpException(e, "fetchRecommendations") { newToken ->
                     fetchRecommendations(from, to, requestBody, newToken)
                 }
-
             } else {
                 println("[ERROR] HTTP ${e.code()} in fetchRecommendationInfo: ${e.message()}")
                 null
@@ -70,8 +74,7 @@ class RecommendationApiAdapter(private val httpExceptionHandler: HttpExceptionHa
             if(e.code()==401){
                 httpExceptionHandler.handleHttpException(e, "fetchRecommendationInfo") { newToken ->
                     fetchRecommendationInfo(recommendationId, newToken)
-            }
-
+                }
             } else {
                 println("[ERROR] HTTP ${e.code()} in fetchRecommendationInfo: ${e.message()}")
                 null
@@ -92,9 +95,8 @@ class RecommendationApiAdapter(private val httpExceptionHandler: HttpExceptionHa
         } catch (e: HttpException) {
             if(e.code()==401){
                 httpExceptionHandler.handleHttpException(e, "fetchRecommendationInfo") { newToken ->
-                    fetchRecommendationStatuses( newToken)
+                    fetchRecommendationStatuses(newToken)
                 }
-
             } else {
                 println("[ERROR] HTTP ${e.code()} in fetchRecommendationInfo: ${e.message()}")
                 null
@@ -105,8 +107,6 @@ class RecommendationApiAdapter(private val httpExceptionHandler: HttpExceptionHa
         }
     }
 }
-
-
 
 interface RecommendationApiService {
     @POST("meetingAgendaRecommendations/search/{from}/{to}")

@@ -5,8 +5,13 @@ import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class TokenApiAdapter {
+@Singleton
+class TokenApiAdapter @Inject constructor(
+    private val tokenManager: TokenManager
+) {
     // TODO add token refresh logic using authInterceptor
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://mmsksa.d-intalio.com/MMS_Api/")
@@ -38,8 +43,5 @@ class TokenApiAdapter {
 
 interface TokenApiService {
     @GET("api/absher-services/test-token")
-    suspend fun testToken(
-
-
-    ): RefreshTokenResponse
+    suspend fun testToken(): RefreshTokenResponse
 }

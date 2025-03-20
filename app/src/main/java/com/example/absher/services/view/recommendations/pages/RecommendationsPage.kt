@@ -37,13 +37,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.absher.R
-import com.example.absher.services.adapter.RecommendationApiAdapter
-import com.example.absher.services.data.datasource.RemoteRecommendationMeetingDataSource
 import com.example.absher.services.data.models.meetings.MeetingRequestBody
 import com.example.absher.services.data.models.recommendations.Recommendation
-import com.example.absher.services.domain.repository.RecommendationRepository
-import com.example.absher.services.domain.usecases.GetRecommendationUseCase
 import com.example.absher.services.view.meetings.AbcherTopAppBar
 import com.example.absher.services.view.meetings.DefaultBackButton
 import com.example.absher.services.view.meetings.SvgIcon
@@ -85,17 +82,7 @@ class RecommendationsPage : ComponentActivity() {
                     ) { innerPadding ->
                         RecommendationListScreen(
                             modifier = Modifier.padding(innerPadding),
-                            viewModel = RecommendationViewModel(
-                                GetRecommendationUseCase(
-                                    RecommendationRepository(
-                                        RemoteRecommendationMeetingDataSource(
-                                            RecommendationApiAdapter(
-
-                                            )
-                                        )
-                                    )
-                                )
-                            ),
+                            viewModel = hiltViewModel(),
                         )
                     }
                 }

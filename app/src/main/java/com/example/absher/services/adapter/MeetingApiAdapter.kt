@@ -21,6 +21,7 @@ import javax.inject.Singleton
 
 @Singleton
 class MeetingApiAdapter @Inject constructor(
+    private val httpExceptionHandler: HttpExceptionHandler,
     private val okHttpClient: OkHttpClient
 ) {
     private val retrofit = Retrofit.Builder()
@@ -33,67 +34,95 @@ class MeetingApiAdapter @Inject constructor(
 
     suspend fun fetchMeetings(
         from: Int = 1,
-        to: Int = 10
+        to: Int = 10, token: String = "Bearer ${HttpExceptionHandler.tokenCore}"
     ): MeetingResponse? {
         val requestBody = MeetingRequestBody()
 
         return try {
-            val result = apiService.getMeetings(from.toString(), to.toString(), requestBody)
+            val result = apiService.getMeetings(from.toString(), to.toString(), token, requestBody)
             println("[INFO] Fetch meetings successful: $result")
             println("[INFO] Message: ${result.message}")
             result
         } catch (e: HttpException) {
-            println("[ERROR] HTTP ${e.code()} in fetchMeetings: ${e.message()}")
-            null
+            if(e.code()==401){
+                httpExceptionHandler.handleHttpException(e, "fetchRecommendations") { newToken ->
+                    fetchMeetings(from, to, newToken)
+                }
+
+            } else {
+                println("[ERROR] HTTP ${e.code()} in fetchRecommendationInfo: ${e.message()}")
+                null
+            }
         } catch (e: Exception) {
             System.err.println("[ERROR] Unexpected error: ${e.message}")
             null
         }
     }
 
-    suspend fun fetchMeetingAttendees(meetingId: Int): AttendeeResponse? {
+    suspend fun fetchMeetingAttendees(meetingId: Int, token: String = "Bearer ${HttpExceptionHandler.tokenCore}"): AttendeeResponse? {
         return try {
-            val result = apiService.fetchMeetingAttendees(meetingId = meetingId)
+            val result = apiService.fetchMeetingAttendees(meetingId = meetingId ,token = token)
             println("[INFO] Fetch meetings successful: $result")
             result
         } catch (e: HttpException) {
-            println("[ERROR] HTTP ${e.code()} in fetchMeetingAttendees: ${e.message()}")
-            null
+            if(e.code()==401){
+                httpExceptionHandler.handleHttpException(e, "fetchRecommendations") { newToken ->
+                    fetchMeetingAttendees(meetingId = meetingId ,token = newToken)
+                }
+
+            } else {
+                println("[ERROR] HTTP ${e.code()} in fetchRecommendationInfo: ${e.message()}")
+                null
+            }
         } catch (e: Exception) {
             System.err.println("[ERROR] Unexpected error: ${e.message}")
             null
         }
     }
 
-    suspend fun fetchMeetingAgendas(meetingId: Int): MeetingAgendaResponse? {
+    suspend fun fetchMeetingAgendas(meetingId: Int, token: String = "Bearer ${HttpExceptionHandler.tokenCore}"): MeetingAgendaResponse? {
         return try {
-            val result = apiService.fetchMeetingAgendas(meetingId)
+            val result = apiService.fetchMeetingAgendas(meetingId  = meetingId , token = token )
             println("[INFO] Fetch meeting agendas successful: $result")
             result
         } catch (e: HttpException) {
-            println("[ERROR] HTTP ${e.code()} in fetchMeetingAgendas: ${e.message()}")
-            null
+            if(e.code()==401){
+                httpExceptionHandler.handleHttpException(e, "fetchRecommendations") { newToken ->
+                    fetchMeetingAgendas(meetingId  = meetingId , token = newToken )
+                }
+
+            } else {
+                println("[ERROR] HTTP ${e.code()} in fetchRecommendationInfo: ${e.message()}")
+                null
+            }
         } catch (e: Exception) {
             System.err.println("[ERROR] Unexpected error: ${e.message}")
             null
         }
     }
 
-    suspend fun fetchMeetingInfo(meetingId: Int): MeetingInfoResponse? {
+    suspend fun fetchMeetingInfo(meetingId: Int, token: String = "Bearer ${HttpExceptionHandler.tokenCore}"): MeetingInfoResponse? {
         return try {
-            val result = apiService.getMeetingInfo(meetingId)
+            val result = apiService.getMeetingInfo(meetingId = meetingId , token = token)
             println("[INFO] Fetch meeting info successful: $result")
             result
         } catch (e: HttpException) {
-            println("[ERROR] HTTP ${e.code()} in fetchMeetingInfo: ${e.message()}")
-            null
-        } catch (e: Exception) {
+            if(e.code()==401){
+                httpExceptionHandler.handleHttpException(e, "fetchRecommendations") { newToken ->
+                    fetchMeetingInfo(meetingId = meetingId , token = newToken)
+                }
+
+            } else {
+                println("[ERROR] HTTP ${e.code()} in fetchRecommendationInfo: ${e.message()}")
+                null
+            }
+        }catch (e: Exception) {
             System.err.println("[ERROR] Unexpected error: ${e.message}")
             null
         }
     }
 
-    suspend fun fetchMeetingAttachments(meetingId: Int): MeetingAttachmentResponse? {
+    suspend fun fetchMeetingAttachments(meetingId: Int, token: String = "Bearer ${HttpExceptionHandler.tokenCore}"): MeetingAttachmentResponse? {
         val mockMeetingAttachmentResponse = MeetingAttachmentResponse(
             data = MeetingAttachmentData(
                 meetingAttachments = listOf(
@@ -134,6 +163,7 @@ class MeetingApiAdapter @Inject constructor(
 interface MeetingApiService {
     @POST("api/meetings/search/{from}/{to}")
     suspend fun getMeetings(
+        @Header("Authorization") token: String,
         @Path("from") from: String,
         @Path("to") to: String,
         @Body requestBody: MeetingRequestBody
@@ -141,16 +171,19 @@ interface MeetingApiService {
 
     @GET("api/meetings/{meetingId}/attendees")
     suspend fun fetchMeetingAttendees(
+        @Header("Authorization") token: String,
         @Path("meetingId") meetingId: Int
     ): AttendeeResponse?
 
     @GET("api/meetings/{meetingId}/agendas")
     suspend fun fetchMeetingAgendas(
+        @Header("Authorization") token: String,
         @Path("meetingId") meetingId: Int
     ): MeetingAgendaResponse?
 
     @GET("api/meetings/{meetingId}/meeting-info")
     suspend fun getMeetingInfo(
+        @Header("Authorization") token: String,
         @Path("meetingId") meetingId: Int
     ): MeetingInfoResponse?
 }
