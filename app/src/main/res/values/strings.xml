@@ -35,4 +35,10 @@
     <string name="loading">جارٍ التحميل</string>
     <string name="retry">إعادة المحاولة</string>
     <string name="no_attendees">لا يوجد حضور</string>
+    <string name="settings">الإعدادات</string>
+    <string name="dark_mode">الوضع الليلي</string>
+    <string name="status_approved">تمت الموافقة</string>
+    <string name="status_pending">قيد الانتظار</string>
+    <string name="status_rejected">مرفوض</string>
+    <string name="status_na">غير متوفر</string>
 </resources>

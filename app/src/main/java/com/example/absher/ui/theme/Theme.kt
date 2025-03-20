@@ -25,13 +25,21 @@ private val DarkColorScheme = darkColorScheme(
     primary = Color(0xFF39836B),
     secondary = Color(0xFF757575),
     tertiary = Color(0xFF39836B),
-    background = Color(0xFFF5F5F5),
-    surface = Color.White,
+    background = Color(0xFF121212),
+    surface = Color(0xFF1E1E1E),
     onPrimary = Color.White,
     onSecondary = Color.White,
     onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
+    onBackground = Color.White,
+    onSurface = Color.White,
+    surfaceVariant = Color(0xFF2D2D2D),
+    onSurfaceVariant = Color.White.copy(alpha = 0.7f),
+    primaryContainer = Color(0xFF1B4D3E),
+    onPrimaryContainer = Color.White,
+    secondaryContainer = Color(0xFF454545),
+    onSecondaryContainer = Color.White,
+    error = Color(0xFFCF6679),
+    onError = Color.Black
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -45,6 +53,14 @@ private val LightColorScheme = lightColorScheme(
     onTertiary = Color.White,
     onBackground = Color(0xFF1C1B1F),
     onSurface = Color(0xFF1C1B1F),
+    surfaceVariant = Color(0xFFF0F0F0),
+    onSurfaceVariant = Color.Black.copy(alpha = 0.7f),
+    primaryContainer = Color(0xFFE1F5ED),
+    onPrimaryContainer = Color(0xFF002117),
+    secondaryContainer = Color(0xFFEEEEEE),
+    onSecondaryContainer = Color(0xFF1C1B1F),
+    error = Color(0xFFB00020),
+    onError = Color.White
 )
 
 val Typography = androidx.compose.material3.Typography(
@@ -154,7 +170,6 @@ fun AbsherTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
@@ -162,7 +177,11 @@ fun AbsherTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = if (darkTheme) {
+                Color(0xFF121212).toArgb()
+            } else {
+                colorScheme.primary.toArgb()
+            }
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }

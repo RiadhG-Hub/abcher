@@ -27,6 +27,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.DarkGray
+import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -40,9 +42,9 @@ import com.example.absher.services.helper.formatTimeToArabic
 import com.example.absher.services.view.meetings.SvgIcon
 import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.ui.theme.BackgroundGray
-import com.example.absher.ui.theme.DarkGray
+
 import com.example.absher.ui.theme.GreenPrimary
-import com.example.absher.ui.theme.LightGray
+
 import com.example.absher.ui.theme.MediumGray
 import com.example.absher.ui.theme.StatusDefault
 import com.example.absher.ui.theme.StatusGreen

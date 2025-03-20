@@ -39,14 +39,18 @@ import com.example.absher.services.helper.formatDateToArabic
 import com.example.absher.services.helper.formatTimeToArabic
 import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.ui.theme.BackgroundGray
-import com.example.absher.ui.theme.DarkGray
+
 import com.example.absher.ui.theme.GreenPrimary
-import com.example.absher.ui.theme.LightGray
+
 import com.example.absher.ui.theme.MediumGray
 import com.example.absher.ui.theme.StatusDefault
 import com.example.absher.ui.theme.StatusGreen
 import com.example.absher.ui.theme.StatusRed
 import com.example.absher.ui.theme.StatusYellow
+import com.example.absher.ui.theme.statusDefaultColor
+import com.example.absher.ui.theme.statusGreenColor
+import com.example.absher.ui.theme.statusRedColor
+import com.example.absher.ui.theme.statusYellowColor
 
 
 @Composable
@@ -69,17 +73,17 @@ fun ClickableUnderlinedText(onClick: () -> Unit) {
 @Composable
 fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
     val statusColor = when (meeting.statusId) {
-        1 -> StatusGreen
-        2 -> StatusYellow
-        3 -> StatusRed
-        else -> StatusDefault
+        1 -> statusGreenColor()
+        2 -> statusYellowColor()
+        3 -> statusRedColor()
+        else -> statusDefaultColor()
     }
 
     val statusText = when (meeting.statusId) {
-        1 -> "Approved"
-        2 -> "Pending"
-        3 -> "Rejected"
-        else -> "N/A"
+        1 -> stringResource(R.string.status_approved)
+        2 -> stringResource(R.string.status_pending)
+        3 -> stringResource(R.string.status_rejected)
+        else -> stringResource(R.string.status_na)
     }
 
     Card(
@@ -92,8 +96,8 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
     ) {
         Column(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(8.dp)
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -108,9 +112,12 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                 Box(
                     modifier = Modifier
                         .padding(8.dp)
-                        .background(color = Color(0x00E0F7FA), shape = MaterialTheme.shapes.small)
+                        .background(
+                            color = MaterialTheme.colorScheme.surface,
+                            shape = MaterialTheme.shapes.small
+                        )
                         .border(1.dp, statusColor, MaterialTheme.shapes.small)
-                        .padding(horizontal = 8.dp, vertical = 0.dp)
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(
                         text = statusText,
@@ -128,23 +135,30 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                 Box(
                     modifier = Modifier
                         .padding(8.dp)
-                        .background(color = Color(0x00E0F7FA), shape = MaterialTheme.shapes.small)
-                        .border(1.dp, MediumGray, MaterialTheme.shapes.small)
-                        .padding(horizontal = 8.dp, vertical = 0.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.surface,
+                            shape = MaterialTheme.shapes.small
+                        )
+                        .border(
+                            1.dp,
+                            MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                            MaterialTheme.shapes.small
+                        )
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(
                         text = stringResource(R.string.infonumber, meeting.referenceNumber!!),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MediumGray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    // SvgIcon(R.drawable.calendar_today) // Uncomment if you have this
+                    // SvgIcon(R.drawable.calendar_today)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = formatDateToArabic(meeting.date ?: ""),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = LightGray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -155,13 +169,16 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
-                    .background(color = BackgroundGray)
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = MaterialTheme.shapes.small
+                    )
                     .padding(12.dp)
             ) {
                 Text(
                     text = meeting.notes ?: "",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = DarkGray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -174,7 +191,7 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    SvgIcon(R.drawable.timer) // Uncomment if you have this
+                    SvgIcon(R.drawable.timer)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = stringResource(
@@ -187,11 +204,11 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                 }
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 4.dp),
-                    color = BackgroundGray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.12f),
                     thickness = 1.dp
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    SvgIcon(R.drawable.timer_off) // Uncomment if you have this
+                    SvgIcon(R.drawable.timer_off)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = stringResource(
@@ -204,14 +221,23 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                 }
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 4.dp),
-                    color = BackgroundGray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.12f),
                     thickness = 1.dp
                 )
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            ClickableUnderlinedText { onClick() }
+            Text(
+                text = stringResource(R.string.moredetails),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.End,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onClick)
+                    .padding(4.dp)
+            )
         }
     }
 }
