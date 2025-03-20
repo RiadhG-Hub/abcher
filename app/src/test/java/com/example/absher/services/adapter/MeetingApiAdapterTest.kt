@@ -1,6 +1,7 @@
 package com.example.absher.services.adapter
 
 import kotlinx.coroutines.runBlocking
+import okhttp3.OkHttpClient
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
@@ -17,7 +18,9 @@ class MeetingApiAdapterTest {
             .build()
 
         retrofit.create(MeetingApiService::class.java)
-        meetingApiAdapter = MeetingApiAdapter() // Use real interceptor if required
+        meetingApiAdapter = MeetingApiAdapter(
+            okHttpClient = OkHttpClient()
+        ) // Use real interceptor if required
     }
 
     @Test

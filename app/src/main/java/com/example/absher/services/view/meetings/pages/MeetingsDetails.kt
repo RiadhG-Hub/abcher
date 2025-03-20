@@ -29,12 +29,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.absher.R
-import com.example.absher.services.adapter.MeetingApiAdapter
-import com.example.absher.services.data.datasource.RemoteMeetingDataSource
-import com.example.absher.services.domain.repository.MeetingRepository
-import com.example.absher.services.domain.usecases.GetMeetingsUseCase
 import com.example.absher.services.view.meetings.AbcherTopAppBar
 import com.example.absher.services.view.meetings.AgendaList
 import com.example.absher.services.view.meetings.AttachmentList
@@ -52,53 +49,10 @@ import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.ui.theme.BackgroundGray
 
 class MeetingsDetails : ComponentActivity() {
-    val fetchMeetingAttendsViewModel = FetchMeetingAttendsViewModel(
-        GetMeetingsUseCase(
-            MeetingRepository(
-                RemoteMeetingDataSource(
-                    MeetingApiAdapter(
 
-                    )
-                )
-            )
-        )
-    )
 
-    val fetchMeetingInfoViewModel = FetchMeetingInfoViewModel(
-        GetMeetingsUseCase(
-            MeetingRepository(
-                RemoteMeetingDataSource(
-                    MeetingApiAdapter(
 
-                    )
-                )
-            )
-        )
-    )
 
-    val fetchAgendaViewModel = FetchAgendaViewModel(
-        GetMeetingsUseCase(
-            MeetingRepository(
-                RemoteMeetingDataSource(
-                    MeetingApiAdapter(
-
-                    )
-                )
-            )
-        )
-    )
-
-    val fetchAttachmentViewModel = FetchMeetingAttachmentViewModel(
-        GetMeetingsUseCase(
-            MeetingRepository(
-                RemoteMeetingDataSource(
-                    MeetingApiAdapter(
-
-                    )
-                )
-            )
-        )
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,9 +63,9 @@ class MeetingsDetails : ComponentActivity() {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 DetailsWrapper(
                     meetingTitle = meetingTitle.toString(),
-                    fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel,
-                    fetchAgendaViewModel = fetchAgendaViewModel,
-                    fetchMeetingAttachmentViewModel = fetchAttachmentViewModel,
+                    fetchMeetingAttendsViewModel = hiltViewModel(),
+                    fetchAgendaViewModel = hiltViewModel(),
+                    fetchMeetingAttachmentViewModel = hiltViewModel(),
                     meetingID = meetingId
                 )
 
@@ -154,7 +108,7 @@ class MeetingsDetails : ComponentActivity() {
                 Wrapper(
                     fetchMeetingAttendsViewModel = fetchMeetingAttendsViewModel,
                     fetchAgendaViewModel = fetchAgendaViewModel,
-                    fetchMeetingInfoViewModel = fetchMeetingInfoViewModel,
+                    fetchMeetingInfoViewModel = hiltViewModel(),
                     fetchMeetingAttachmentViewModel = fetchMeetingAttachmentViewModel,
                     meetingID = meetingID
                 )

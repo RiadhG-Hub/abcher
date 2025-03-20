@@ -21,37 +21,22 @@ class AuthInterceptor @Inject constructor(
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
-        val originalRequest = chain.request()
-
-        val token = tokenManager.getAccessToken()
-        val authenticatedRequest = originalRequest.newBuilder()
-            .addAuthHeader(token)
+        val request = chain.request().newBuilder()
+            .addHeader("Authorization", "Bearer ${tokenManager.getToken()}")
+            .addHeader("Accept", "application/json")
+            .addHeader("Content-Type", "application/json")
             .build()
 
-        val response = chain.proceed(authenticatedRequest)
+        val response = chain.proceed(request)
 
+        // Handle token refresh if needed
         if (response.code == UNAUTHORIZED) {
-            synchronized(this) {
-                val currentToken = tokenManager.getAccessToken()
-                if (currentToken != token) {
-                    return chain.proceed(
-                        originalRequest.newBuilder()
-                            .addAuthHeader(currentToken)
-                            .build()
-                    )
-                }
-
-                val newToken = refreshToken()
-                if (newToken != null) {
-                    tokenManager.saveAccessToken(newToken)
-                    return chain.proceed(
-                        originalRequest.newBuilder()
-                            .addAuthHeader(newToken)
-                            .build()
-                    )
-                }
-            }
+            // Token expired or invalid
+            // You can implement token refresh logic here
+            tokenManager.clearToken()
+            // You might want to trigger a re-authentication flow here
         }
+
         return response
     }
 
@@ -73,6 +58,6 @@ class AuthInterceptor @Inject constructor(
     }
 
     fun getToken(): String? {
-        return tokenManager.getAccessToken()
+        return tokenManager.getToken()
     }
 }

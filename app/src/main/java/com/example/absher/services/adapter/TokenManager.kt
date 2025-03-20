@@ -13,22 +13,38 @@ class TokenManager @Inject constructor(
 ) {
     companion object {
         private const val KEY_ACCESS_TOKEN = "access_token"
+        private const val KEY_REFRESH_TOKEN = "refresh_token"
     }
 
-    fun saveAccessToken(token: String) {
-        sharedPreferences.edit {
-            putString(KEY_ACCESS_TOKEN, token)
+    fun saveToken(accessToken: String, refreshToken: String? = null) {
+        sharedPreferences.edit()
+            .putString(KEY_ACCESS_TOKEN, accessToken)
+            .apply()
+        
+        refreshToken?.let {
+            sharedPreferences.edit()
+                .putString(KEY_REFRESH_TOKEN, it)
+                .apply()
         }
     }
 
-    fun getAccessToken(): String? {
+    fun getToken(): String? {
         return sharedPreferences.getString(KEY_ACCESS_TOKEN, null)
     }
 
+    fun getRefreshToken(): String? {
+        return sharedPreferences.getString(KEY_REFRESH_TOKEN, null)
+    }
+
     fun clearToken() {
-        sharedPreferences.edit {
-            remove(KEY_ACCESS_TOKEN)
-        }
+        sharedPreferences.edit()
+            .remove(KEY_ACCESS_TOKEN)
+            .remove(KEY_REFRESH_TOKEN)
+            .apply()
+    }
+
+    fun hasToken(): Boolean {
+        return !getToken().isNullOrEmpty()
     }
 
     fun refreshTokenSync(): RefreshTokenResponse? {

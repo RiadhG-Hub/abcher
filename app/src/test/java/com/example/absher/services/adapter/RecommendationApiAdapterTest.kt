@@ -1,6 +1,7 @@
 package com.example.absher.services.adapter
 
 import kotlinx.coroutines.runBlocking
+import okhttp3.OkHttpClient
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
@@ -17,7 +18,7 @@ class RecommendationApiAdapterTest {
             .build()
 
         retrofit.create(RecommendationApiService::class.java)
-        recommendationApiAdapter = RecommendationApiAdapter() // Use real interceptor if required
+        recommendationApiAdapter = RecommendationApiAdapter(okHttpClient = OkHttpClient()) // Use real interceptor if required
     }
 
     @Test

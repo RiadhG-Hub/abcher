@@ -5,10 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.absher.services.data.models.meetings.Meeting
 import com.example.absher.services.domain.usecases.GetMeetingsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MeetingViewModel(
+@HiltViewModel
+class MeetingViewModel @Inject constructor(
     private val getMeetingsUseCase: GetMeetingsUseCase
 ) : ViewModel() {
     private val _fetchMeetingState = MutableLiveData<FetchMeetingState>()
@@ -22,6 +27,9 @@ class MeetingViewModel(
     private var hasMoreData = true
     private val allMeetings = mutableListOf<Meeting>()
 
+    private val _uiState = MutableStateFlow<FetchMeetingState>(FetchMeetingStateInit)
+    val uiState: StateFlow<FetchMeetingState> = _uiState.asStateFlow()
+
     init {
         fetchMeetings()
     }
@@ -30,7 +38,7 @@ class MeetingViewModel(
         if (isLoading || !hasMoreData) return
 
         isLoading = true
-        _fetchMeetingState.value = FetchMeetingStateLoading()
+        _fetchMeetingState.value = FetchMeetingStateLoading
 
         viewModelScope.launch {
             try {
@@ -38,7 +46,7 @@ class MeetingViewModel(
                     from = currentPage,
                     to = pageSize
                 )
-                val newMeetings  = response ?: emptyList()
+                val newMeetings = response ?: emptyList()
 
                 allMeetings.addAll(newMeetings)
                 hasMoreData = newMeetings.size == pageSize
@@ -63,11 +71,15 @@ class MeetingViewModel(
         hasMoreData = true
         fetchMeetings()
     }
+
+    fun retry() {
+        fetchMeetings()
+    }
 }
 
 // Define states
 sealed class FetchMeetingState
-class FetchMeetingStateInit : FetchMeetingState()
-class FetchMeetingStateLoading : FetchMeetingState()
+object FetchMeetingStateInit : FetchMeetingState()
+object FetchMeetingStateLoading : FetchMeetingState()
 data class FetchMeetingStateSuccess(val meetings: List<Meeting>?) : FetchMeetingState()
 data class FetchMeetingStateError(val error: String) : FetchMeetingState()

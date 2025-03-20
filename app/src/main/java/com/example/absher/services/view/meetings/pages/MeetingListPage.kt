@@ -2,7 +2,6 @@ package com.example.absher.services.view.meetings.pages
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -48,13 +47,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.absher.R
-import com.example.absher.services.adapter.MeetingApiAdapter
-import com.example.absher.services.data.datasource.RemoteMeetingDataSource
 import com.example.absher.services.data.models.meetings.Meeting
-import com.example.absher.services.domain.repository.MeetingRepository
-import com.example.absher.services.domain.usecases.GetMeetingsUseCase
 import com.example.absher.services.view.meetings.AbcherTopAppBar
 import com.example.absher.services.view.meetings.DefaultBackButton
 import com.example.absher.services.view.meetings.MeetingCard
@@ -65,20 +61,18 @@ import com.example.absher.services.viewmodel.meetings.FetchMeetingStateLoading
 import com.example.absher.services.viewmodel.meetings.FetchMeetingStateSuccess
 import com.example.absher.services.viewmodel.meetings.MeetingViewModel
 import com.example.absher.ui.theme.AbsherTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 
-// Path: view/MeetingListPage.kt
-
-
+@AndroidEntryPoint
 class MeetingListPage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
         setContent {
-
             AbsherTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                     Scaffold(
@@ -100,17 +94,7 @@ class MeetingListPage : ComponentActivity() {
                     ) { innerPadding ->
                         MeetingListScreen(
                             modifier = Modifier.padding(innerPadding),
-                            viewModel = MeetingViewModel(
-                                GetMeetingsUseCase(
-                                    MeetingRepository(
-                                        RemoteMeetingDataSource(
-                                            MeetingApiAdapter(
-
-                                            )
-                                        )
-                                    )
-                                )
-                            ),
+                            viewModel = hiltViewModel()
                         )
                     }
                 }
@@ -118,7 +102,6 @@ class MeetingListPage : ComponentActivity() {
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -202,7 +185,7 @@ fun MeetingListScreen(
 
 @Composable
 fun MeetingListViewHandler(viewModel: MeetingViewModel) {
-    val meetingsState by viewModel.fetchMeetingState.observeAsState(FetchMeetingStateInit())
+    val meetingsState by viewModel.fetchMeetingState.observeAsState(FetchMeetingStateInit)
     val lazyListState = rememberLazyListState()
 
     // Load more when reaching the end
@@ -220,9 +203,7 @@ fun MeetingListViewHandler(viewModel: MeetingViewModel) {
 
     when (meetingsState) {
         is FetchMeetingStateLoading -> {
-            if ((meetingsState as FetchMeetingStateLoading) == FetchMeetingStateLoading() &&
-                viewModel.fetchMeetingState.value is FetchMeetingStateSuccess
-            ) {
+            if (viewModel.fetchMeetingState.value is FetchMeetingStateSuccess) {
                 // Show list with loading at bottom
                 SuccessView(
                     meetings = (viewModel.fetchMeetingState.value as FetchMeetingStateSuccess).meetings,
@@ -233,25 +214,21 @@ fun MeetingListViewHandler(viewModel: MeetingViewModel) {
                 LoadingView()
             }
         }
-
         is FetchMeetingStateSuccess -> SuccessView(
             meetings = (meetingsState as FetchMeetingStateSuccess).meetings,
             isLoadingMore = false,
             lazyListState = lazyListState
         )
-
         is FetchMeetingStateError -> ErrorView(
             message = (meetingsState as FetchMeetingStateError).error,
             onRetry = { viewModel.resetAndFetch() }
         )
-
         is FetchMeetingStateInit -> EmptyStateView()
     }
 }
 
 @Composable
 private fun SuccessView(
-
     meetings: List<Meeting>?,
     isLoadingMore: Boolean,
     lazyListState: LazyListState
@@ -262,18 +239,15 @@ private fun SuccessView(
     } else {
         LazyColumn(
             state = lazyListState,
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(meetings.size) { index ->
                 MeetingCard(meetings[index], onClick = {
-                    Log.e("TAG", "SuccessView: Clicked")
                     val intent = Intent(context, MeetingsDetails::class.java)
                     intent.putExtra("MEETING_ID", meetings[index].id)
                     intent.putExtra("MEETING_TITLE", meetings[index].title)
                     context.startActivity(intent)
-
                 })
             }
 
