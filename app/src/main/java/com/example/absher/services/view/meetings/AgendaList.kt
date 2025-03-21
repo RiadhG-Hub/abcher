@@ -62,7 +62,7 @@ fun AgendaList(
                 (fetchMeetingState as FetchMeetingAgendaStateSuccess).meetingAgenda!!.data
             Card(
                 modifier = Modifier
-                    .fillMaxWidth()
+
                     .padding(start = 20.dp, end = 20.dp)
                     .border(1.dp, BackgroundGray, MaterialTheme.shapes.small),
                 shape = MaterialTheme.shapes.medium,

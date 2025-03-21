@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
@@ -65,7 +64,7 @@ class RecommendationsDetails : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val meetingId = intent.getIntExtra("MEETING_ID", 0)
-        val meetingTitle = intent.getStringExtra("MEETING_TITLE") ?: "Meeting Details"
+        val meetingTitle = intent.getStringExtra("MEETING_TITLE") ?: "التوصيات"
 
         setContent {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -130,7 +129,7 @@ private fun DetailsWrapper(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(padding)
-                .fillMaxSize(),
+                ,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Box(modifier = Modifier.background(BackgroundGray)) {
@@ -247,12 +246,13 @@ private fun Wrapper(
     recommendationViewModel: RecommendationViewModel
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+
         contentAlignment = Alignment.CenterStart
     ) {
         when (viewModel.selectedNavItem.value) {
             RecommendationDetailsNavigationSections.Info -> {
                 recommendationViewModel.fetchRecommendationInfo(recommendationID = recommendationId)
+
                 RecommendationInfo(meetingId = recommendationId, recommendationViewModel = recommendationViewModel)
             }
             RecommendationDetailsNavigationSections.Progress -> {
