@@ -4,6 +4,7 @@ import com.example.absher.services.adapter.HttpExceptionHandler
 import com.example.absher.services.adapter.RecommendationApiAdapter
 import com.example.absher.services.adapter.TokenApiAdapter
 import com.example.absher.services.adapter.TokenManager
+import com.example.absher.services.data.models.recommendations.FetchRecommendationInfoResponse
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import org.junit.Before
@@ -55,7 +56,7 @@ class RecommendationApiAdapterTest {
     @Test
     fun `fetchMeetingAttendees should return real MeetingResponse`() = runBlocking {
         // Make the actual request to real server
-        val result = meetingApiAdapter. fetchRecommendationInfo(2013, )
+        val result : FetchRecommendationInfoResponse? = meetingApiAdapter. fetchRecommendationInfo(5059, )
 
         // Verify the response
         assert(result != null)
