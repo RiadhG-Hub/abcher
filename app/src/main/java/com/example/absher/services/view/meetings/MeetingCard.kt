@@ -167,7 +167,7 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
                     .padding(12.dp)
             ) {
                 Text(
-                    text = meeting.notes ?: "",
+                    text = meeting.notes ?: "لا توجد ملاحظات ",
                     style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Start,
@@ -238,7 +238,7 @@ fun MeetingCard(meeting: Meeting, onClick: () -> Unit) {
 
             Text(
                 text = stringResource(R.string.moredetails),
-                style = MaterialTheme.typography.labelMedium.copy(MaterialTheme.colorScheme.primary),
+                style = MaterialTheme.typography.labelMedium.copy(GreenPrimary),
 
                 textAlign = TextAlign.End,
                 modifier = Modifier

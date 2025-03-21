@@ -280,7 +280,7 @@ private fun RecommendationInfoCard(recommendation: FetchRecommendationInfoData, 
                     thickness = 1.dp
                 )
             }
-            CustomProgressBar(progress = 50F, backgroundColor = Color(0XFFB8DCCF))
+            CustomProgressBar(progress = 50F)
             HorizontalDivider(
                 modifier = Modifier
                     .padding(vertical = 4.dp)

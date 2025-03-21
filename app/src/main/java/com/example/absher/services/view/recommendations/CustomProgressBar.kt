@@ -31,7 +31,7 @@ fun CustomProgressBar(
     progress: Float, // Progress as a percentage (0f to 100f)
     modifier: Modifier = Modifier,
     height: Dp = 16.dp,
-    backgroundColor: Color = Color.Gray.copy(alpha = 0.3f),
+    backgroundColor: Color = Color(0XFFB8DCCF),
     progressColor: Color = GreenPrimary,
     cornerRadius: Dp = 4.dp,
 

@@ -22,6 +22,8 @@ val StatusYellow = Color(0xFFFFC107)
 val StatusRed = Color(0xFFDC3545)
 val StatusDefault = Color(0xFFD4A017)
 
+val BorderCircleColor = Color(0XFFE5D9B4)
+
 // Semantic Colors - These adapt to light/dark theme
 @Composable
 fun contentBackground() = MaterialTheme.colorScheme.background
