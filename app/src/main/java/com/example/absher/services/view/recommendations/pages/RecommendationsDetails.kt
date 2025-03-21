@@ -248,7 +248,7 @@ private fun Wrapper(
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.CenterStart
     ) {
         when (viewModel.selectedNavItem.value) {
             RecommendationDetailsNavigationSections.Info -> {

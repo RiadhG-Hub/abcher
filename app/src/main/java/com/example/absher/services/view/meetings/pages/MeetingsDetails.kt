@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
@@ -30,7 +29,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.absher.R
 import com.example.absher.services.view.meetings.AbcherTopAppBar
 import com.example.absher.services.view.meetings.AgendaList
@@ -63,14 +61,15 @@ class MeetingsDetails : ComponentActivity() {
 
         setContent {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                DetailsWrapper(
-                    meetingTitle = meetingTitle.toString(),
-                    fetchMeetingAttendsViewModel = hiltViewModel(),
-                    fetchAgendaViewModel = hiltViewModel(),
-                    fetchMeetingAttachmentViewModel = hiltViewModel(),
-                    meetingID = meetingId
-                )
-
+                AbsherTheme {
+                    DetailsWrapper(
+                        meetingTitle = meetingTitle.toString(),
+                        fetchMeetingAttendsViewModel = hiltViewModel(),
+                        fetchAgendaViewModel = hiltViewModel(),
+                        fetchMeetingAttachmentViewModel = hiltViewModel(),
+                        meetingID = meetingId
+                    )
+                }
             }
         }
     }
@@ -99,7 +98,7 @@ class MeetingsDetails : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .padding(padding)
-                    .fillMaxSize()
+
                     .padding(0.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {

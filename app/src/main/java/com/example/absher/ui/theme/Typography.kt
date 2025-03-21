@@ -1,16 +1,12 @@
 package com.example.absher.ui.theme
 
 
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
-
-
-
 
 
 // Custom text styles object
@@ -28,7 +24,7 @@ object CustomTextStyles {
         lineHeight = 24.sp,
         //fontFamily = FontFamily(Font(R.font.almarai)),
         fontWeight = FontWeight(700),
-        color = Color(0xFFFFFFFF),
+
         textAlign = TextAlign.Right,
     )
 
@@ -37,7 +33,7 @@ object CustomTextStyles {
         lineHeight = 20.sp,
         //fontFamily = FontFamily(Font(R.font.almarai)),
         fontWeight = FontWeight(700),
-        color = Color(0xFFC3A355),
+
 
         textAlign = TextAlign.Right,
     )
@@ -56,7 +52,7 @@ object CustomTextStyles {
         lineHeight = 16.sp,
 
         fontWeight = FontWeight(700),
-        color = Color(0xFF39836B),
+
 
         textDecoration = TextDecoration.Underline,
     )
@@ -68,7 +64,6 @@ object CustomTextStyles {
         fontWeight = FontWeight(700),
 
 
-
-    )
+        )
 
 }

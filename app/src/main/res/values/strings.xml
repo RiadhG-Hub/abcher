@@ -41,4 +41,6 @@
     <string name="status_pending">قيد الانتظار</string>
     <string name="status_rejected">مرفوض</string>
     <string name="status_na">غير متوفر</string>
+    <string name="update">تعديل</string>
+    <string name="add_note">إضافة ملاحظات</string>
 </resources>

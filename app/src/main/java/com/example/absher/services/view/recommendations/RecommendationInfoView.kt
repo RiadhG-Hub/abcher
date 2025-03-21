@@ -1,5 +1,6 @@
 package com.example.absher.services.view.recommendations
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -52,7 +54,9 @@ import com.example.absher.services.viewmodel.recommendations.FetchRecommendation
 import com.example.absher.services.viewmodel.recommendations.RecommendationViewModel
 import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.ui.theme.Gray
+import com.example.absher.ui.theme.GreenPrimary
 import com.example.absher.ui.theme.SubtitleColor
+import com.example.absher.ui.theme.White
 
 @Composable
 fun RecommendationInfo(
@@ -107,7 +111,7 @@ fun RecommendationInfo(
 }
 
 @Composable
-private fun RecommendationInfoCard(recommendation: FetchRecommendationInfoData, modifier: Modifier = Modifier) {
+private fun RecommendationInfoCard(recommendation: FetchRecommendationInfoData, modifier: Modifier = Modifier , onUpdateClicked: (FetchRecommendationInfoData) -> Unit = {}, onAddNoteClicked: (FetchRecommendationInfoData) -> Unit = {}) {
 
     val statusColor = when (recommendation.statusId) {
         1 -> Color(0xFF28A745) // Green for status 1
@@ -465,22 +469,26 @@ private fun RecommendationInfoCard(recommendation: FetchRecommendationInfoData, 
         ) {
             Button(
                 modifier = Modifier.weight(1f),
-                onClick = { /* TODO: Handle click */ },
-                shape = RoundedCornerShape(4.dp) // Rounded corners
+                onClick = { onUpdateClicked(recommendation) },
+                shape = RoundedCornerShape(4.dp), // Rounded corners
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = GreenPrimary // Change this to your desired color
+                )
             ) {
-               Row{
-                   Text(text = "Save")
-                   SvgIcon(R.drawable.edit)
-               }
+                Row {
+                    Text(text = stringResource(R.string.update) , style = MaterialTheme.typography.displaySmall.copy(color = White) ,  modifier = Modifier.padding(end =    4.dp))
+                    SvgIcon(R.drawable.edit)
+                }
             }
 
             OutlinedButton(
                 modifier = Modifier.weight(1f),
-                onClick = { /* TODO: Handle click */ },
-                shape = RoundedCornerShape(4.dp) // Rounded corners
+                onClick = { onAddNoteClicked(recommendation) },
+                shape = RoundedCornerShape(4.dp), // Rounded corners
+                border = BorderStroke(1.dp, GreenPrimary) // Change this to your desired border color
             ) {
-                Row{
-                    Text(text = "Save")
+                Row {
+                    Text(text = stringResource(R.string.add_note), style = MaterialTheme.typography.displaySmall.copy(color = GreenPrimary), modifier = Modifier.padding(end =    4.dp))
                     SvgIcon(R.drawable.add)
                 }
             }

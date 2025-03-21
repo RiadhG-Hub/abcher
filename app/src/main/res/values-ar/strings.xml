@@ -33,5 +33,7 @@
     <string name="loading">جارٍ التحميل</string>
     <string name="retry">إعادة المحاولة</string>
     <string name="no_attendees">لا يوجد حضور</string>
+    <string name="update">تعديل</string>
+    <string name="add_note">إضافة ملاحظات</string>
 
 </resources>
