@@ -29,13 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.absher.R
 import com.example.absher.services.view.meetings.AbcherTopAppBar
@@ -51,7 +47,9 @@ import com.example.absher.services.viewmodel.meetings.FetchMeetingAttendsViewMod
 import com.example.absher.services.viewmodel.recommendations.RecommendationDetailsNavigationSections
 import com.example.absher.services.viewmodel.recommendations.RecommendationDetailsNavigationViewModel
 import com.example.absher.services.viewmodel.recommendations.RecommendationViewModel
+import com.example.absher.ui.theme.AbsherTheme
 import com.example.absher.ui.theme.BackgroundGray
+import com.example.absher.ui.theme.CustomTextStyles
 import dagger.hilt.android.AndroidEntryPoint
 
 private object RecommendationDetailsStyles {
@@ -59,12 +57,7 @@ private object RecommendationDetailsStyles {
     val unselectedColor = Color(0xff757575)
     val backgroundColor = Color(0xFFF2F2F2)
     
-    val navigationItemText = TextStyle(
-        fontSize = 12.sp,
-        lineHeight = 20.sp,
-        fontWeight = FontWeight(400),
-        textAlign = TextAlign.Center,
-    )
+    val navigationItemText = CustomTextStyles.SmallRegular12
 }
 
 @AndroidEntryPoint
@@ -76,10 +69,11 @@ class RecommendationsDetails : ComponentActivity() {
 
         setContent {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                AbsherTheme() {
                 DetailsWrapper(
                     meetingTitle = meetingTitle,
                     meetingID = meetingId
-                )
+                )}
             }
         }
     }
@@ -168,7 +162,7 @@ private fun NavigationTopAppBar(
         ) {
             NavigationItem(
                 title = stringResource(R.string.meetings),
-                icon = R.drawable.note,
+                icon = R.drawable.meeting_note,
                 index = RecommendationDetailsNavigationSections.Info,
                 selectedIndex = selectedIndex,
                 onClick = { newSelection ->

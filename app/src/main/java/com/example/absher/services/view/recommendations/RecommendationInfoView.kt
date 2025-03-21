@@ -19,6 +19,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -50,7 +51,6 @@ import com.example.absher.services.viewmodel.recommendations.FetchRecommendation
 import com.example.absher.services.viewmodel.recommendations.FetchRecommendationInfoStateSuccess
 import com.example.absher.services.viewmodel.recommendations.RecommendationViewModel
 import com.example.absher.ui.theme.AbsherTheme
-import com.example.absher.ui.theme.CustomTextStyles
 import com.example.absher.ui.theme.Gray
 import com.example.absher.ui.theme.SubtitleColor
 
@@ -202,7 +202,7 @@ private fun RecommendationInfoCard(recommendation: FetchRecommendationInfoData, 
                     SvgIcon(R.drawable.calendar_today)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = formatDateToArabic(recommendation.id.toString() ?: ""),
+                        text = formatDateToArabic(recommendation.id.toString()),
                         style = TextStyle(fontSize = 12.sp, color = Color(0xFF757575))
                     )
                 }
@@ -265,7 +265,10 @@ private fun RecommendationInfoCard(recommendation: FetchRecommendationInfoData, 
                             R.string.meetingend, formatTimeToArabic(recommendation.id.toString())
                         ), style = TextStyle(fontSize = 12.sp, color = Color(0xFF212121))
                     )
+
+
                 }
+
                 HorizontalDivider(
                     modifier = Modifier
                         .padding(vertical = 4.dp)
@@ -273,7 +276,14 @@ private fun RecommendationInfoCard(recommendation: FetchRecommendationInfoData, 
                     thickness = 1.dp
                 )
             }
-
+            CustomProgressBar(progress = 50F, backgroundColor = Color(0XFFB8DCCF))
+            HorizontalDivider(
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .background(Color(0XFFF2F2F2)),
+                thickness = 1.dp
+            )
+        }
             Row {
                 Column {
                     Row {
@@ -449,11 +459,38 @@ private fun RecommendationInfoCard(recommendation: FetchRecommendationInfoData, 
             )
 
             Spacer(modifier = Modifier.height(12.dp))
+        Row(
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp) // Space between buttons
+        ) {
+            Button(
+                modifier = Modifier.weight(1f),
+                onClick = { /* TODO: Handle click */ },
+                shape = RoundedCornerShape(4.dp) // Rounded corners
+            ) {
+               Row{
+                   Text(text = "Save")
+                   SvgIcon(R.drawable.edit)
+               }
+            }
+
+            OutlinedButton(
+                modifier = Modifier.weight(1f),
+                onClick = { /* TODO: Handle click */ },
+                shape = RoundedCornerShape(4.dp) // Rounded corners
+            ) {
+                Row{
+                    Text(text = "Save")
+                    SvgIcon(R.drawable.add)
+                }
+            }
 
 
         }
+
+        }
     }
-}
+
 
 
 @Preview(showBackground = true)

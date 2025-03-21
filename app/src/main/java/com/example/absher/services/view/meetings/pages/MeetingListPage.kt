@@ -79,7 +79,7 @@ class MeetingListPage : ComponentActivity() {
                         containerColor = MaterialTheme.colorScheme.surface,
                         topBar = {
                             AbcherTopAppBar(
-                                title = stringResource(id = R.string.meetings),
+                                title = stringResource(id = R.string.team),
                                 navigationIcon = {
                                     DefaultBackButton()
                                 },

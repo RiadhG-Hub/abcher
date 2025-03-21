@@ -90,7 +90,7 @@ fun CustomProgressBar(
 fun CustomProgressBarPreview() {
     AbsherTheme {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-    CustomProgressBar(progress = 100F)
+    CustomProgressBar(progress = 50F)
 
         }}
 }
